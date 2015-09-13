@@ -1,10 +1,11 @@
 {
   "name": "homebridge-knx",
-  "version": "0.0.3",
-  "description": "hombridge shim for KNX home automation",
+  "version": "0.0.4",
+  "description": "hombridge shim for KNX home automation - 0.0.4 working with peerDependencies",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "echo \"Error: configure and run homebridge to start\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,9 @@
   "dependencies": {
 	    "eibd": "^0.3.1"
 	  },
+  "peerDependencies": {
+	  "hap-nodejs":"*"
+  }
   "author": "Raoul <snowdd1.theelk@xoxy.net> (snowdd1)",
   "license": "GPL2",
   "bugs": {
