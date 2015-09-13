@@ -23,7 +23,7 @@
 	    "eibd": "^0.3.1"
 	  },
   "peerDependencies": {
-	  "hap-nodejs":"*"
+	  "hap-nodejs":"git+https://github.com/KhaosT/HAP-NodeJS#6bf0f9eaaa2d87db8d1768114c61f4acbb095c41"
   },
   "author": "Raoul <snowdd1.theelk@xoxy.net> (snowdd1)",
   "license": "GPL2",
