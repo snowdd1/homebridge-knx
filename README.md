@@ -1,2 +1,6 @@
 # homebridge-knx
-KNX p0latform shim for homebridge
+KNX platform shim for homebridge.
+This cannot run stand-alone!
+
+## This Work In Progress, use carefully.
+Please also visit homebridge github homepage first
