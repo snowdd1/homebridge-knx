@@ -24,7 +24,7 @@
 	  },
   "peerDependencies": {
 	  "hap-nodejs":"*"
-  }
+  },
   "author": "Raoul <snowdd1.theelk@xoxy.net> (snowdd1)",
   "license": "GPL2",
   "bugs": {
