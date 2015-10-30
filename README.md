@@ -9,7 +9,7 @@ Please also visit homebridge github homepage first
 
 ### Installation and running
 -  Install homebridge plugin-system first, see there
--  then install this package to <any> directory you want
+-  then install this package to `<any>` directory you want
 -  start homebridge with 
 `bin/homebridge --plugin-path <any>/homebridge-knx`
  
