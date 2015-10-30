@@ -2,7 +2,7 @@
   "name": "homebridge-knx",
   "version": "0.1.0",
   "description": "homebridge shim for KNX home automation - 0.1.0 working with homebridge plugin system branch",
-  "note":"peerDependencies is hardcoded to peerDepdendencies in homebridge!!!"
+  "note":"peerDependencies is hardcoded to peerDepdendencies in homebridge!!!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
