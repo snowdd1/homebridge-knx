@@ -1,18 +1,20 @@
 {
   "name": "homebridge-knx",
-  "version": "0.0.4",
-  "description": "hombridge shim for KNX home automation - 0.0.4 working with peerDependencies",
+  "version": "0.1.0",
+  "description": "homebridge shim for KNX home automation - 0.1.0 working with homebridge plugin system branch",
+  "note":"peerDependencies is hardcoded to peerDepdendencies in homebridge!!!"
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "echo \"Error: configure and run homebridge to start\" && exit 1"
   },
+  "engines":{"node":">4.0.0"},
   "repository": {
     "type": "git",
     "url": "https://github.com/snowdd1/homebridge-knx.git"
   },
   "keywords": [
-    "homebridge",
+    "homebridge-plugin",
     "KNX",
     "knx",
     "knxd",
@@ -20,10 +22,11 @@
     "Siri"
   ],
   "dependencies": {
-	    "eibd": "^0.3.1"
+	    "eibd": "^0.3.1",
+	    "hapi": "*"
 	  },
-  "peerDependencies": {
-	  "hap-nodejs":"*"
+  "peerDepdendencies": {
+	  "homebridge": ">=0.2.0"
   },
   "author": "Raoul <snowdd1.theelk@xoxy.net> (snowdd1)",
   "license": "GPL2",
