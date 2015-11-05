@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "echo \"Error: configure and run homebridge to start\" && exit 1"
   },
-  "engines":{"node":">4.0.0"},
+  "engines":{"node":">4.0.0", "homebridge":"^0.2.0"},
   "repository": {
     "type": "git",
     "url": "https://github.com/snowdd1/homebridge-knx.git"
@@ -25,9 +25,6 @@
 	    "eibd": "^0.3.1",
 	    "hapi": "*"
 	  },
-  "peerDepdendencies": {
-	  "homebridge": ">=0.2.0"
-  },
   "author": "Raoul <snowdd1.theelk@xoxy.net> (snowdd1)",
   "license": "GPL2",
   "bugs": {
