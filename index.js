@@ -27,10 +27,10 @@ function KNXPlatform(log, config){
 
 
 function registry(homebridge) {
-	console.log("HERE: hombridge-knx/index.js/registry()");
+	//console.log("HERE: hombridge-knx/index.js/registry()");
 	Service = homebridge.hap.Service;
 	Characteristic = homebridge.hap.Characteristic;
-	homebridge.registerPlatform("KNX", KNXPlatform);
+	homebridge.registerPlatform("homebridge-knx", "KNX", KNXPlatform); //update signature for homebridge 0.2.0
 }
 
 KNXPlatform.prototype = {
