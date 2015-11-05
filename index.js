@@ -1,8 +1,27 @@
 /*****
  * Platform shim for use with nfarina's homebridge plugin system 
+ * This is the version for plugin support
+ * ******************************************************************************************** 
+ * 
+New 2015-09-16: Welcome iOS9.0
+new features include:
+-  services: 
+-  Window
+-  WindowCovering
+-  ContactSensor
+New 2015-09-18: 
+-  Services Switch and Outlet
+-  Code cleanup
+New 2015-09-19:
+-  GarageDoorOpener Service
+-  MotionSensor Service
+New 2015-10-02:
+- Check for valid group addresses
+- new "R" flag allowed for Boolean addresses: 1/2/3R is the boolean not(1/2/3), i.e. 0 and 1 switched on read and write
+New 2015-11-05:
+- now fully supports the official homebridge version 0.2.0
+ * 
  */
-
-
 
 
 /**************************************************************************************************************************************
@@ -275,28 +294,7 @@ module.exports = registry;
  *  this section replaces the knxdevice.js file
  */
 
-/**
- * This is a KNX universal accessory shim.
- * This is the version for plugin support
- * ******************************************************************************************** 
- * 
-New 2015-09-16: Welcome iOS9.0
-new features include:
--  services: 
--  Window
--  WindowCovering
--  ContactSensor
-New 2015-09-18: 
--  Services Switch and Outlet
--  Code cleanup
-New 2015-09-19:
--  GarageDoorOpener Service
--  MotionSensor Service
-New 2015-10-02:
-- Check for valid group addresses
-- new "R" flag allowed for Boolean addresses: 1/2/3R is the boolean not(1/2/3), i.e. 0 and 1 switched on read and write
- * 
- */
+
 //var Service = require("HAP-NodeJS").Service;
 //var Characteristic = require("HAP-NodeJS").Characteristic;
 //var knxd = require("eibd");
