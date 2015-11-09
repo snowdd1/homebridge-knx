@@ -104,8 +104,8 @@ So the charcteristic section may look like:
             "Listen": [
                 "1/1/63"
             ],
-            minValue: -18,
-            maxValue: 30
+            "minValue": -18,
+            "maxValue": 30
         },
         "TargetTemperature": {
             "Set": "1/1/62",
