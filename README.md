@@ -11,9 +11,11 @@ Please also visit homebridge github homepage first
 This node module requires a running (and properly configured) knx daemon (knxd). You can find the latest version [here](https://github.com/knxd/knxd). I have mirrored an ancient snapshot that runs stable *with my configuration* (raspberry 1b, busware pigator single with knx module) but has not been tested otherwise. I cannot support the knxd. Please address issues directly at the [knxd issue pages](https://github.com/knxd/knxd/issues). It might help to search the existing issues, as your problem might have been solved already.  
 
 ### Installation and running
--  Install homebridge first, [see there](https://github.com/nfarina/homebridge)
--  then install this package to `<any>` directory you want
--  start homebridge with 
+-  Install homebridge first, [see there](https://github.com/nfarina/homebridge), nfarina recommends a global install as super user. It's a server tool, so we can safly assume that the person that installes it is sufficiently  priviledged to do so. `sudo npm install -g homebridge`
+-  then install this package to `<any>` directory you want; If you installed homebridge globally I recommend to do so with homebridge-knx: `sudo npm install -g homebridge-knx`
+-  configure homebridge and its plugins. You might start by copying the [`KNX-sample-config.json`](https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json) to a new folder `.homebridge` in your user folder (on a default installation raspberry, it's `/users/pi`) and rename it to config.json
+-  Eliminate everything (especially all group addresses) that might harm your KNX installation. Sending bus telegrams to your alarm device might wake the neighbourhood unpleasantly!
+-  when done, start homebridge with 
 `bin/homebridge --plugin-path <any>/homebridge-knx`
  
 # Configuration 
