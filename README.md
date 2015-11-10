@@ -5,7 +5,7 @@ This cannot run stand-alone!
 ## This Work In Progress, use carefully.
 Please also visit homebridge github homepage first
 
-### This can only be used with the new homebridge >=0.2.0
+### This can only be used with the new homebridge >=0.2.0 and Node >=4.0.0
 
 ### Prerequisites
 This node module requires a running (and properly configured) knx daemon (knxd). You can find the latest version [here](https://github.com/knxd/knxd). I have mirrored an ancient snapshot that runs stable *with my configuration* (raspberry 1b, busware pigator single with knx module) but has not been tested otherwise. I cannot support the knxd. Please address issues directly at the [knxd issue pages](https://github.com/knxd/knxd/issues). It might help to search the existing issues, as your problem might have been solved already.  
