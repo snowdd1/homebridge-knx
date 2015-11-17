@@ -500,14 +500,7 @@ KNXDevice.prototype = {
 				characteristic.setValue(val ? (reverse ? 0:1) : (reverse ? 1:0), undefined, 'fromKNXBus');
 			}.bind(this));
 		},
-//		knxregister_boolReverse: function(addresses, characteristic) {
-//			this.log("knx registering BOOLEAN REVERSE " + addresses);
-//			knxd_registerGA(addresses, function(val, src, dest, type, reverse){
-//				this.log("[" +this.name + "]: Received value from bus:"+val+ " for " +dest+ " from "+src+" of type "+type + " for " + characteristic.displayName);
-////				iterate(characteristic);
-//				characteristic.setValue(val ? 0 : 1, undefined, 'fromKNXBus');
-//			}.bind(this));
-//		},
+
 		// percentage: get 0..255 from the bus, write 0..100 to characteristic
 		knxregister_percent: function(addresses, characteristic) {
 			this.log("knx registering PERCENT " + addresses);
@@ -638,22 +631,7 @@ KNXDevice.prototype = {
 			}
 
 		},
-//		setBooleanReverseState: function(value, callback, context, gaddress) {
-//			if (context === 'fromKNXBus') {
-////				this.log(gaddress + " event ping pong, exit!");
-//				if (callback) {
-//					callback();
-//				}
-//			} else {
-//				var numericValue = 0;
-//				if (!value) {
-//					numericValue = 1; // need 0 or 1, not true or something
-//				}
-//				this.log("["+ this.name +"]:Setting "+gaddress+" Boolean to %s", numericValue);
-//				this.knxwrite(callback, gaddress,'DPT1',numericValue);			
-//			}
-//
-//		},
+
 		setPercentage: function(value, callback, context, gaddress, reverseflag) {
 			if (context === 'fromKNXBus') {
 //				this.log(gaddress + "event ping pong, exit!");
@@ -771,12 +749,7 @@ KNXDevice.prototype = {
 						this.setBooleanState(value, callback, context, setGA, setReverse); //NEW
 					}.bind(this));
 					break;
-//				case "BoolReverse":
-//					this.log("["+ this.name +"]:["+myCharacteristic.displayName+"] \x1b[30;47m%s\x1b[0mWARNING in group adress: "+ config.Set +": Legacy BoolReverse used. Use " + config.Set +"R instead");
-//					myCharacteristic.on('set', function(value, callback, context) {
-//						this.setBooleanReverseState(value, callback, context, config.Set);
-//					}.bind(this));
-//					break;
+
 				case "Percent":
 					myCharacteristic.on('set', function(value, callback, context) {
 						this.setPercentage(value, callback, context, setGA, setReverse);
@@ -811,9 +784,6 @@ KNXDevice.prototype = {
 				case "Bool":
 					this.knxregister_bool([config.Set].concat(config.Listen || []), myCharacteristic);
 					break;				
-//				case "BoolReverse":
-//					this.knxregister_boolReverse([config.Set].concat(config.Listen || []), myCharacteristic);
-//					break;
 				case "Percent":
 					this.knxregister_percent([config.Set].concat(config.Listen || []), myCharacteristic);
 					break;
