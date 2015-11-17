@@ -9,6 +9,7 @@
 	"hint": "Always paste into jsonlint.com validation page before starting your homebridge, saves a lot of frustration",
 	"hint2": "Replace all group addresses by current addresses of your installation, these are arbitrary examples!",
 	"hint3": "For valid services and their characteristics have a look at the KNX.md file in folder platforms!",
+	"hint99":"Everything that is named description or hint is not used by homebridge but decriptive only, you may change or remove at will",
 	"platforms": [
 		{
 			"platform": "KNX",

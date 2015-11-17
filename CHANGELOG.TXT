@@ -1,0 +1,2 @@
+0.2.0 Initial Release for homebridge 0.2.0 plug-in system
+0.2.1 Readme fixes.
