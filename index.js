@@ -145,7 +145,12 @@ var running;
 
 function groupsocketlisten(opts, callback) {
 	var conn = knxd.Connection();
-	conn.socketRemote(opts, function() {
+	conn.socketRemote(opts, function(err) {
+		if (err) {
+			// a fatal error occurred
+			console.log("FATAL: knxd or eibd not reachable");
+			throw new Error("Cannot reach knxd or eibd service, please check installation and config.json");
+		}
 		conn.openGroupSocket(0, callback);
 	});
 }
@@ -419,7 +424,12 @@ KNXDevice.prototype = {
 			// this.log("DEBUG in knxwrite");
 			var knxdConnection = new knxd.Connection();
 			// this.log("DEBUG in knxwrite: created empty connection, trying to connect socket to "+this.knxd_ip+":"+this.knxd_port);
-			knxdConnection.socketRemote({ host: this.knxd_ip, port: this.knxd_port }, function() {
+			knxdConnection.socketRemote({ host: this.knxd_ip, port: this.knxd_port }, function(err) {
+				if (err) {
+					// a fatal error occurred
+					console.log("FATAL: knxd or eibd not reachable");
+					throw new Error("Cannot reach knxd or eibd service, please check installation and config.json");
+				}
 				var dest = knxd.str2addr(groupAddress);
 				// this.log("DEBUG got dest="+dest);
 				knxdConnection.openTGroup(dest, 1, function(err) {
