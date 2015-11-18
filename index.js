@@ -20,13 +20,19 @@ New 2015-10-02:
 - new "R" flag allowed for Boolean addresses: 1/2/3R is the boolean not(1/2/3), i.e. 0 and 1 switched on read and write
 New 2015-11-05:
 - now fully supports the official homebridge version 0.2.0
+New 2015-11-18:
+- get rid of obsolete "knxdevice" accessory_type (there is only one anyhow!)
+  accessory_type is not required in config.json section platform KNX accessories any more.
  * 
  */
 
 
-/**************************************************************************************************************************************
- *  this section replaces the KNX.js file 
+
+/**** TO DO s
+ *   Generate own persiistence layer, see:
+ *   https://github.com/simonlast/node-persist#factory-method
  */
+
 
 
 'use strict';
@@ -71,21 +77,17 @@ KNXPlatform.prototype = {
 			for (var int = 0; int < foundAccessories.length; int++) {
 				this.log("parsing acc " + int + " of " + foundAccessories.length);
 				// instantiate and push to array
-				switch (foundAccessories[int].accessory_type) {
-				case "knxdevice":
-					this.log("push new universal device "+foundAccessories[int].name);
-					// push knxd connection setting to each device from platform
-					foundAccessories[int].knxd_ip = this.config.knxd_ip;
-					foundAccessories[int].knxd_port = this.config.knxd_port;
-					//var accConstructor = require('./knxdevice.js');
-					var acc = new KNXDevice(this.log,foundAccessories[int]);
-					this.log("created "+acc.name+" universal accessory");	
-					myAccessories.push(acc);
-					break;
-				default:
-					// do something else
-					this.log("unkown accessory type found");
-				} 
+
+				this.log("push new device "+foundAccessories[int].name);
+				// push knxd connection setting to each device from platform
+				foundAccessories[int].knxd_ip = this.config.knxd_ip;
+				foundAccessories[int].knxd_port = this.config.knxd_port;
+				//var accConstructor = require('./knxdevice.js');
+				var acc = new KNXDevice(this.log,foundAccessories[int]);
+				this.log("created "+acc.name+" accessory");	
+				myAccessories.push(acc);
+				break;
+
 
 			}	
 			// if done, return the array to callback function

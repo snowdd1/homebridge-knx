@@ -18,7 +18,6 @@
 			"knxd_port": 6720,
 			"accessories": [
 				{
-					"accessory_type": "knxdevice",
 					"description": "Only generic type knxdevice is supported, all previous knx types have been merged into that.",
 					"name": "Living Room North Lamp",
 					"services": [
@@ -43,7 +42,6 @@
 					"services-description": "Services is an array, you CAN have multiple service types in one accessory, though it is not fully supported in many iOS HK apps, such as EVE and myTouchHome"
 				},
 				{
-					"accessory_type": "knxdevice",
 					"name": "Office Temperature",
 					"description": "iOS8.4.1 TemperatureSensor type, supports CurrentTemperature",
 					"services": [
@@ -57,7 +55,6 @@
 					]
 				},
 				{
-					"accessory_type": "knxdevice",
 					"name": "Office Window Lock",
 					"services": [
 						{
@@ -74,7 +71,6 @@
 					]
 				},
 				{
-					"accessory_type": "knxdevice",
 					"description": "sample device with multiple services. Multiple services of different types are widely supported",
 					"name": "Office",
 					"services": [
@@ -118,7 +114,6 @@
 					]
 				},
 				{
-					"accessory_type": "knxdevice",
 					"description": "sample contact sensor device",
 					"name": "Office Contact",
 					"services": [
@@ -132,7 +127,6 @@
 					]
 				},
 				{
-					"accessory_type": "knxdevice",
 					"description": "sample garage door opener",
 					"name": "Office Garage",
 					"services": [

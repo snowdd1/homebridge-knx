@@ -1,3 +1,4 @@
 0.2.0 Initial Release for homebridge 0.2.0 plug-in system
 0.2.1 Readme fixes.
 0.2.2 Better error message if knxd service not reachable
+0.2.3 deprecated config.json entry "accessory_type":"knxdevice" (not evalutated any more)

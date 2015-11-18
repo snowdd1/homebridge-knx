@@ -29,11 +29,10 @@ You need to configure all devices directly in the config.json. You can find a sa
         {
             "platform": "KNX",
             "name": "KNX",
-            "knxd_ip": "192.168.178.205", 
+            "knxd_ip": "192.168.1.1", 
             "knxd_port": 6720,
             "accessories": [
                 {
-                    "accessory_type": "knxdevice",
                     "name": "Living Room North Lamp",
                     "services": [
                         {
@@ -57,7 +56,6 @@ You need to configure all devices directly in the config.json. You can find a sa
 In the accessories section (the array within the brackets [ ]) you can insert as many objects as you like in the following form
 ````json
     {
-	    "accessory_type": "knxdevice",
 	    "name": "Here goes your display name, this will be shown in HomeKit apps",
 	    "services": [
 	        {      
@@ -135,6 +133,20 @@ Likewise, all percentages of DPT5 can be reversed, if you need a 100% (=255) for
         }
     }
 ````
+## Unique names required
+If the names of your devices are not unique, or you think they might not be unique for all times, or you think you going to need to change them without loosing the settings in homekit - then you will need to set the **uuid_base** parameter for each device.
+
+````json
+            "accessories": [
+                {
+                    "name": "Living Room North Lamp",
+                    "uuid_base":"LIVROOMLAMP00001"
+                    "services": [
+                        {
+
+````
+Then you can change the name of the device without harm to your device database in homekit, as the internal IDs are based on the *uuid_base* field instead of the *name* field. 
+
 # Supported Services and their characteristics
 ## ContactSensor
 -  ContactSensorState: DPT 1.002, 0 as contact 
@@ -205,7 +217,7 @@ Likewise, all percentages of DPT5 can be reversed, if you need a 100% (=255) for
 -  CurrentTemperature: DPT9.001 in ï¿½C [listen only]
   
 ## Thermostat
--  CurrentTemperature: DPT9.001 in ï¿½C [listen only], -40 to 80ï¿½C if not overriden as shown above
+-  CurrentTemperature: DPT9.001 in °C [listen only], -40 to 80ï¿½C if not overriden as shown above
 -  TargetTemperature: DPT9.001, values 0..40ï¿½C only, all others are ignored
 -  CurrentHeatingCoolingState: DPT20.102 HVAC, because of the incompatible mapping only off and heating (=auto) are shown, [listen only]
 -  TargetHeatingCoolingState: DPT20.102 HVAC, as above
@@ -219,7 +231,7 @@ Likewise, all percentages of DPT5 can be reversed, if you need a 100% (=255) for
 -  CurrentPosition: DPT5.001 percentage
 -  TargetPosition: DPT5.001 percentage
 -  PositionState: DPT5.001 value [listen only: 0 Closing, 1 Opening, 2 Stopped]
-*As of iOS9.1 Siri does not support window covering.*
+*As of iOS9.1 Siri does not support window covering properly.*
 
 ### not yet supported
 -  HoldPosition
@@ -229,7 +241,8 @@ Likewise, all percentages of DPT5 can be reversed, if you need a 100% (=255) for
 -  CurrentVerticalTiltAngle
 -  ObstructionDetected
 
-
+# Status Web Server
+You can see the last telegrams' values on port 3000, as in http://YOURIP:3000  
 
 
 # DISCLAIMER
