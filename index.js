@@ -86,9 +86,6 @@ KNXPlatform.prototype = {
 				var acc = new KNXDevice(this.log,foundAccessories[int]);
 				this.log("created "+acc.name+" accessory");	
 				myAccessories.push(acc);
-				break;
-
-
 			}	
 			// if done, return the array to callback function
 			this.log("returning "+myAccessories.length+" accessories");
