@@ -1,37 +1,63 @@
-{
-  "name": "homebridge-knx",
-  "version": "0.2.3",
-  "description": "homebridge shim for KNX home automation",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "echo \"Error: configure and run homebridge to start\" && exit 1"
-  },
-  "engines": {
-	  "node":">4.0.0", 
-	  "homebridge":"^0.2.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/snowdd1/homebridge-knx.git"
-  },
-  "keywords": [
-    "homebridge-plugin",
-    "homebridge",
-    "KNX",
-    "knx",
-    "knxd",
-    "eibd",
-    "Siri"
-  ],
-  "dependencies": {
-	    "eibd": "^0.3.1",
-	    "hapi": "^11.1.0"
-	  },
-  "author": "Raoul <snowdd1.theelk@xoxy.net> (snowdd1)",
-  "license": "GPL2",
-  "bugs": {
-    "url": "https://github.com/snowdd1/homebridge-knx/issues"
-  },
-  "homepage": "https://github.com/snowdd1/homebridge-knx"
-}
+{ 
+	"name": "homebridge-knx", 
+	"version": "0.2.4", 
+	"description": "homebridge shim for KNX home automation", 
+	"main": "index.js", 
+	"scripts": 
+	{ 
+		"test": "echo \"Error: no test specified\" && exit 1", 
+		"start": "echo \"Error: configure and run homebridge to start\" && exit 1"
+	 }, 
+
+	"engines": 
+	{ 
+		"node": ">4.0.0", 
+		"homebridge": "^0.2.0"
+	 }, 
+
+	"repository": 
+	{ 
+		"type": "git", 
+		"url": "https://github.com/snowdd1/homebridge-knx.git"
+	 }, 
+
+	"keywords": 
+	[ 
+		"homebridge-plugin", 
+		"homebridge", 
+		"KNX", 
+		"knx", 
+		"knxd", 
+		"eibd", 
+		"Siri"
+	 ], 
+
+	"dependencies": 
+	{ 
+		"eibd": "^0.3.1", 
+		"hapi": "^11.1.0"
+	 }, 
+
+	"author": 
+	{ 
+		"name": "Raoul", 
+		"e-mail": "<snowdd1.theelk@xoxy.net>", 
+		"url": "https://github.com/snowdd1/issues"
+	 }, 
+
+	"contributors": 
+	[ 
+		{ 
+			"name": "EIBHomeControl", 
+			"url": "https://github.com/EIBHomeControl"
+		 }
+	 ], 
+
+	"license": "GPL2", 
+	"bugs": 
+	{ 
+		"url": "https://github.com/snowdd1/homebridge-knx/issues"
+	 }, 
+
+	"homepage": "https://github.com/snowdd1/homebridge-knx"
+ }
