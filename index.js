@@ -1309,6 +1309,9 @@ KNXDevice.prototype = {
 				case "MotionSensor":
 					accessoryServices.push(this.getMotionSensorService(configService));
 					break;	
+				case "Outlet":
+					accessoryServices.push(this.getOutletService(configService));
+					break;	
 				case "Switch":
 					accessoryServices.push(this.getSwitchService(configService));
 					break;					
