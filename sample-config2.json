@@ -1,0 +1,88 @@
+{ 
+	"platform": "KNX", 
+	"name": "KNX", 
+	"knxd_ip": "192.168.1.1", 
+	"knxd_port": 6720, 
+	"GroupAddresses": { 
+		"1/1/6": { 
+			"name": "Living north light", 
+			"dptype": "DPT1", 
+			"readable": false, 
+			"readOnStartup": false, 
+			"writable": true, 
+			"comment": "No comment"
+		 }, 
+
+		"1/1/63": { 
+			"name": "Living north light return", 
+			"dptype": "DPT1", 
+			"readable": true, 
+			"readOnStartup": true, 
+			"writable": false, 
+			"comment": "No comment"
+		 }, 
+
+		"1/1/62": { 
+			"name": "Living north light brightness set", 
+			"dptype": "DPT5.001", 
+			"readable": false, 
+			"readOnStartup": false, 
+			"writable": true, 
+			"comment": "Percentage type"
+		 }, 
+
+		"1/1/64": { 
+			"name": "Living north light brightness return", 
+			"dptype": "DPT5.001", 
+			"readable": true, 
+			"readOnStartup": true, 
+			"writable": false, 
+			"comment": "Percentage type"
+		 }
+	 }, 
+
+	"Devices": [ 
+		{ 
+			"name": "Living Room North Lamp", 
+			"uuid_base": "LIVROOMNRTHBULB", 
+			"Services": [ 
+				{ 
+					"ServiceType": "Lightbulb", 
+					"Description": "iOS8 Lightbulb type, supports On (Switch) and Brightness", 
+					"name": "Living Room North Lamp", 
+					"Characteristics": [ 
+						{ 
+							"Type": "On", 
+							"Set": { 
+								"Type": "Mapper-Single", 
+								"Data": "1/1/6"
+							 }, 
+
+							"Listen": { 
+								"Type": "Mapper-Multiple", 
+								"Data": [ 
+									"1/1/63"
+								 ]
+							 }
+						 }, 
+
+						{ 
+							"Type": "Brightness", 
+							"Set": { 
+								"Type": "Mapper-Single", 
+								"Data": "1/1/62"
+							 }, 
+
+							"Listen": { 
+								"Type": "Mapper-Multiple", 
+								"Data": [ 
+									"1/1/64"
+								 ]
+							 }
+						 }
+					 ]
+				 }
+			 ]
+		 }
+	 ]
+ }

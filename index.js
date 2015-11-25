@@ -3,36 +3,8 @@
  * This is the version for plugin support
  * ******************************************************************************************** 
  * 
-New 2015-09-16: Welcome iOS9.0
-new features include:
--  services: 
--  Window
--  WindowCovering
--  ContactSensor
-New 2015-09-18: 
--  Services Switch and Outlet
--  Code cleanup
-New 2015-09-19:
--  GarageDoorOpener Service
--  MotionSensor Service
-New 2015-10-02:
-- Check for valid group addresses
-- new "R" flag allowed for Boolean addresses: 1/2/3R is the boolean not(1/2/3), i.e. 0 and 1 switched on read and write
-New 2015-11-05:
-- now fully supports the official homebridge version 0.2.0
-New 2015-11-18:
-- get rid of obsolete "knxdevice" accessory_type (there is only one anyhow!)
-  accessory_type is not required in config.json section platform KNX accessories any more.
- * 
+ALL NEW VERSION WITH OWN PERSISTENCE LAYER (file based, anyhow)
  */
-
-
-
-/**** TO DO s
- *   Generate own persiistence layer, see:
- *   https://github.com/simonlast/node-persist#factory-method
- */
-
 
 
 'use strict';
@@ -42,218 +14,105 @@ var Hapi = require('hapi');
 
 var Service, Characteristic; // passed default objects from hap-nodejs
 
+var globs = {}; // the storage for cross module data pooling;
 
 
+/**
+ * KNXPlatform
+ * 
+ * @constructor
+ * @param {function} log - logging function for console etc. out
+ * @param {object} config - configuration object from global config.json
+ */
 function KNXPlatform(log, config){
 	this.log = log;
-	this.config = config;
+	this.Old_config = config;
 
 }
 
-
-function registry(homebridge) {
-	//console.log("HERE: hombridge-knx/index.js/registry()");
-	Service = homebridge.hap.Service;
-	Characteristic = homebridge.hap.Characteristic;
-	homebridge.registerPlatform("homebridge-knx", "KNX", KNXPlatform); //update signature for homebridge 0.2.0
-}
-
-KNXPlatform.prototype = {
-		accessories: function(callback) {
-			this.log("Fetching KNX devices.");
-			var that = this;
-
-
-			// iterate through all devices the platform my offer
-			// for each device, create an accessory
-
-			// read accessories from file !!!!!
-			var foundAccessories = this.config.accessories; 
-
-
-			//create array of accessories
-			var myAccessories = [];
-
-			for (var int = 0; int < foundAccessories.length; int++) {
-				this.log("parsing acc " + int + " of " + foundAccessories.length);
-				// instantiate and push to array
-
-				this.log("push new device "+foundAccessories[int].name);
-				// push knxd connection setting to each device from platform
-				foundAccessories[int].knxd_ip = this.config.knxd_ip;
-				foundAccessories[int].knxd_port = this.config.knxd_port;
-				//var accConstructor = require('./knxdevice.js');
-				var acc = new KNXDevice(this.log,foundAccessories[int]);
-				this.log("created "+acc.name+" accessory");	
-				myAccessories.push(acc);
-			}	
-			// if done, return the array to callback function
-			this.log("returning "+myAccessories.length+" accessories");
-			callback(myAccessories);
-		}
-};
-
-
-
-//array of registered addresses and their callbacks
-var subscriptions = []; 
-//check variable to avoid running two listeners
-var running; 
-
-function groupsocketlisten(opts, callback) {
-	var conn = knxd.Connection();
-	conn.socketRemote(opts, function(err) {
-		if (err) {
-			// a fatal error occurred
-			console.log("FATAL: knxd or eibd not reachable");
-			throw new Error("Cannot reach knxd or eibd service, please check installation and config.json");
-		}
-		conn.openGroupSocket(0, callback);
-	});
-}
-
-
-var registerSingleGA = function registerSingleGA (groupAddress, callback, reverse) {
-	subscriptions.push({address: groupAddress, callback: callback, reverse:reverse });
-};
-
-/*
- * public busMonitor.startMonitor()
- * starts listening for telegrams on KNX bus
+/**
+ * Registers the plugin with homebridge. Will be called by homebridge if found in directory structure and package.json
+ * is right This function needs to be exported.
  * 
- */ 
-var startMonitor = function startMonitor(opts) {  // using { host: name-ip, port: port-num } options object
-	if (!running) {
-		running = true;
-	} else {
-		console.log("<< knxd socket listener already running >>");
-		return null;
-	}
-	console.log(">>> knxd groupsocketlisten starting <<<");	
-	groupsocketlisten(opts, function(parser) {
-		//console.log("knxfunctions.read: in callback parser");
-		parser.on('write', function(src, dest, type, val){
-			// search the registered group addresses
-			//console.log('recv: Write from '+src+' to '+dest+': '+val+' ['+type+'], listeners:' + subscriptions.length);
-			for (var i = 0; i < subscriptions.length; i++) {
-				// iterate through all registered addresses
-				if (subscriptions[i].address === dest) {
-					// found one, notify
-					//console.log('HIT: Write from '+src+' to '+dest+': '+val+' ['+type+']');
-					subscriptions[i].lastValue = {val: val, src: src, dest: dest, type: type, date:Date()};
-					subscriptions[i].callback(val, src, dest, type, subscriptions[i].reverse);
-				}
-			}
-		});
-
-		parser.on('response', function(src, dest, type, val) {
-			// search the registered group addresses
-//			console.log('recv: resp from '+src+' to '+dest+': '+val+' ['+type+']');
-			for (var i = 0; i < subscriptions.length; i++) {
-				// iterate through all registered addresses
-				if (subscriptions[i].address === dest) {
-					// found one, notify
-//					console.log('HIT: Response from '+src+' to '+dest+': '+val+' ['+type+']');
-					subscriptions[i].lastValue = {val: val, src: src, dest:dest, type:type, date:Date()};
-					subscriptions[i].callback(val, src, dest, type, subscriptions[i].reverse);
-				}
-			}
-
-		});
-
-		
-		// check if a tiny web server could show current status *******************************************************************************
-		// Create a server with a host and port
-		var server = new Hapi.Server();
-		server.connection({ port: 3000 });
-
-		server.route({
-		    method: 'GET',
-		    path: '/',
-		    handler: function (request, reply) {
-		    	var answer = "<html><title>Subscriptions</title><body>";
-		    	var name, nextlevelname;
-		    	answer += "<TABLE>";
-		    	for (var i = 0; i < subscriptions.length; i++) {
-		    		answer += "<TR>";
-		    		for (name in  subscriptions[i]) {
-		    		    if (typeof subscriptions[i][name] !== 'function') {
-		    		    	if (typeof subscriptions[i][name] !== 'object' ) {
-		    		    		answer += ("<TD>" + name + ': ' + subscriptions[i][name] +"</TD>"); 
-		    		    	} else {
-		    		    		for (nextlevelname in  subscriptions[i][name]) {
-		    		    		    if (typeof subscriptions[i][name][nextlevelname] !== 'function') {
-		    		    		    	if (typeof subscriptions[i][name][nextlevelname] !== 'object' ) {
-		    		    		    		answer += ("<TD>" + nextlevelname + ': ' + subscriptions[i][name][nextlevelname]) + "</TD> ";
-		    		    		    	} 
-		    		    		    } 
-		    		    		}
-		    		    	}
-		    		    } 
-		    		}
-		    		answer += "</TR>";
-		    	}
-		        reply(answer + "</body></html>");
-		    }
-		});
-
-		server.route({
-		    method: 'GET',
-		    path: '/{name}',
-		    handler: function (request, reply) {
-		        reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
-		    }
-		});
-
-		server.start(function () {
-		    console.log('Server running at:', server.info.uri);
-		});
-		
-		
-		
-		
-	}); // groupsocketlisten parser
-}; //startMonitor
-
-
-/*
- *  public registerGA(groupAdresses[], callback(value))
- *  parameters
- *  	callback: function(value, src, dest, type) called when a value is sent on the bus
- *  	groupAddresses: (Array of) string(s) for group addresses
+ * @param {object} homebridgeAPI - The API Object made available by homebridge. Contains the HAP type library e.g.
  * 
- *  
- *  
  */
-var registerGA = function (groupAddresses, callback) {
-	// check if the groupAddresses is an array
-	if (groupAddresses.constructor.toString().indexOf("Array") > -1) {
-		// handle multiple addresses
-		for (var i = 0; i < groupAddresses.length; i++) {
-			if (groupAddresses[i] && groupAddresses[i].match(/(\d*\/\d*\/\d*)/)) { // do not bind empty addresses or invalid addresses
-				// clean the addresses
-				registerSingleGA (groupAddresses[i].match(/(\d*\/\d*\/\d*)/)[0], callback,groupAddresses[i].match(/\d*\/\d*\/\d*(R)/) ? true:false );
-			}
-		}
-	} else {
-		// it's only one
-		if (groupAddresses.match(/(\d*\/\d*\/\d*)/)) {
-			registerSingleGA (groupAddresses.match(/(\d*\/\d*\/\d*)/)[0], callback, groupAddresses.match(/\d*\/\d*\/\d*(R)/) ? true:false);
-		}
-	}
-//	console.log("listeners now: " + subscriptions.length);
-};
+function registry(homebridgeAPI) {
+	//console.log("HERE: hombridge-knx/index.js/registry()");
+	Service = homebridgeAPI.hap.Service;
+	Characteristic = homebridgeAPI.hap.Characteristic;
+	globs.Service = Service;
+	globs.Characteristic = Characteristic;
+	globs.API = homebridgeAPI;
+	homebridgeAPI.registerPlatform("homebridge-knx", "KNX", KNXPlatform); //update signature for homebridge 0.2.0
+}
 
-
-
-//module.exports.platform = KNXPlatform;
-//module.exports.registerGA = registerGA;
-//module.exports.startMonitor = startMonitor;
 module.exports = registry;
 
 
-/************************************************************************************************************************************************
- *  this section replaces the knxdevice.js file
+/**
+ * The accessories method is invoked by homebridge after calling the constructor. It is supposed to return an array of accessories as parameter of the callback
+ * @param {function(array)} callback - the callback to invoke after finishing fetching accessories.
+ */
+KNXPlatform.prototype.accessories = function(callback) {
+	this.log("Fetching KNX devices.");
+	var that = this;
+
+	/* our own config file */
+	var userOpts = require('./lib/user').User;
+	this.config = userOpts.loadConfig();
+	
+	/* we should have now:
+	 * - knxd_ip
+	 * - knxd_port
+	 * - GroupAddresses object
+	 * - Devices Object
+	
+	
+	*/
+	
+	if (!this.config.GroupAddresses){
+		this.config.GroupAddresses = [];
+	}
+	
+	
+	// iterate through all devices the platform my offer
+	// for each device, create an accessory
+
+	// read accessories from file !!!!!
+	var foundAccessories = this.config.Devices || []; 
+
+
+	//create array of accessories
+	globs.devices = [];
+
+	for (var int = 0; int < foundAccessories.length; int++) {
+		this.log("parsing acc " + int + " of " + foundAccessories.length);
+		// instantiate and push to array
+
+		this.log("push new device "+foundAccessories[int].name);
+		// push knxd connection setting to each device from platform
+		
+		
+		
+		var accConstructor = require('./lib/knxdevice.js');
+		
+		var acc = new accConstructor(globs,foundAccessories[int]);
+		
+		this.log("created "+acc.name+" accessory");	
+		globs.devices.push(acc);
+	}	
+	// if done, return the array to callback function
+	this.log("returning "+globs.devices.length+" accessories");
+	callback(globs.devices);
+}
+
+
+
+
+
+/***********************************************************************************************************************
+ * this section replaces the knxdevice.js file
  */
 
 
@@ -268,29 +127,9 @@ var milliTimeout = 300; // used to block responses while swiping
 var colorOn = "\x1b[30;47m";
 var colorOff = "\x1b[0m";
 
-function KNXDevice(log, config) {
-	this.log = log;
-	// everything in one object, do not copy individually
-	this.config = config;
-	log("Accessory constructor called");
-	if (config.name) {
-		this.name = config.name;
-	}
-	if (config.knxd_ip){
-		this.knxd_ip = config.knxd_ip;
-	} else {
-		throw new Error("KNX configuration fault: MISSING KNXD IP");
-	}
-	if (config.knxd_port){
-		this.knxd_port = config.knxd_port;
-	} else {
-		throw new Error("MISSING KNXD PORT");
-	}
 
-}
-
-/*********
- *  DEBUGGER FUNCTION ONLY
+/***********************************************************************************************************************
+ * DEBUGGER FUNCTION ONLY
  */
 
 //inspects an object and prints its properties (also inherited properties) 
@@ -318,143 +157,16 @@ var iterate = function nextIteration(myObject, path){
 };
 
 
-// function to avoid out of bounds for fixed-value characteristics
-// for float types this is already managed by hap-nodeJS itself
-// returns a value that can be safely used in 
-var safeSet = function(char, value) {
-	console.log("DEBUG: entered safeSet");
-	//iterate(char);
-	if (char.props.format==="uint8") {
-		console.log("DEBUG: format ok");
-		// fixed-value formats use unsigned integer AFAIK
-		if (!char.hasOwnProperty("validValues")) {
-			console.log("DEBUG: establishing safe values");
-			// we need to find those first
-			// find the prototype
-			var displayName = char.displayName;
-			if (Characteristic.hasOwnProperty(displayName.replace(/ /g,''))) {
-				var chartype = displayName.replace(/ /g,'');
-				console.log("DEBUG: chartype " + chartype);
-				for (var name in Characteristic[chartype]) {
-					//console.log("DEBUG: chartype.name " + name);
-					if (Characteristic[chartype].hasOwnProperty(name)){
-						console.log("DEBUG: typeof chartype.name " + typeof Characteristic[chartype][name]);
-						if (typeof Characteristic[chartype][name] === 'number' ) {
-							// add it to the array
-							if (char.hasOwnProperty("validValues")){
-								char.validValues = char.validValues.concat(Characteristic[chartype][name]);
-								console.log("DEBUG: following: length " + char.validValues.length);
-							} else {
-								char.validValues = [Characteristic[chartype][name]];
-								console.log("DEBUG: 1st: length " + char.validValues.length);
-							}
-						}
-					}
-				}
-			}
-			console.log("DEBUG: " + char.displayName + " has now validValue of "+ char.validValues );
-		}
-		// compare value to allowed values
-		if (char.hasOwnProperty("validValues")) {
-			//do the check
-			if (char.validValues.indexOf(value)<0) { 
-				// didn't find
-				console.log("DEBUG: " + char.displayName + " has validValue of "+ char.validValues );
-				console.log("DEBUG: " + char.displayName + " ERROR illegal value "+ value );
-				value =  char.validValues[0]; // default to first one
-				console.log("DEBUG: " + char.displayName + " ERROR returned instead "+ value );
-			}
-		}
-		
-	} else {
-		console.log("DEBUG: " + char.props.format + "!== uint8");
-	}
-	return value;
-};
+
 
 
 
 KNXDevice.prototype = {
 
-		// all purpose / all types write function	
-		knxwrite: function(callback, groupAddress, dpt, value) {
-			// this.log("DEBUG in knxwrite");
-			var knxdConnection = new knxd.Connection();
-			// this.log("DEBUG in knxwrite: created empty connection, trying to connect socket to "+this.knxd_ip+":"+this.knxd_port);
-			knxdConnection.socketRemote({ host: this.knxd_ip, port: this.knxd_port }, function(err) {
-				if (err) {
-					// a fatal error occurred
-					console.log("FATAL: knxd or eibd not reachable");
-					throw new Error("Cannot reach knxd or eibd service, please check installation and config.json");
-				}
-				var dest = knxd.str2addr(groupAddress);
-				// this.log("DEBUG got dest="+dest);
-				knxdConnection.openTGroup(dest, 1, function(err) {
-					if (err) {
-						this.log("[ERROR] knxwrite:openTGroup: " + err);
-						callback(err);
-					} else {
-						// this.log("DEBUG opened TGroup ");
-						var msg = knxd.createMessage('write', dpt, parseFloat(value));
-						knxdConnection.sendAPDU(msg, function(err) {
-							if (err) {
-								this.log("[ERROR] knxwrite:sendAPDU: " + err);
-								callback(err);
-							} else {
-								this.log("knx data sent: Value "+value+ " for GA "+groupAddress);
-								callback();
-							}
-						}.bind(this));
-					}
-				}.bind(this));
-			}.bind(this));
-		},	
-		// issues an all purpose read request on the knx bus
-		// DOES NOT WAIT for an answer. Please register the address with a callback using registerGA() function
-		knxread: function(groupAddress){
-			// this.log("DEBUG in knxread");
-			if (!groupAddress) {
-				return null;
-			}
-			this.log("[knxdevice:knxread] preparing knx request for "+groupAddress);
-			var knxdConnection = new knxd.Connection();
-			// this.log("DEBUG in knxread: created empty connection, trying to connect socket to "+this.knxd_ip+":"+this.knxd_port);
-			knxdConnection.socketRemote({ host: this.knxd_ip, port: this.knxd_port }, function() {
-				var dest = knxd.str2addr(groupAddress);
-				// this.log("DEBUG got dest="+dest);
-				knxdConnection.openTGroup(dest, 1, function(err) {
-					if (err) {
-						this.log("[ERROR] knxread:openTGroup: " + err);
-					} else {
-						// this.log("DEBUG knxread: opened TGroup ");
-						var msg = knxd.createMessage('read', 'DPT1', 0);
-						knxdConnection.sendAPDU(msg, function(err) {
-							if (err) {
-								this.log("[ERROR] knxread:sendAPDU: " + err);
-							} else {
-								this.log("[knxdevice:knxread] knx request sent for "+groupAddress);
-							}
-						}.bind(this));
-					}
-				}.bind(this));
-			}.bind(this));		
-		},
-		// issuing multiple read requests at once 
-		knxreadarray: function (groupAddresses) {
-			if (groupAddresses.constructor.toString().indexOf("Array") > -1) {
-				// handle multiple addresses
-				for (var i = 0; i < groupAddresses.length; i++) {
-					if (groupAddresses[i]) { // do not bind empty addresses
-						this.knxread (groupAddresses[i].match(/(\d*\/\d*\/\d*)/)[0]); // clean address
-					}
-				}
-			} else {
-				// it's only one
-				this.knxread (groupAddresses.match(/(\d*\/\d*\/\d*)/)[0]); // regex for cleaning address
-			}
-		},
 
-/** Registering routines
+
+/**
+ * Registering routines
  * 
  */
 		// boolean: get 0 or 1 from the bus, write boolean
@@ -549,20 +261,14 @@ KNXDevice.prototype = {
 				characteristic.setValue(HAPvalue, undefined, 'fromKNXBus');
 			}.bind(this));
 		},
-		/** KNX HVAC (heating, ventilation, and air conditioning) types do not really match to homekit types:
-//		0 = Auto
-//		1 = Comfort
-//		2 = Standby
-//		3 = Night
-//		4 = Freezing/Heat Protection
-//		5 – 255 = not allowed”
-		// The value property of TargetHeatingCoolingState must be one of the following:
-//		Characteristic.TargetHeatingCoolingState.OFF = 0;
-//		Characteristic.TargetHeatingCoolingState.HEAT = 1;
-//		Characteristic.TargetHeatingCoolingState.COOL = 2;
-//		Characteristic.TargetHeatingCoolingState.AUTO = 3;
-		AUTO (3) is not allowed as return type from devices!
-*/
+		/**
+		 * KNX HVAC (heating, ventilation, and air conditioning) types do not really match to homekit types: // 0 = Auto //
+		 * 1 = Comfort // 2 = Standby // 3 = Night // 4 = Freezing/Heat Protection // 5 – 255 = not allowed” // The
+		 * value property of TargetHeatingCoolingState must be one of the following: //
+		 * Characteristic.TargetHeatingCoolingState.OFF = 0; // Characteristic.TargetHeatingCoolingState.HEAT = 1; //
+		 * Characteristic.TargetHeatingCoolingState.COOL = 2; // Characteristic.TargetHeatingCoolingState.AUTO = 3; AUTO
+		 * (3) is not allowed as return type from devices!
+		 */
 		// undefined, has to match!
 		knxregister: function(addresses, characteristic) {
 			this.log("["+ this.name +"]:[" + characteristic.displayName+ "]:knx registering " + addresses);
@@ -572,118 +278,18 @@ KNXDevice.prototype = {
 			}.bind(this));
 		},
 
-/** set methods used for creating callbacks
- *  such as
- *  		var Characteristic = myService.addCharacteristic(new Characteristic.Brightness())
- *				.on('set', function(value, callback, context) {
- *					this.setPercentage(value, callback, context, this.config[index].Set)
- *				}.bind(this));
- *  
- */
-		setBooleanState: function(value, callback, context, gaddress, reverseflag) {
-			if (context === 'fromKNXBus') {
-//				this.log(gaddress + " event ping pong, exit!");
-				if (callback) {
-					callback();
-				}
-			} else {
-				var numericValue = reverseflag ? 1:0;
-				if (value) {
-					numericValue = reverseflag ? 0:1; // need 0 or 1, not true or something
-				}
-				this.log("["+ this.name +"]:Setting "+gaddress+" " + reverseflag ? " (reverse)":""+ " Boolean to %s", numericValue);
-				this.knxwrite(callback, gaddress,'DPT1',numericValue);			
-			}
 
-		},
 
-		setPercentage: function(value, callback, context, gaddress, reverseflag) {
-			if (context === 'fromKNXBus') {
-//				this.log(gaddress + "event ping pong, exit!");
-				if (callback) {
-					callback();
-				}
-			} else {	  
-				var numericValue = 0;
-				value = ( value>=0 ? (value<=100 ? value:100):0 ); //ensure range 0..100
-				if (reverseflag) {
-					numericValue = 255 - Math.round(255*value/100);  // convert 0..100 to 255..0 for KNX bus  
-				} else {
-					numericValue = Math.round(255*value/100);  // convert 0..100 to 0..255 for KNX bus  
-				}
-				this.log("["+ this.name +"]:Setting "+gaddress+" percentage to %s (%s)", value, numericValue);
-				this.knxwrite(callback, gaddress,'DPT5',numericValue);
-			}
-		},
-		setInt: function(value, callback, context, gaddress) {
-			if (context === 'fromKNXBus') {
-//				this.log(gaddress + "event ping pong, exit!");
-				if (callback) {
-					callback();
-				}
-			} else {	  
-				var numericValue = 0;
-				if (value && value>=0 && value<=255) {
-					numericValue = value;  // assure 0..255 for KNX bus  
-				}
-				this.log("["+ this.name +"]:Setting "+gaddress+" int to %s (%s)", value, numericValue);
-				this.knxwrite(callback, gaddress,'DPT5',numericValue);
-			}
-		},
-		setFloat: function(value, callback, context, gaddress) {
-			if (context === 'fromKNXBus') {
-//				this.log(gaddress + " event ping pong, exit!");
-				if (callback) {
-					callback();
-				}
-			} else {
-				var numericValue = 0;
-				if (value) {
-					numericValue = value; // homekit expects precision of 1 decimal
-				}
-				this.log("["+ this.name +"]:Setting "+gaddress+" Float to %s", numericValue);
-				this.knxwrite(callback, gaddress,'DPT9',numericValue);			
-			}
-		},
-		setHVACState: function(value, callback, context, gaddress) {
-			if (context === 'fromKNXBus') {
-//				this.log(gaddress + " event ping pong, exit!");
-				if (callback) {
-					callback();
-				}
-			} else {
-				var KNXvalue = 0;
-				switch (value){
-				case 0: 
-					KNXvalue = 4;
-					break;
-				case 1: 
-					KNXvalue = 1;
-					break;
-				case 2: 
-					KNXvalue = 1;
-					break;
-				case 3: 
-					KNXvalue = 1;
-					break;
-				default:
-					KNXvalue = 1;
-				}
-
-				this.log("["+ this.name +"]:Setting "+gaddress+" HVAC to %s", KNXvalue);
-				this.knxwrite(callback, gaddress,'DPT5',KNXvalue);			
-			}
-
-		},
-/** identify dummy
+/**
+ * identify dummy
  * 
  */
 		identify: function(callback) {
 			this.log("["+ this.name +"]:Identify requested!");
 			callback(); // success
 		},
-/** bindCharacteristic
- *  initializes callbacks for 'set' events (from HK) and for KNX bus reads (to HK)
+/**
+ * bindCharacteristic initializes callbacks for 'set' events (from HK) and for KNX bus reads (to HK)
  */
 		bindCharacteristic: function(myService, characteristicType, valueType, config, defaultValue) {
 			var myCharacteristic = myService.getCharacteristic(characteristicType);
@@ -708,39 +314,7 @@ KNXDevice.prototype = {
 					
 				setReverse = config.Set.match(/\d*\/\d*\/\d*(R)/) ? true:false;
 				
-				switch (valueType) {
-				case "Bool":
-					myCharacteristic.on('set', function(value, callback, context) {
-						this.setBooleanState(value, callback, context, setGA, setReverse); //NEW
-					}.bind(this));
-					break;
 
-				case "Percent":
-					myCharacteristic.on('set', function(value, callback, context) {
-						this.setPercentage(value, callback, context, setGA, setReverse);
-						//myCharacteristic.timeout = Date.now()+milliTimeout;
-					}.bind(this));	
-					break;
-				case "Float":
-					myCharacteristic.on('set', function(value, callback, context) {
-						this.setFloat(value, callback, context, config.Set);
-					}.bind(this));
-					break;
-				case "Int":
-					myCharacteristic.on('set', function(value, callback, context) {
-						this.setInt(value, callback, context, config.Set);
-					}.bind(this));
-					break;
-				case "HVAC":
-					myCharacteristic.on('set', function(value, callback, context) {
-						this.setHVACState(value, callback, context, config.Set);
-					}.bind(this));
-					break;
-				default: {
-					this.log(colorOn + "[ERROR] unknown type passed: [" + valueType+"]"+ colorOff);
-					throw new Error("[ERROR] unknown type passed");
-					}
-				} 
 			}
 			if ([config.Set].concat(config.Listen || []).length>0) {
 				//this.log("Binding LISTEN");
@@ -771,13 +345,10 @@ KNXDevice.prototype = {
 			return myCharacteristic; // for chaining or whatsoever
 		},
 /**
- *  function getXXXXXXXService(config)
- *  returns a configured service object to the caller (accessory/device)
- *  
- *  @param config
- *  pass a configuration array parsed from config.json
- *  specifically for this service
- *  
+ * function getXXXXXXXService(config) returns a configured service object to the caller (accessory/device)
+ * 
+ * @param config pass a configuration array parsed from config.json specifically for this service
+ * 
  */
 		getContactSenserService: function(config) {
 //			Characteristic.ContactSensorState.CONTACT_DETECTED = 0;
@@ -824,291 +395,7 @@ KNXDevice.prototype = {
 			} 
 			return myService;
 		},		
-		getGarageDoorOpenerService: function(config) {
-//			  // Required Characteristics
-//			  this.addCharacteristic(Characteristic.CurrentDoorState);
-//			  this.addCharacteristic(Characteristic.TargetDoorState);
-//			  this.addCharacteristic(Characteristic.ObstructionDetected);
-//			Characteristic.CurrentDoorState.OPEN = 0;
-//			Characteristic.CurrentDoorState.CLOSED = 1;
-//			Characteristic.CurrentDoorState.OPENING = 2;
-//			Characteristic.CurrentDoorState.CLOSING = 3;
-//			Characteristic.CurrentDoorState.STOPPED = 4;
-//			//
-//			  // Optional Characteristics
-//			  this.addOptionalCharacteristic(Characteristic.LockCurrentState);
-//			  this.addOptionalCharacteristic(Characteristic.LockTargetState);
-			// The value property of LockCurrentState must be one of the following:
-//			Characteristic.LockCurrentState.UNSECURED = 0;
-//			Characteristic.LockCurrentState.SECURED = 1;
-//			Characteristic.LockCurrentState.JAMMED = 2;
-//			Characteristic.LockCurrentState.UNKNOWN = 3;
-			
-			// some sanity checks 
-			if (config.type !== "GarageDoorOpener") {
-				this.log("[ERROR] GarageDoorOpener Service for non 'GarageDoorOpener' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] GarageDoorOpener Service without 'name' property called");
-				return undefined;
-			}
-			
-			var myService = new Service.GarageDoorOpener(config.name,config.name);
-			if (config.CurrentDoorState) {
-				this.log("["+ this.name +"]:GarageDoorOpener CurrentDoorState characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.CurrentDoorState, "Int", config.CurrentDoorState);
-			}
-			if (config.TargetDoorState) {
-				this.log("["+ this.name +"]:GarageDoorOpener TargetDoorState characteristic enabled");
-				//myService.getCharacteristic(Characteristic.TargetDoorState).minimumValue=0; // 
-				//myService.getCharacteristic(Characteristic.TargetDoorState).maximumValue=4; // 
-				this.bindCharacteristic(myService, Characteristic.TargetDoorState, "Int", config.TargetDoorState);
-			}
-			if (config.ObstructionDetected) {
-				this.log("["+ this.name +"]:GarageDoorOpener ObstructionDetected characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.ObstructionDetected, "Bool", config.ObstructionDetected);
-			}
-			//optionals
-			if (config.LockCurrentState) {
-				this.log("["+ this.name +"]:GarageDoorOpener LockCurrentState characteristic enabled");
-				myService.addCharacteristic(Characteristic.LockCurrentState);
-				this.bindCharacteristic(myService, Characteristic.LockCurrentState, "Int", config.LockCurrentState);
-			} 
-			if (config.LockTargetState) {
-				this.log("["+ this.name +"]:GarageDoorOpener LockTargetState characteristic enabled");
-				myService.addCharacteristic(Characteristic.LockTargetState);
-				this.bindCharacteristic(myService, Characteristic.LockTargetState, "Bool", config.LockTargetState);
-			} 
-			return myService;
-		},	
-		getLightbulbService: function(config) {
-			// some sanity checks
-			//this.config = config;
-
-			if (config.type !== "Lightbulb") {
-				this.log("[ERROR] Lightbulb Service for non 'Lightbulb' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] Lightbulb Service without 'name' property called");
-				return undefined;
-			}
-			var myService = new Service.Lightbulb(config.name,config.name);
-			// On (and Off)
-			if (config.On) {
-				this.log("["+ this.name +"]:Lightbulb on/off characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.On, "Bool", config.On);
-			} // On characteristic
-			// Brightness if available
-			if (config.Brightness) {
-				this.log("["+ this.name +"]:Lightbulb Brightness characteristic enabled");
-				myService.addCharacteristic(Characteristic.Brightness); // it's an optional
-				this.bindCharacteristic(myService, Characteristic.Brightness, "Percent", config.Brightness);
-			}
-			// Hue and Saturation could be added here if available in KNX lamps
-			//iterate(myService);
-			return myService;
-		},
-		getLightSensorService: function(config) {
-
-			// some sanity checks 
-			if (config.type !== "LightSensor") {
-				this.log("[ERROR] LightSensor Service for non 'LightSensor' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] LightSensor Service without 'name' property called");
-				return undefined;
-			}
-			var myService = new Service.LightSensor(config.name,config.name);
-			// CurrentTemperature)
-			if (config.CurrentAmbientLightLevel) {
-				this.log("["+ this.name +"]:LightSensor CurrentAmbientLightLevel characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.CurrentAmbientLightLevel, "Float", config.CurrentAmbientLightLevel);
-			} 
-			return myService;
-		},	
-		getLockMechanismService: function(config) {
-
-/**			//this.config = config;
-//			Characteristic.LockCurrentState.UNSECURED = 0;
-//			Characteristic.LockCurrentState.SECURED = 1;
-*/			
-			// some sanity checks
-			if (config.type !== "LockMechanism") {
-				this.log("[ERROR] LockMechanism Service for non 'LockMechanism' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] LockMechanism Service without 'name' property called");
-				return undefined;
-			}
-			
-			var myService = new Service.LockMechanism(config.name,config.name);
-			// LockCurrentState
-			if (config.LockCurrentState) {
-				// for normal contacts: Secured = 1
-				this.log("["+ this.name +"]:LockMechanism LockCurrentState characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.LockCurrentState, "Bool", config.LockCurrentState);
-			} else if (config.LockCurrentStateSecured0) { 
-				// for reverse contacts Secured = 0
-				this.log(colorOn+ "[ERROR] outdated type passed: [LockCurrentStateSecured0]"+colorOff);
-				throw new Error("[ERROR] outdated type passed");
-			} 
-			//  LockTargetState
-			if (config.LockTargetState) {
-				this.log("["+ this.name +"]:LockMechanism LockTargetState characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.LockTargetState, "Bool", config.LockTargetState);
-			} else 	if (config.LockTargetStateSecured0) {
-				this.log(colorOn+ "[ERROR] outdated type passed: [LockTargetStateSecured0]"+colorOff);
-				throw new Error("[ERROR] outdated type passed");
-			}
-
-			//iterate(myService);
-			return myService;
-		},
-		getMotionSensorService: function(config) {
-//			Characteristic.ContactSensorState.CONTACT_DETECTED = 0;
-//			Characteristic.ContactSensorState.CONTACT_NOT_DETECTED = 1;
-			
-			// some sanity checks 
-			if (config.type !== "MotionSensor") {
-				this.log("[ERROR] MotionSensor Service for non 'MotionSensor' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] MotionSensor Service without 'name' property called");
-				return undefined;
-			}
-			
-			var myService = new Service.MotionSensor(config.name,config.name);
-			if (config.MotionDetected) {
-				this.log("["+ this.name +"]:MotionSensor MotionDetected characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.MotionDetected, "Bool", config.MotionDetected);
-			}
-			//optionals
-			if (config.StatusActive) {
-				this.log("["+ this.name +"]:MotionSensor StatusActive characteristic enabled");
-				myService.addCharacteristic(Characteristic.StatusActive);
-				this.bindCharacteristic(myService, Characteristic.StatusActive, "Bool", config.StatusActive);
-			} 
-			if (config.StatusFault) {
-				this.log("["+ this.name +"]:MotionSensor StatusFault characteristic enabled");
-				myService.addCharacteristic(Characteristic.StatusFault);
-				this.bindCharacteristic(myService, Characteristic.StatusFault, "Bool", config.StatusFault);
-			} 
-			if (config.StatusTampered) {
-				this.log("["+ this.name +"]:MotionSensor StatusTampered characteristic enabled");
-				myService.addCharacteristic(Characteristic.StatusTampered);
-				this.bindCharacteristic(myService, Characteristic.StatusTampered, "Bool", config.StatusTampered);
-			} 
-			if (config.StatusLowBattery) {
-				this.log("["+ this.name +"]:MotionSensor StatusLowBattery characteristic enabled");
-				myService.addCharacteristic(Characteristic.StatusLowBattery);
-				this.bindCharacteristic(myService, Characteristic.StatusLowBattery, "Bool", config.StatusLowBattery);
-			} 
-			return myService;
-		},	
-		getOutletService: function(config) {
-			/**
-			 *   this.addCharacteristic(Characteristic.On);
-			 *   this.addCharacteristic(Characteristic.OutletInUse);
-			 */
-			// some sanity checks
-			if (config.type !== "Outlet") {
-				this.log("[ERROR] Outlet Service for non 'Outlet' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] Outlet Service without 'name' property called");
-				return undefined;
-			}
-			var myService = new Service.Outlet(config.name,config.name);
-			// On (and Off)
-			if (config.On) {
-				this.log("["+ this.name +"]:Outlet on/off characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.On, "Bool", config.On);
-			} // OutletInUse characteristic
-			if (config.OutletInUse) {
-				this.log("["+ this.name +"]:Outlet on/off characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.OutletInUse, "Bool", config.OutletInUse);
-			}
-			return myService;
-		},
-		getSwitchService: function(config) {
-			// some sanity checks
-			if (config.type !== "Switch") {
-				this.log("[ERROR] Switch Service for non 'Switch' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] Switch Service without 'name' property called");
-				return undefined;
-			}
-			var myService = new Service.Switch(config.name,config.name);
-			// On (and Off)
-			if (config.On) {
-				this.log("["+ this.name +"]:Switch on/off characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.On, "Bool", config.On);
-			} // On characteristic
-
-			return myService;
-		},
-		getThermostatService: function(config) {
-/**
-			// Optional Characteristics
-			this.addOptionalCharacteristic(Characteristic.CurrentRelativeHumidity);
-			this.addOptionalCharacteristic(Characteristic.TargetRelativeHumidity);
-			this.addOptionalCharacteristic(Characteristic.CoolingThresholdTemperature);
-			this.addOptionalCharacteristic(Characteristic.HeatingThresholdTemperature);
-*/
-
-			// some sanity checks 
-			if (config.type !== "Thermostat") {
-				this.log("[ERROR] Thermostat Service for non 'Thermostat' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] Thermostat Service without 'name' property called");
-				return undefined;
-			}
-
-			var myService = new Service.Thermostat(config.name,config.name);
-			// CurrentTemperature)
-			// props update for https://github.com/KhaosT/HAP-NodeJS/commit/1d84d128d1513beedcafc24d2c07d98185563243#diff-cb84de3a1478a38b2cf8388d709f1c1cR108
-			if (config.CurrentTemperature) {
-				this.log("["+ this.name +"]:Thermostat CurrentTemperature characteristic enabled");
-				myService.getCharacteristic(Characteristic.CurrentTemperature).setProps({
-					minValue: config.CurrentTemperature.minValue || -40,
-					maxValue: config.CurrentTemperature.maxValue || 60
-				}); // °C by default
-				this.bindCharacteristic(myService, Characteristic.CurrentTemperature, "Float", config.CurrentTemperature);
-			} 
-			// TargetTemperature if available 
-			if (config.TargetTemperature) {
-				this.log("["+ this.name +"]:Thermostat TargetTemperature characteristic enabled");
-				// default boundary too narrow for thermostats
-				// props update for https://github.com/KhaosT/HAP-NodeJS/commit/1d84d128d1513beedcafc24d2c07d98185563243#diff-cb84de3a1478a38b2cf8388d709f1c1cR108
-				myService.getCharacteristic(Characteristic.TargetTemperature).setProps({
-					minValue: config.TargetTemperature.minValue || 0,
-					maxValue: config.TargetTemperature.maxValue || 40
-				});
-				
-				this.bindCharacteristic(myService, Characteristic.TargetTemperature, "Float", config.TargetTemperature);
-			}
-			// HVAC 
-			if (config.CurrentHeatingCoolingState) {
-				this.log("["+ this.name +"]:Thermostat CurrentHeatingCoolingState characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.CurrentHeatingCoolingState, "HVAC", config.CurrentHeatingCoolingState);
-			}
-			// HVAC 
-			if (config.TargetHeatingCoolingState) {
-				this.log("["+ this.name +"]:Thermostat TargetHeatingCoolingState characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.TargetHeatingCoolingState, "HVAC", config.TargetHeatingCoolingState);
-			}
-			return myService;
-		},
+		
 		getTemperatureSensorService: function(config) {
 
 			// some sanity checks 
@@ -1134,81 +421,7 @@ KNXDevice.prototype = {
 
 			return myService;
 		},		
-		getWindowService: function(config) {
-/**			
-		Optional Characteristics
-		this.addOptionalCharacteristic(Characteristic.HoldPosition);
-		this.addOptionalCharacteristic(Characteristic.ObstructionDetected);
-		this.addOptionalCharacteristic(Characteristic.Name);
-		
-		PositionState values: The KNX blind actuators I have return only MOVING=1 and STOPPED=0
-		Characteristic.PositionState.DECREASING = 0;
-		Characteristic.PositionState.INCREASING = 1;
-		Characteristic.PositionState.STOPPED = 2;
-*/
-
-			// some sanity checks 
-
-
-			if (config.type !== "Window") {
-				this.log("[ERROR] Window Service for non 'Window' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] Window Service without 'name' property called");
-				return undefined;
-			}
-			var myService = new Service.Window(config.name,config.name);
-
-			if (config.CurrentPosition) {
-				this.log("["+ this.name +"]:Window CurrentPosition characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.CurrentPosition, "Percent", config.CurrentPosition);
-			} 
-			if (config.TargetPosition) {
-				this.log("["+ this.name +"]:Window TargetPosition characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.TargetPosition, "Percent", config.TargetPosition);
-			} 
-			if (config.PositionState) {
-				this.log("["+ this.name +"]:Window PositionState characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.PositionState, "Int", config.PositionState);
-			} 
-			return myService;
-		},			
-		getWindowCoveringService: function(config) {
-			/**
-			  // Optional Characteristics
-			  this.addOptionalCharacteristic(Characteristic.HoldPosition);
-			  this.addOptionalCharacteristic(Characteristic.TargetHorizontalTiltAngle);
-			  this.addOptionalCharacteristic(Characteristic.TargetVerticalTiltAngle);
-			  this.addOptionalCharacteristic(Characteristic.CurrentHorizontalTiltAngle);
-			  this.addOptionalCharacteristic(Characteristic.CurrentVerticalTiltAngle);
-			  this.addOptionalCharacteristic(Characteristic.ObstructionDetected);
-	*/
-			// some sanity checks 
-			if (config.type !== "WindowCovering") {
-				this.log("[ERROR] WindowCovering Service for non 'WindowCovering' service called");
-				return undefined;
-			}
-			if (!config.name) {
-				this.log("[ERROR] WindowCovering Service without 'name' property called");
-				return undefined;
-			}
-
-			var myService = new Service.WindowCovering(config.name,config.name);
-			if (config.CurrentPosition) {
-				this.log("["+ this.name +"]:WindowCovering CurrentPosition characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.CurrentPosition, "Percent", config.CurrentPosition);
-			} 
-			if (config.TargetPosition) {
-				this.log("["+ this.name +"]:WindowCovering TargetPosition characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.TargetPosition, "Percent", config.TargetPosition);
-			} 
-			if (config.PositionState) {
-				this.log("["+ this.name +"]:WindowCovering PositionState characteristic enabled");
-				this.bindCharacteristic(myService, Characteristic.PositionState, "Int", config.PositionState);
-			} 
-			return myService;
-		},		
+				
 		
 		
 	
