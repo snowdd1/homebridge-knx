@@ -53,7 +53,7 @@
 		 }
 	 ], 
 
-	"license": "GPL2", 
+	"license": "GPL-2.0", 
 	"bugs": 
 	{ 
 		"url": "https://github.com/snowdd1/homebridge-knx/issues"

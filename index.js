@@ -94,48 +94,6 @@ KNXPlatform.prototype = {
 };
 
 
-/**
- * The buscallbacks module is to expose a simple function to listen on the bus and register callbacks for value changes
- * of registered addresses.
- * 
- * Usage:
- *	 You can start the monitoring process at any time
-	 startMonitor({host: name-ip, port: port-num });
-
- *	 You can add addresses to the subscriptions using 
-
-registerGA(groupAddress, callback)
-
- *	 groupAddress has to be an groupAddress in common knx notation string '1/2/3'
- *	 the callback has to be a 
- *	 	var f = function(value) { handle value update;}
- *	 so you can do a 
- *	 	registerGA('1/2/3', function(value){
- *	 		console.log('1/2/3 got a hit with '+value);
- *	 		});
- *	 but of course it is meant to be used programmatically, not literally, otherwise it has no advantage
- *	
- *	 You can also use arrays of addresses if your callback is supposed to listen to many addresses:
-
-registerGA(groupAddresses[], callback)
-
- *	as in 
- *	 	registerGA(['1/2/3','1/0/0'], function(value){
- *	 		console.log('1/2/3 or 1/0/0 got a hit with '+value);
- *	 		});
- *  if you are having central addresses like "all lights off" or additional response objects
- *  
- *  
- *  callbacks can have a signature of
- *  function(value, src, dest, type) but do not have to support these parameters (order matters)
- *  src = physical address such as '1.1.20'
- *  dest = groupAddress hit (you subscribed to that address, remember?), as '1/2/3'
- *  type = Data point type, as 'DPT1' 
- *  
- *  	
- */
-
-
 
 //array of registered addresses and their callbacks
 var subscriptions = []; 
@@ -182,7 +140,7 @@ var startMonitor = function startMonitor(opts) {  // using { host: name-ip, port
 				if (subscriptions[i].address === dest) {
 					// found one, notify
 					//console.log('HIT: Write from '+src+' to '+dest+': '+val+' ['+type+']');
-					subscriptions[i].lastValue = {vaL: val, src: src, dest: dest, type: type, date:Date()};
+					subscriptions[i].lastValue = {val: val, src: src, dest: dest, type: type, date:Date()};
 					subscriptions[i].callback(val, src, dest, type, subscriptions[i].reverse);
 				}
 			}
@@ -504,8 +462,6 @@ KNXDevice.prototype = {
 			this.log("knx registering BOOLEAN " + addresses);
 			registerGA(addresses, function(val, src, dest, type, reverse){
 				this.log("[" +this.name + "]: Received value from bus:"+val+ " for " +dest+ " from "+src+" of type "+type + " for " + characteristic.displayName);
-//				iterate(characteristic);
-				
 				characteristic.setValue(val ? (reverse ? 0:1) : (reverse ? 1:0), undefined, 'fromKNXBus');
 			}.bind(this));
 		},
@@ -762,7 +718,7 @@ KNXDevice.prototype = {
 				case "Percent":
 					myCharacteristic.on('set', function(value, callback, context) {
 						this.setPercentage(value, callback, context, setGA, setReverse);
-						myCharacteristic.timeout = Date.now()+milliTimeout;
+						//myCharacteristic.timeout = Date.now()+milliTimeout;
 					}.bind(this));	
 					break;
 				case "Float":
