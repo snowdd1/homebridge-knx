@@ -18,6 +18,7 @@ var Service, Characteristic; // passed default objects from hap-nodejs
 var globs = {}; // the storage for cross module data pooling;
 var iterate = require('./lib/iterate');
 var knxmonitor = require('./lib/knxmonitor');
+var KNXAccess = require("./lib/knxaccess");
 
 /**
  * KNXPlatform
@@ -55,6 +56,7 @@ function KNXPlatform(log, config){
 	globs.log = log;
 	globs.knxmonitor = knxmonitor;
 	globs.Hapi = Hapi;
+	KNXAccess.setGlobs(globs); // init link for module;
 	knxmonitor.startMonitor({host: globs.knxd_ip, port: globs.knxd_port});
 	
 	
