@@ -8,12 +8,12 @@ ALL NEW VERSION WITH OWN PERSISTENCE LAYER (file based, anyhow)
 
 
 'use strict';
-//var types = require("HAP-NodeJS/accessories/types.js"); // is not to be used any more
+
 var knxd = require('eibd');
 var Hapi = require('hapi');
+var accConstructor = require('./lib/knxdevice.js');
 
 var Service, Characteristic; // passed default objects from hap-nodejs
-
 var globs = {}; // the storage for cross module data pooling;
 
 
@@ -25,9 +25,18 @@ var globs = {}; // the storage for cross module data pooling;
  * @param {object} config - configuration object from global config.json
  */
 function KNXPlatform(log, config){
+	that = this;
 	this.log = log;
 	this.Old_config = config;
-
+	/**
+	 * Talkative Info spitting thingy. 
+	 * @param {string} comment
+	 * 
+	 */
+	globs.info = function(comment) {
+		that.log("[INFO] " + comment);
+	}
+	
 }
 
 /**
@@ -92,11 +101,7 @@ KNXPlatform.prototype.accessories = function(callback) {
 
 		this.log("push new device "+foundAccessories[int].name);
 		// push knxd connection setting to each device from platform
-		
-		
-		
-		var accConstructor = require('./lib/knxdevice.js');
-		
+
 		var acc = new accConstructor(globs,foundAccessories[int]);
 		
 		this.log("created "+acc.name+" accessory");	
@@ -280,14 +285,7 @@ KNXDevice.prototype = {
 
 
 
-/**
- * identify dummy
- * 
- */
-		identify: function(callback) {
-			this.log("["+ this.name +"]:Identify requested!");
-			callback(); // success
-		},
+
 /**
  * bindCharacteristic initializes callbacks for 'set' events (from HK) and for KNX bus reads (to HK)
  */

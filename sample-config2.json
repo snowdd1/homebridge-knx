@@ -43,13 +43,16 @@
 
 	"Devices": [ 
 		{ 
-			"name": "Living Room North Lamp", 
-			"uuid_base": "LIVROOMNRTHBULB", 
+			"DeviceName": "Living Room North Lamp", 
+			"UUIDBase": "LIVROOMNRTHBULB", 
+			"Manufacturer": "Optional Manufacturer Name", 
+			"Model": "Optional Model Name", 
+			"SerialNumber": "Optional Serial Number", 
 			"Services": [ 
 				{ 
 					"ServiceType": "Lightbulb", 
 					"Description": "iOS8 Lightbulb type, supports On (Switch) and Brightness", 
-					"name": "Living Room North Lamp", 
+					"ServiceName": "Living Room North Lamp", 
 					"Characteristics": [ 
 						{ 
 							"Type": "On", 
