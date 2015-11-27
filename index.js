@@ -12,10 +12,12 @@ ALL NEW VERSION WITH OWN PERSISTENCE LAYER (file based, anyhow)
 var knxd = require('eibd');
 var Hapi = require('hapi');
 var accConstructor = require('./lib/knxdevice.js');
+var userOpts = require('./lib/user').User;
 
 var Service, Characteristic; // passed default objects from hap-nodejs
 var globs = {}; // the storage for cross module data pooling;
-
+var iterate = require('./lib/iterate');
+var knxmonitor = require('./lib/knxmonitor');
 
 /**
  * KNXPlatform
@@ -25,7 +27,7 @@ var globs = {}; // the storage for cross module data pooling;
  * @param {object} config - configuration object from global config.json
  */
 function KNXPlatform(log, config){
-	that = this;
+	var that = this;
 	this.log = log;
 	this.Old_config = config;
 	/**
@@ -34,8 +36,27 @@ function KNXPlatform(log, config){
 	 * 
 	 */
 	globs.info = function(comment) {
-		that.log("[INFO] " + comment);
+		that.log('info', "[INFO] " + comment);
 	}
+	
+	/* our own config file */
+	
+	this.config = userOpts.loadConfig();
+	globs.config = this.config;
+	
+	/* we should have now:
+	 * - knxd_ip
+	 * - knxd_port
+	 * - GroupAddresses object
+	 * - Devices Object
+	*/
+	globs.knxd_ip = this.config.knxd_ip;
+	globs.knxd_port = this.config.knxd_port || 6720;
+	globs.log = log;
+	globs.knxmonitor = knxmonitor;
+	globs.Hapi = Hapi;
+	knxmonitor.startMonitor({host: globs.knxd_ip, port: globs.knxd_port});
+	
 	
 }
 
@@ -67,19 +88,6 @@ KNXPlatform.prototype.accessories = function(callback) {
 	this.log("Fetching KNX devices.");
 	var that = this;
 
-	/* our own config file */
-	var userOpts = require('./lib/user').User;
-	this.config = userOpts.loadConfig();
-	
-	/* we should have now:
-	 * - knxd_ip
-	 * - knxd_port
-	 * - GroupAddresses object
-	 * - Devices Object
-	
-	
-	*/
-	
 	if (!this.config.GroupAddresses){
 		this.config.GroupAddresses = [];
 	}
@@ -96,15 +104,15 @@ KNXPlatform.prototype.accessories = function(callback) {
 	globs.devices = [];
 
 	for (var int = 0; int < foundAccessories.length; int++) {
-		this.log("parsing acc " + int + " of " + foundAccessories.length);
+		this.log("parsing acc " + int+1 + " of " + foundAccessories.length);
 		// instantiate and push to array
 
-		this.log("push new device "+foundAccessories[int].name);
+		globs.info("push new device ["+foundAccessories[int].DeviceName+"]");
 		// push knxd connection setting to each device from platform
 
 		var acc = new accConstructor(globs,foundAccessories[int]);
 		
-		this.log("created "+acc.name+" accessory");	
+		this.log("created ["+acc.name+"] accessory");	
 		globs.devices.push(acc);
 	}	
 	// if done, return the array to callback function
@@ -137,34 +145,12 @@ var colorOff = "\x1b[0m";
  * DEBUGGER FUNCTION ONLY
  */
 
-//inspects an object and prints its properties (also inherited properties) 
-var iterate = function nextIteration(myObject, path){
-	// this function iterates over all properties of an object and print them to the console
-	// when finding objects it goes one level  deeper
-	var name;
-	if (!path){ 
-		console.log("---iterating--------------------");
-	}
-	for (name in myObject) {
-		if (typeof myObject[name] !== 'function') {
-			if (typeof myObject[name] !== 'object' ) {
-				console.log((path  || "") + name + ': ' + myObject[name]);
-			} else {
-				nextIteration(myObject[name], path ? path + name + "." : name + ".");
-			}
-		} else {
-			console.log((path  || "") + name + ': (function)' );
-		}
-	}
-	if (!path) {
-		console.log("================================");
-	}
-};
 
 
 
 
 
+/*
 
 KNXDevice.prototype = {
 
@@ -173,7 +159,7 @@ KNXDevice.prototype = {
 /**
  * Registering routines
  * 
- */
+ 
 		// boolean: get 0 or 1 from the bus, write boolean
 		knxregister_bool: function(addresses, characteristic) {
 			this.log("knx registering BOOLEAN " + addresses);
@@ -273,7 +259,7 @@ KNXDevice.prototype = {
 		 * Characteristic.TargetHeatingCoolingState.OFF = 0; // Characteristic.TargetHeatingCoolingState.HEAT = 1; //
 		 * Characteristic.TargetHeatingCoolingState.COOL = 2; // Characteristic.TargetHeatingCoolingState.AUTO = 3; AUTO
 		 * (3) is not allowed as return type from devices!
-		 */
+		 
 		// undefined, has to match!
 		knxregister: function(addresses, characteristic) {
 			this.log("["+ this.name +"]:[" + characteristic.displayName+ "]:knx registering " + addresses);
@@ -288,7 +274,7 @@ KNXDevice.prototype = {
 
 /**
  * bindCharacteristic initializes callbacks for 'set' events (from HK) and for KNX bus reads (to HK)
- */
+ 
 		bindCharacteristic: function(myService, characteristicType, valueType, config, defaultValue) {
 			var myCharacteristic = myService.getCharacteristic(characteristicType);
 			var setGA = "";
@@ -302,7 +288,7 @@ KNXDevice.prototype = {
 			if (config.Set) {
 				// can write
 				// extract address and Reverse flag
-				setGA = config.Set.match(/\d*\/\d*\/\d*/);
+				setGA = config.Set.match(/\d*\/\d*\/\d*--------------------------------------------------------/);
 				if (setGA===null) {
 					this.log(colorOn + "["+ this.name +"]:["+myCharacteristic.displayName+"] Error in group adress: ["+ config.Set +"] "+colorOff);
 					throw new Error("EINVGROUPADRESS - Invalid group address given");
@@ -347,7 +333,7 @@ KNXDevice.prototype = {
  * 
  * @param config pass a configuration array parsed from config.json specifically for this service
  * 
- */
+ 
 		getContactSenserService: function(config) {
 //			Characteristic.ContactSensorState.CONTACT_DETECTED = 0;
 //			Characteristic.ContactSensorState.CONTACT_NOT_DETECTED = 1;
@@ -424,7 +410,7 @@ KNXDevice.prototype = {
 		
 	
 		
-/* assemble the device ***************************************************************************************************/
+/* assemble the device **************************************************************************************************
 		getServices: function() {
 
 			// you can OPTIONALLY create an information service if you wish to override
@@ -501,3 +487,4 @@ KNXDevice.prototype = {
 			return accessoryServices;
 		}
 };
+*/
