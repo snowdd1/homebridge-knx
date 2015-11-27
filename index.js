@@ -318,6 +318,9 @@ function KNXDevice(log, config) {
 	if (config.name) {
 		this.name = config.name;
 	}
+	if (config.uuid_base){
+		this.uuid_base = config.uuid_base;
+	}
 	if (config.knxd_ip){
 		this.knxd_ip = config.knxd_ip;
 	} else {
