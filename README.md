@@ -3,7 +3,9 @@ KNX platform shim for homebridge.
 This cannot run stand-alone!
 
 ## This Work In Progress, use carefully.
-Please also visit homebridge github homepage first
+Please also visit [homebridge github homepage](https://github.com/nfarina/homebridge) first.
+
+Latest to homebridge-knx changes can be found in the [CHANGELOG.TXT](https://github.com/snowdd1/homebridge-knx/blob/master/CHANGELOG.TXT)
 
 ### This can only be used with the new homebridge >=0.2.0 and Node >=4.0.0
 
@@ -214,11 +216,11 @@ Then you can change the name of the device without harm to your device database 
  -  On: DPT 1.001, 1 as on, 0 as off
 
 ## TemperatureSensor
--  CurrentTemperature: DPT9.001 in ï¿½C [listen only]
+-  CurrentTemperature: DPT9.001 in °C [listen only]
   
 ## Thermostat
--  CurrentTemperature: DPT9.001 in °C [listen only], -40 to 80ï¿½C if not overriden as shown above
--  TargetTemperature: DPT9.001, values 0..40ï¿½C only, all others are ignored
+-  CurrentTemperature: DPT9.001 in °C [listen only], -40 to 80°C if not overriden as shown above
+-  TargetTemperature: DPT9.001, values 0..40°C only, all others are ignored
 -  CurrentHeatingCoolingState: DPT20.102 HVAC, because of the incompatible mapping only off and heating (=auto) are shown, [listen only]
 -  TargetHeatingCoolingState: DPT20.102 HVAC, as above
 
