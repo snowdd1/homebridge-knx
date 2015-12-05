@@ -23,6 +23,9 @@ New 2015-11-05:
 New 2015-11-18:
 - get rid of obsolete "knxdevice" accessory_type (there is only one anyhow!)
   accessory_type is not required in config.json section platform KNX accessories any more.
+New 2015-12-01
+- new flag for 'knxd_do_not_read_set_groups' true or false:
+  when true neither READ requests are sent to the bus nor is listened to "SET" group addresses (you might duplicate them to "Listen":[] if required)
  * 
  */
 
@@ -82,6 +85,7 @@ KNXPlatform.prototype = {
 				// push knxd connection setting to each device from platform
 				foundAccessories[int].knxd_ip = this.config.knxd_ip;
 				foundAccessories[int].knxd_port = this.config.knxd_port;
+				foundAccessories[int].knxd_do_not_read_set_groups = this.config.knxd_do_not_read_set_groups; // new
 				//var accConstructor = require('./knxdevice.js');
 				var acc = new KNXDevice(this.log,foundAccessories[int]);
 				this.log("created "+acc.name+" accessory");	
@@ -331,6 +335,7 @@ function KNXDevice(log, config) {
 	} else {
 		throw new Error("MISSING KNXD PORT");
 	}
+	this.knxd_do_not_read_set_groups = config.knxd_do_not_read_set_groups ? true:false; // convert trueish to true
 
 }
 
@@ -736,6 +741,7 @@ KNXDevice.prototype = {
 			var myCharacteristic = myService.getCharacteristic(characteristicType);
 			var setGA = "";
 			var setReverse = false;
+			var listenaddresses;
 			if (myCharacteristic === undefined) {
 				throw new Error("unknown characteristics cannot be bound");
 			}
@@ -789,31 +795,38 @@ KNXDevice.prototype = {
 					}
 				} 
 			}
-			if ([config.Set].concat(config.Listen || []).length>0) {
+			if (this.knxd_do_not_read_set_groups) {
+				listenaddresses = config.Listen || []; // listen to LISTEN addresses only;
+				
+			} else {
+				listenaddresses = [config.Set].concat(config.Listen || []); // listen to all, even SET addresses 
+				
+			}
+			if (listenaddresses.length>0) {
 				//this.log("Binding LISTEN");
 				// can read
 				switch (valueType) {
 				case "Bool":
-					this.knxregister_bool([config.Set].concat(config.Listen || []), myCharacteristic);
+					this.knxregister_bool(listenaddresses, myCharacteristic);
 					break;				
 				case "Percent":
-					this.knxregister_percent([config.Set].concat(config.Listen || []), myCharacteristic);
+					this.knxregister_percent(listenaddresses, myCharacteristic);
 					break;
 				case "Float":
-					this.knxregister_float([config.Set].concat(config.Listen || []), myCharacteristic);
+					this.knxregister_float(listenaddresses, myCharacteristic);
 					break;
 				case "Int":
-					this.knxregister_int([config.Set].concat(config.Listen || []), myCharacteristic);
+					this.knxregister_int(listenaddresses, myCharacteristic);
 					break;
 				case "HVAC":
-					this.knxregister_HVAC([config.Set].concat(config.Listen || []), myCharacteristic);
+					this.knxregister_HVAC(listenaddresses, myCharacteristic);
 					break;
 				default:
 					this.log(colorOn+ "[ERROR] unknown type passed: ["+valueType+"]"+colorOff);
 					throw new Error("[ERROR] unknown type passed");
 				} 
 				this.log("["+ this.name +"]:["+myCharacteristic.displayName+"]: Issuing read requests on the KNX bus...");
-				this.knxreadarray([config.Set].concat(config.Listen || []));
+				this.knxreadarray(listenaddresses);
 			}
 			return myCharacteristic; // for chaining or whatsoever
 		},

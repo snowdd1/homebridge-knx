@@ -33,6 +33,7 @@ You need to configure all devices directly in the config.json. You can find a sa
             "name": "KNX",
             "knxd_ip": "192.168.1.1", 
             "knxd_port": 6720,
+            "knxd_do_not_read_set_groups":true,
             "accessories": [
                 {
                     "name": "Living Room North Lamp",
