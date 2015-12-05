@@ -1,0 +1,68 @@
+/** all devices and responsive browser windows **/
+@media screen and (max-width: 800px) {
+	body {
+		padding: 10px 15px;
+	}
+	#container {
+		width: 100%;
+	}
+	#hongkiat-form #aligned {
+		width: 100%;
+		float: none;
+		display: block;
+	}
+	#hongkiat-form #aside {
+		width: 100%;
+		display: block;
+		float: none;
+	}
+	#hongkiat-form .txtinput, #hongkiat-form textarea {
+		width: 85%;
+	}
+	#prioritycase {
+		float: left;
+		display: block;
+	}
+	#recipientcase {
+		float: left;
+		display: block;
+		margin-right: 55px;
+	}
+}
+
+
+/* smaller screen dropoff *******/
+@media only screen and (max-width: 550px) {
+ 	#hongkiat-form .txtinput, #hongkiat-form textarea {
+		width: 80%;
+	}
+}
+
+/* iPhone Landscape ********/
+@media only screen and (max-width: 480px) {
+	body {
+		padding: 10px 0px;
+	}
+	select.selmenu {
+		width: 190px;
+	}
+}
+
+/* iPhone portrait *******/
+@media only screen and (max-width: 320px) {
+	body {
+		padding: 10px 0px;
+	}
+ 	#hongkiat-form .txtinput, #hongkiat-form textarea {
+		width: 70%;
+	}
+	#hongkiat-form #aligned {
+		overflow: hidden;
+	}
+	select.selmenu {
+		width: 160px;
+	}
+	#recipientcase {
+		margin-right: 30px;
+	}
+}

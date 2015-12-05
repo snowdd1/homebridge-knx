@@ -1,0 +1,36 @@
+extends knxlayout
+
+block content
+	// never write here, it's on the background
+	//WRAPPER
+	section#container
+		h2 KNX Device
+		form(method="post", action="#", name="knxform", id="knxform")
+			#wrapping(class="clearfix")
+				section(id="aligned")
+					label(for="devicenanme") Device Name
+					input#devicename(type='text', placeholder='Device name', name='devicename', tabindex="1", autocomplete="off", class="txtinput")
+				section.clearfix(id="aside")
+					section(id="prioritycase")
+						h3 Configuration Status:
+						span(class="radiobadge")
+							input#low( type="radio",  name="priority", value="low")
+							label(for="low") Initial
+						span(class="radiobadge")
+							input( type="radio", id="med", name="priority", value="med", checked="checked")
+							label( for="med") Work in progress
+						span(class="radiobadge")
+							input( type="radio", id="high", name="priority", value="high")
+							label( for="high") Finished
+		#wrapping(class="clearfix")
+			#aligned
+				//USER LIST
+				h3 Assigned Services
+				#serviceList
+					table
+						thead
+							th UserName
+							th Email
+							th Delete?
+						tbody
+				// /USER LIST

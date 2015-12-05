@@ -3,7 +3,7 @@ This is going to be something completely new.
 
 This is not the repo you're looking for...
 
-# All new
+# The only thing that changes is _everything_
 A lot of changes at once 
 - own persistence (own file) instead of shared config.json with homebridge
 - all new concept: no native services any more, but using the defaults from HAP-NodeJS
@@ -13,3 +13,4 @@ A lot of changes at once
 
 # pipeline
 Web interface for configuration
+

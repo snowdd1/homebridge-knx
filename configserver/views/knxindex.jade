@@ -1,0 +1,24 @@
+extends knxlayout
+
+block content
+	// never write here, it's on the background
+	//WRAPPER
+	section#container
+		h2 KNX Device
+		form(method="post", action="#", name="knxform", id="knxform")
+			#wrapping(class="clearfix")
+				#aligned
+					label Device Name
+					input#devicename(type='text', placeholder='Device name', name='devicename', tabindex="1", autocomplete="off", class="txtinput")
+		#wrapping(class="clearfix")
+			#aligned
+				//USER LIST
+				h3 Assigned Services
+				#serviceList
+					table
+						thead
+							th UserName
+							th Email
+							th Delete?
+						tbody
+				// /USER LIST
