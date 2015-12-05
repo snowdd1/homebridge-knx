@@ -4,21 +4,22 @@
  * Module dependencies.
  */
 
+console.log("www.js: REQUIRES");
 var app = require('../app');
-var debug = require('debug')('nodetest2:server');
+var debug = require('debug')('knx-configserver:server');
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-
+console.log("www.js: CREATE HTTP Serv");
 var server = http.createServer(app);
 
 /**
@@ -28,6 +29,8 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+console.log("www.js: DONE");
+
 
 /**
  * Normalize a port into a number, string, or false.

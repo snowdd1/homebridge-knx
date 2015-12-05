@@ -6,15 +6,15 @@
 			"fields": [ 
 				{ 
 					"label": "Device name", 
-					"type": "string", 
+					"type": "text", 
 					"infotext": "The device name allows you to find the device in your homekit app.", 
 					"storage": "DeviceName", 
-					"cssclass": "DeviceName"
+					"cssclass": "txtinput"
 				 }, 
 
 				{ 
 					"label": "UUID", 
-					"type": "string", 
+					"type": "text", 
 					"infotext": "Defining a UUID allows you to keep homekit data (such as Scene allocation) even if you change the device name.", 
 					"optional": true, 
 					"storage": "UUIDBase"

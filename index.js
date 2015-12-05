@@ -58,8 +58,8 @@ function KNXPlatform(log, config){
 	globs.Hapi = Hapi;
 	KNXAccess.setGlobs(globs); // init link for module;
 	knxmonitor.startMonitor({host: globs.knxd_ip, port: globs.knxd_port});
-	
-	
+	// start the configuration server
+	require('./configserver/bin/www.js');
 }
 
 /**

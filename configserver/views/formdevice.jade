@@ -10,6 +10,7 @@ block content
 				section(id="aligned")
 					label(for="devicenanme") Device Name
 					input#devicename(type='text', placeholder='Device name', name='devicename', tabindex="1", autocomplete="off", class="txtinput")
+					input#uuid(type='text', placeholder='optional UUID', name='UUIDBase', tabindex="1", autocomplete="off", class="txtinput")
 				section.clearfix(id="aside")
 					section(id="prioritycase")
 						h3 Configuration Status:
@@ -29,8 +30,8 @@ block content
 				#serviceList
 					table
 						thead
-							th UserName
-							th Email
-							th Delete?
+							th Type
+							th Name
+							th Remove?
 						tbody
 				// /USER LIST
