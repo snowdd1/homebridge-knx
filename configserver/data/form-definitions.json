@@ -17,7 +17,8 @@
 					"type": "text", 
 					"infotext": "Defining a UUID allows you to keep homekit data (such as Scene allocation) even if you change the device name.", 
 					"optional": true, 
-					"storage": "UUIDBase"
+					"storage": "UUIDBase", 
+					"cssclass": "txtinput"
 				 }
 			 ]
 		 }, 
@@ -30,14 +31,16 @@
 					"label": "Service name", 
 					"type": "string", 
 					"infotext": "The service name is required to address the service through Siri. If you have multiple services in one device, the service names have to be unique - which is a good idea anyhow.", 
-					"storage": "ServiceName"
+					"storage": "ServiceName", 
+					"cssclass": "txtinput"
 				 }, 
 
 				{ 
 					"label": "Description", 
 					"type": "string", 
 					"infotext": "You can stow your description/remarks here", 
-					"storage": "Description"
+					"storage": "Description", 
+					"cssclass": "txtinput"
 				 }, 
 
 				{ 
@@ -76,13 +79,15 @@
 				{ 
 					"label": "knxd_ip", 
 					"default": "127.0.0.1", 
-					"type": "ip-address"
+					"type": "ip-address", 
+					"cssclass": "txtinput"
 				 }, 
 
 				{ 
 					"label": "knxd_port", 
 					"default": 6720, 
-					"type": "ip-port"
+					"type": "ip-port", 
+					"cssclass": "txtinput"
 				 }
 			 ]
 		 }, 
@@ -96,14 +101,16 @@
 					"default": "1/0/0", 
 					"type": "groupaddress", 
 					"infotext": "The group address used for bus communication, format 31/7/255", 
-					"storage": "/object"
+					"storage": "/object", 
+					"cssclass": "txtinput"
 				 }, 
 
 				{ 
 					"label": "Name", 
 					"type": "string", 
 					"infotext": "You can give it a name for later reference and easier maintenance", 
-					"storage": "name"
+					"storage": "name", 
+					"cssclass": "txtinput"
 				 }, 
 
 				{ 
@@ -111,7 +118,8 @@
 					"type": "selection", 
 					"storage": "dptype", 
 					"default": "DPT1", 
-					"infotext": "data point type describes the telegram type and the contents of the data sent to the bus"
+					"infotext": "data point type describes the telegram type and the contents of the data sent to the bus", 
+					"cssclass": "txtinput"
 				 }, 
 
 				{ 

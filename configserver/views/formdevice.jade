@@ -4,6 +4,7 @@ block content
 	// never write here, it's on the background
 	//WRAPPER
 	section#container
+		// this is supposed to be "form" "label"
 		h2 KNX Device
 		form(method="post", action="#", name="knxform", id="knxform")
 			#wrapping(class="clearfix")
@@ -12,6 +13,7 @@ block content
 					input#devicename(type='text', placeholder='Device name', name='devicename', tabindex="1", autocomplete="off", class="txtinput")
 					input#uuid(type='text', placeholder='optional UUID', name='UUIDBase', tabindex="1", autocomplete="off", class="txtinput")
 				section.clearfix(id="aside")
+					// example for a 3-way-radio selection
 					section(id="prioritycase")
 						h3 Configuration Status:
 						span(class="radiobadge")
@@ -24,8 +26,8 @@ block content
 							input( type="radio", id="high", name="priority", value="high")
 							label( for="high") Finished
 		#wrapping(class="clearfix")
-			#aligned
-				//USER LIST
+			section(id="aligned")
+				// list with assigned services for devices, etc.
 				h3 Assigned Services
 				#serviceList
 					table
