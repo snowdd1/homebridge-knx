@@ -7,19 +7,37 @@ var bodyParser = require('body-parser');
 
 // Database - we use node-persist here
 var storage = require('node-persist');
-var myStorage = storage.create({dir: 'userlist'}); //proudly copied from simonlast
-myStorage.initSync();
+//var myStorage = storage.create({dir: 'userlist'}); //proudly copied from simonlast
+//myStorage.initSync();
 //
 
 //init on first start
-myStorage.setItem("test2", {'username' : 'test2','email' : 'test2@test.com','fullname' : 'Blob Smiths','age' : 99,'location' : 'San Francisco','gender' : 'Male'});
+//myStorage.setItem("test2", {'username' : 'test2','email' : 'test2@test.com','fullname' : 'Blob Smiths','age' : 99,'location' : 'San Francisco','gender' : 'Male'});
 //
 
+
+/// woher bekommen wir die JSON strings für die collections?
+
+var myStorage, hap;
+
+var setStorage = function(storageJSON, homekitap) {
+	myStorage = storageJSON;
+	hap = homekitap;
+	console.log("==================================================================================================");
+	console.log(myStorage);
+	console.log(hap);
+	console.log("==================================================================================================");
+}
+
+
+
+
 /**
- *  Add all the routes in separte modules 
+ *  Add all the routes in separate modules 
  */
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var devices = require('./routes/devices');
 
 var app = express();
 
@@ -38,10 +56,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Make our db accessible to our router
 app.use(function(req,res,next){
     req.myStorage = myStorage;
+    req.hap = hap;
     next();
 });
 app.use('/', routes);
 app.use('/users', users);
+app.use('/devices', devices)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -76,3 +96,4 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+module.exports.setStorage = setStorage;

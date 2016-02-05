@@ -1,55 +1,63 @@
-#!/usr/bin/env node
 
 /**
  * Module dependencies.
  */
 
-console.log("www.js: REQUIRES");
-var app = require('../app');
+var app = require('../app'); //returns the express app, not the node module app
 var debug = require('debug')('knx-configserver:server');
 var http = require('http');
+var server;
 
-/**
- * Get port from environment and store in Express.
- */
+var initialize = function (globs) {
 
-var port = normalizePort(process.env.PORT || '3001');
-app.set('port', port);
+	/**
+	 * Set the storage option right
+	 * 
+	 */
+	debug("Setting the global objects for the web server. =========================================")
+	app.setStorage(globs.config, globs.API);
+	/**
+	 * Get port from environment and store in Express.
+	 */
 
-/**
- * Create HTTP server.
- */
-console.log("www.js: CREATE HTTP Serv");
-var server = http.createServer(app);
+	var port = normalizePort(process.env.PORT || '3001');
+	app.set('port', port);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+	/**
+	 * Create HTTP server.
+	 */
+	console.log("www.js: CREATE HTTP Serv");
+	server = http.createServer(app);
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-console.log("www.js: DONE");
+	/**
+	 * Listen on provided port, on all network interfaces.
+	 */	
 
+	server.listen(port);
+	server.on('error', onError);
+	server.on('listening', onListening);
+	console.log("www.js: DONE");
+}
+module.exports.initialize = initialize;
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+	var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+	if (isNaN(port)) {
+		// named pipe
+		return val;
+	}
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+	if (port >= 0) {
+		// port number
+		return port;
+	}
 
-  return false;
+	return false;
 }
 
 /**
@@ -57,27 +65,27 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+	if (error.syscall !== 'listen') {
+		throw error;
+	}
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+	var bind = typeof port === 'string'
+		? 'Pipe ' + port
+				: 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+	// handle specific listen errors with friendly messages
+	switch (error.code) {
+	case 'EACCES':
+		console.error(bind + ' requires elevated privileges');
+		process.exit(1);
+		break;
+	case 'EADDRINUSE':
+		console.error(bind + ' is already in use');
+		process.exit(1);
+		break;
+	default:
+		throw error;
+	}
 }
 
 /**
@@ -85,9 +93,9 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+	var addr = server.address();
+	var bind = typeof addr === 'string'
+		? 'pipe ' + addr
+				: 'port ' + addr.port;
+	debug('Listening on ' + bind);
 }

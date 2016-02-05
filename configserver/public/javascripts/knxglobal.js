@@ -2,41 +2,47 @@
  * http://usejsdoc.org/
  */
 // Userlist data array for filling in info box
-var userListData = [];
+var serviceListData = [];
 
 // DOM Ready =============================================================
 $(document).ready(function() {
 
     // Populate the user table on initial page load
-    populateTable();
+	populateServicesTable();
     // Username link click
-    //$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
+    //$('#userList table tbody').on('click', 'td a.linkshowservice', showUserInfo);
     // Add User button click
     //$('#btnAddUser').on('click', addUser);
     // Delete User link click
-    //$('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
+    //$('#userList table tbody').on('click', 'td a.removeservice', deleteUser);
 
 });
 
 // Functions =============================================================
 
 // Fill table with data
-function populateTable() {
+function populateServicesTable() {
 
     // Empty content string
     var tableContent = '';
 
     // jQuery AJAX call for JSON
-    $.getJSON( '/users/userlist', function( data ) {
+    $.getJSON( '/devices/services/' + ($('#uuid').val() ? $('#uuid').val() : $('#devicename').val()), function( data ) {
         // Stick our user data array into a userlist variable in the global object
-        userListData = data;
+    	serviceListData = data;
+    	deviceUUID = ($('#uuid').val() ? $('#uuid').val() : $('#devicename').val())
         // For each item in our JSON, add a table row and cells to the content string
         $.each(data, function(){
             tableContent += '<tr>';
-            tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.username + '">' + this.username + '</a></td>';
-            tableContent += '<td>' + this.email + '</td>';
-            tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this.username + '">delete</a></td>'; // username as delete key for node-persist
+            tableContent += '<td><a href="/device/' + encodeURIComponent(deviceUUID) + '/' + encodeURIComponent(this.ServiceName) + '" class="linkshowservice" rel="' + this.ServiceType + '">' + this.ServiceType + '</a></td>';
+            tableContent += '<td class="serviceName">' + this.ServiceName + '</td>';
+            tableContent += '<td align="right"><a href="#" class="removeservice" rel="' + this.username + '">delete</a></td>'; // username as delete key for node-persist
             tableContent += '</tr>';
+            if (this.Description){
+                tableContent += '<tr>';
+                tableContent += '<td colspan=3 class="serviceListDescription">' + this.Description + '</td>';
+                tableContent += '</tr>';
+            }
         });
 
         // Inject the whole content string into our existing HTML table
@@ -44,6 +50,14 @@ function populateTable() {
     });
 };
 
+// go to next device [draft only]
+function nextDevice() {
+	$.getJSON('/devices/deviceinfos/'+document.getElementById("nextDevice"), function (data) {
+		nextDeviceData = $.parseJSON(data);
+		// update the web form
+		
+	});
+}
 
 //Show User Info
 function showUserInfo(event) {
@@ -105,7 +119,7 @@ function addUser(event) {
                 $('#addUser fieldset input').val('');
 
                 // Update the table
-                populateTable();
+                populateServicesTable();
 
             }
             else {
@@ -149,7 +163,7 @@ function deleteUser(event) {
          }
 
          // Update the table
-         populateTable();
+         populateServicesTable();
 
      });
 

@@ -12,6 +12,23 @@ padding-top: 10px;
 
 a { color: #4681da; text-decoration: none; }
 a:hover { text-decoration: underline; }
+a.removeservice {
+	text-aligh: right;
+}
+.leftaligned {
+	text-align: left;
+	float: left;	
+	height: 1em;	
+	margin-top: 1em;	
+	width: 7em;
+}
+.rightaligned {
+	text-align: right;
+	float: right;	
+	height: 1em;	
+	margin-top: 1em;	
+	width: 7em;
+}
 
 h2 { 
 border-bottom: 1px solid #ddd; 
@@ -21,7 +38,7 @@ font-family: "Droid Serif", Georgia, serif;
 font-size: 2.6em; 
 line-height: 1.8em; 
 font-weight: 500; 
-margin-top: 25px; 
+margin-top: 3px; 
 margin-bottom: 25px; 
 padding: 12px 0; 
 text-align: center; 
@@ -52,10 +69,11 @@ box-sizing: border-box;
 }
 
 
-/** the form elements **/
-#knxform { box-sizing: border-box; }
 
-#knxform .txtinput { 
+/** the form elements **/
+.knxform { box-sizing: border-box; }
+
+.knxform .txtinput { 
 display: block;
 font-family: "Helvetica Neue", Arial, sans-serif;
 border-style: solid;
@@ -76,7 +94,7 @@ transition: border 0.15s linear 0s, box-shadow 0.15s linear 0s, color 0.15s line
 -o-transition: border 0.15s linear 0s, box-shadow 0.15s linear 0s, color 0.15s linear 0s;
 }
 
-#knxform .txtinput:focus { 
+.knxform .txtinput:focus { 
 color: #333;
 border-color: rgba(41, 92, 161, 0.4);
 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(41, 92, 161, 0.6);
@@ -85,20 +103,20 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(41, 92, 161, 0.6);
 outline: 0 none; 
 }
 
-#knxform input#devicename {
+.knxform input#devicename {
 background: #fff url('images/device.jpg') 5px 4px no-repeat;
 }
-#knxform input#email {
+.knxform input#email {
 background: #fff url('images/email.png') 5px 4px no-repeat;
 }
-#knxform input#website {
+.knxform input#website {
 background: #fff url('images/website.png') 5px 4px no-repeat;
 }
-#knxform input#telephone {
+.knxform input#telephone {
 background: #fff url('images/phone.png') 5px 4px no-repeat;
 }
 
-#knxform textarea {
+.knxform textarea {
 display: block;
 font-family: "Helvetica Neue", Arial, sans-serif;
 border-style: solid;
@@ -109,7 +127,7 @@ font-size: 1.5em;
 padding: 11px 25px;
 padding-left: 55px;
 width: 90%;
-height: 180px;
+height: 90px;
 color: #777;
 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
 -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
@@ -119,7 +137,7 @@ transition: border 0.15s linear 0s, box-shadow 0.15s linear 0s, color 0.15s line
 -moz-transition: border 0.15s linear 0s, box-shadow 0.15s linear 0s, color 0.15s linear 0s;
 -o-transition: border 0.15s linear 0s, box-shadow 0.15s linear 0s, color 0.15s linear 0s;
 }
-#knxform textarea:focus {
+.knxform textarea:focus {
 color: #333;
 border-color: rgba(41, 92, 161, 0.4);
 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(40, 90, 160, 0.6);
@@ -127,20 +145,21 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(40, 90, 160, 0.6);
 -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(40, 90, 160, 0.6);
 outline: 0 none; 
 }
-#knxform textarea.txtblock {
+.knxform textarea.txtblock {
 background: #fff url('images/speech.png') 5px 4px no-repeat;
 }
 
-#knxform #slider { width: 60%; }
+.knxform #slider { width: 60%; }
 
-#knxform #aligned { 
+.knxform #aligned { 
 box-sizing: border-box; 
 float: left; 
-width: 450px; 
+max-width: 400px; /** was width: 450px **/
 margin-right: 50px; 
 }
-#knxform #aside {
+.knxform #aside {
 	float: left;
+	margin-left: 10px;
 	width: 250px;
 	padding: 0;
 	box-sizing: border-box;
@@ -148,12 +167,11 @@ margin-right: 50px;
 
 #wrapping { width: 100%; box-sizing: border-box; }
 
-#serviceList {}
-
-#characteristicsList {}
 
 span.radiobadge { display: block; margin-bottom: 8px; }
 span.radiobadge label { font-size: 1.2em; padding-bottom: 4px; }
+
+.radioselection {margin-bottom: 30px;}
 
 select.selmenu {
 font-size: 17px;
@@ -165,8 +183,8 @@ width: 200px;
 
 /** custom buttons **/
 
-#buttons { display: block; padding-top: 10px; }
-#buttons #resetbtn {
+#buttons, .buttons { display: block; padding-top: 10px; }
+#buttons #resetbtn, .buttons .resetbtn {
 display: block;
 float: left;
 color: #515151;
@@ -198,7 +216,7 @@ box-shadow: 0 1px 2px rgba(144, 144, 144, 0.4);
 text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }
 
-#buttons #resetbtn:hover {
+#buttons #resetbtn:hover, .buttons .resetbutton:hover {
 text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);	
 color: #818181;
 background-color: #fff;
@@ -210,7 +228,7 @@ border-color: #aeaeae;
 box-shadow: inset 0 1px 0 rgba(256,256,256,0.4),0 1px 3px rgba(0,0,0,0.5);
 }
 
-#buttons #submitbtn {
+#buttons #submitbtn, .buttons .submitbtn {
 display: block;
 float: left;
 height: 3em;
@@ -242,7 +260,7 @@ background-image: -ms-linear-gradient(top, rgb(226,238,175) 3%,rgb(188,216,77) 3
 background-image: linear-gradient(top, rgb(226,238,175) 3%,rgb(188,216,77) 3%,rgb(144,176,38) 100%); 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2eeaf', endColorstr='#90b026',GradientType=0 );
 }
-#buttons #submitbtn:hover, #buttons #submitbtn:active {
+#buttons #submitbtn:hover, #buttons #submitbtn:active, .buttons .submitbtn:hover, .buttons .submitbtn:active {
 border-color: #7c9826 #7c9826 #000;
 color: #fff;
 -moz-box-shadow: inset 0 1px 0 rgba(256,256,256,0.4),0 1px 3px rgba(0,0,0,0.5);
@@ -258,8 +276,48 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4edbd', end
 }
 
 /** @group clearfix **/
+/** it's an inline block with all the rest floating around it. **/
 .clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
 .clearfix { display: inline-block; }
  
 html[xmlns] .clearfix { display: block; }
 * html .clearfix { height: 1%; }
+
+#serviceList {
+	box-sizing: border-box;
+	/**float: left;**/
+	/**width: 450px;**/
+	max-width: 400px;
+	margin-right: 0px;
+	font-size: 150%; 
+	}
+#serviceList .serviceName {
+	font-size: 100%; 
+	position: relative;
+}
+
+/** gute idee geht aber nicht mit touch
+#serviceList .serviceName span {
+  display: none;
+text-decoration: none;
+		}
+
+#serviceList .serviceName:hover span {
+  display: block;
+  position: absolute; 
+  top: 20px; 
+  left: 0; 
+  width: 200px;
+  z-index: 100;
+  color: #000000; 
+  border:1px solid #000000; 
+  background: #FFFFCC;
+  font: 12px Verdana, sans-serif; 
+  text-align: left;
+  }
+**/
+
+#serviceList td.serviceListDescription {
+	font-size: 100%;
+	color: rgba(150, 150, 150, 1);
+}

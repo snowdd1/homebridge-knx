@@ -1,0 +1,14 @@
+extends knxlayout
+
+block localStyles
+	link(rel='stylesheet', type="text/css", media="all", href='/stylesheets/knxlists.css')
+
+block content
+	// never write here, it's on the background
+	//WRAPPER
+	section#container
+		// this is supposed to be "form" "label"
+		h2 KNX Devices
+		- each device in devices
+			div.device!= '<a href=device/' + ( device.UUIDBase ? encodeURIComponent(device.UUIDBase) : encodeURIComponent(device.DeviceName)) + '> ' + device.DeviceName + '</a>'
+		div.device Add new device...

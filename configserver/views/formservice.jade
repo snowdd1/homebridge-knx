@@ -10,20 +10,23 @@ block content
 	//WRAPPER
 	section#container
 		.leftaligned
-			a(href="/devicelist") Back to list
+			a(href="/devicelist") Back to device
 		.rightaligned
 			input#nextDevice(type="hidden", value=devicedata.nextDevice)
 			if devicedata.nextDevice
-				a#nextdev(href=devicedata.nextDevice) Next device
+				a#nextdev(href=encodeURIComponent(devicedata.nextDevice)) Next device
 		// this is supposed to be "form" "label"
-		h2 KNX Device
+		h2 KNX Service
 		form.knxform(method="post", action="#", name="knxform", id="knxform")
 			#wrapping.clearfix
 				section#aligned
-					label(for="devicenanme") Device Name
-					input#devicename.txtinput(type='text', placeholder='Device name', name='devicename', tabindex="1", autocomplete="off", value= devicedata.DeviceName	)
-					label(for="UUIDBase") Optional UUID Base
-					input#uuid.txtinput(type='text', placeholder='optional UUID', name='UUIDBase', tabindex="1", autocomplete="off", value= devicedata.UUIDBase)
+					label(for="servicename") Device Name
+					input#servicename.txtinput(type='text', placeholder='Service name', name='servicename', tabindex="1", autocomplete="off", value= devicedata.service.ServiceName	)
+					label(for="servicetype") Service type
+					select#servicename(name='servicetype')
+						- each serv in Services
+							option Dummy
+							//option(value=serv.displayName, checked=(serv.displayName===devicedata.service.ServiceType)) serv.displayName
 					//Description
 					label(for="Description") Optional description - for your own use only
 					textarea#description.txtinput(type='text', placeholder='optional description', name='Description', tabindex="1", autocomplete="off", value= devicedata.Description)
