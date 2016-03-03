@@ -1,3 +1,7 @@
+
+[![NPM version](http://img.shields.io/npm/v/homebridge-knx.png)](https://npmjs.org/package/homebridge-knx) 
+[![Downloads](http://img.shields.io/npm/dm/homebridge-knx.png)](https://npmjs.org/package/homebridge-knx)         
+
 # homebridge-knx
 KNX platform shim for homebridge.
 This cannot run stand-alone!
@@ -217,11 +221,11 @@ Then you can change the name of the device without harm to your device database 
  -  On: DPT 1.001, 1 as on, 0 as off
 
 ## TemperatureSensor
--  CurrentTemperature: DPT9.001 in 캜 [listen only]
+-  CurrentTemperature: DPT9.001 in 째C [listen only]
   
 ## Thermostat
--  CurrentTemperature: DPT9.001 in 캜 [listen only], -40 to 80캜 if not overriden as shown above
--  TargetTemperature: DPT9.001, values 0..40캜 only, all others are ignored
+-  CurrentTemperature: DPT9.001 in 째C [listen only], -40 to 80째C if not overriden as shown above
+-  TargetTemperature: DPT9.001, values 0..40째C only, all others are ignored
 -  CurrentHeatingCoolingState: DPT20.102 HVAC, because of the incompatible mapping only off and heating (=auto) are shown, [listen only]
 -  TargetHeatingCoolingState: DPT20.102 HVAC, as above
 
