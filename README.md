@@ -1,5 +1,6 @@
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
+
+[![NPM version](http://img.shields.io/npm/v/homebridge-knx.png)](https://npmjs.org/package/homebridge-knx) 
+[![Downloads](http://img.shields.io/npm/dm/homebridge-knx.png)](https://npmjs.org/package/homebridge-knx)         
 
 # homebridge-knx
 KNX platform shim for homebridge.
