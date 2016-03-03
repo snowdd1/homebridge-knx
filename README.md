@@ -1,6 +1,5 @@
 
-[![NPM version](http://img.shields.io/npm/v/homebridge-knx.png)](https://npmjs.org/package/homebridge-knx) 
-[![Downloads](http://img.shields.io/npm/dm/homebridge-knx.png)](https://npmjs.org/package/homebridge-knx)         
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]  [![Build status][appveyor-image]][appveyor-url] [![Build status][codeship-image]][codeship-url] [![Dependency status][david-dm-image]][david-dm-url]   
 
 # homebridge-knx
 KNX platform shim for homebridge.
@@ -255,3 +254,17 @@ You can see the last telegrams' values on port 3000, as in http://YOURIP:3000
 # DISCLAIMER
 **This is work in progress!**
 
+[npm-url]: https://npmjs.org/package/homebridge-knx
+
+[downloads-image]: http://img.shields.io/npm/dm/homebridge-knx.svg
+
+[npm-image]: http://img.shields.io/npm/v/homebridge-knx.svg
+
+[appveyor-image]:https://ci.appveyor.com/api/projects/status/bsu9w9ar8pboc2nj?svg=true
+[appveyor-url]:https://ci.appveyor.com/project/snowdd1/homebridge-knx
+
+[codeship-image]:https://codeship.com/projects/79da7240-5481-0132-ea32-42ab35009c21/status
+[codeship-url]:https://codeship.com/projects/49203
+
+[david-dm-url]:https://david-dm.org/snowdd1/homebridge-knx
+[david-dm-image]:https://david-dm.org/snowdd1/homebridge-knx.svg
