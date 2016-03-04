@@ -6,8 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // Database - we use node-persist here
-var storage = require('node-persist');
-//var myStorage = storage.create({dir: 'userlist'}); //proudly copied from simonlast
+//var storage = require('node-persist');
 //myStorage.initSync();
 //
 

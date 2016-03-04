@@ -116,9 +116,6 @@ KNXPlatform.prototype.configure = function() {
 	
 	globs.info('We think homebridge has restored '+ globs.restoredAccessories.length + ' accessories.')
 
-	// 1. get all our devices from the config file
-
-	// this.accessories(); // doof
 	
 	/**************** read the config the first time 
 	 * 
