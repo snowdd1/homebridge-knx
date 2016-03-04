@@ -1,6 +1,6 @@
 { 
 	"name": "homebridge-knx", 
-	"version": "0.2.6", 
+	"version": "0.2.7", 
 	"description": "homebridge shim for KNX home automation", 
 	"main": "index.js", 
 	"scripts": { 
@@ -10,7 +10,7 @@
 
 	"engines": { 
 		"node": ">4.0.0", 
-		"homebridge": "^0.2.0"
+		"homebridge": "^0.3.0"
 	 }, 
 
 	"repository": { 
@@ -30,7 +30,7 @@
 
 	"dependencies": { 
 		"eibd": "^0.3.1", 
-		"hapi": "^11.1.0"
+		"hapi": "^13.0.0"
 	 }, 
 
 	"author": { 
