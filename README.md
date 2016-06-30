@@ -164,28 +164,28 @@ Then you can change the name of the device without harm to your device database 
 -  StatusLowBattery: DPT 1.011, 1 as true
 
 ## GarageDoorOpener
--  CurrentDoorState: DPT5 integer value in range 0..4
-	//			Characteristic.CurrentDoorState.OPEN = 0;
-	//			Characteristic.CurrentDoorState.CLOSED = 1;
-	//			Characteristic.CurrentDoorState.OPENING = 2;
-	//			Characteristic.CurrentDoorState.CLOSING = 3;
-	//			Characteristic.CurrentDoorState.STOPPED = 4;
+-  CurrentDoorState: DPT5 integer value in range 0..4  
+	//			Characteristic.CurrentDoorState.OPEN = 0;  
+	//			Characteristic.CurrentDoorState.CLOSED = 1;  
+	//			Characteristic.CurrentDoorState.OPENING = 2;  
+	//			Characteristic.CurrentDoorState.CLOSING = 3;  
+	//			Characteristic.CurrentDoorState.STOPPED = 4;  
 
--  TargetDoorState: DPT5 integer value in range 0..1
-	// Characteristic.TargetDoorState.OPEN = 0;
-	// Characteristic.TargetDoorState.CLOSED = 1;
+-  TargetDoorState: DPT5 integer value in range 0..1  
+	// Characteristic.TargetDoorState.OPEN = 0;  
+	// Characteristic.TargetDoorState.CLOSED = 1;  
 
 -  ObstructionDetected: DPT1, 1 as true
 
--  LockCurrentState: DPT5 integer value in range 0..3
-	//			Characteristic.LockCurrentState.UNSECURED = 0;
-	//			Characteristic.LockCurrentState.SECURED = 1;
-	//			Characteristic.LockCurrentState.JAMMED = 2;
-	//			Characteristic.LockCurrentState.UNKNOWN = 3;
+-  LockCurrentState: DPT5 integer value in range 0..3  
+    - Characteristic.LockCurrentState.UNSECURED = 0;  
+    - Characteristic.LockCurrentState.SECURED = 1;  
+    - Characteristic.LockCurrentState.JAMMED = 2;  
+    - Characteristic.LockCurrentState.UNKNOWN = 3;  
 
--  LockTargetState: DPT5 integer value in range 0..1
-	//			Characteristic.LockTargetState.UNSECURED = 0;
-	//			Characteristic.LockTargetState.SECURED = 1;
+-  LockTargetState: DPT5 integer value in range 0..1  
+	//			Characteristic.LockTargetState.UNSECURED = 0;  
+	//			Characteristic.LockTargetState.SECURED = 1;  
 
 
 
