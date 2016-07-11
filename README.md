@@ -21,6 +21,11 @@ This node module requires a running (and properly configured) knx daemon (knxd).
 -  configure homebridge and its plugins. You might start by copying the [`KNX-sample-config.json`](https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json) to a new folder `.homebridge` in your user folder (on a default installation raspberry, it's `/users/pi`) and rename it to config.json
 -  Eliminate everything (especially all group addresses) that might harm your KNX installation. Sending bus telegrams to your alarm device might wake the neighbourhood unpleasantly!
 -  when done, start homebridge with `homebridge`. If you have chosen a local install, go to the homebridge folder and do a `bin/homebridge --plugin-path <any>/homebridge-knx` with the path to the homebridge-knx installation.
+
+### Limitations
+Since homebridge-knx is not an Apple-certified HomeKit device some functions are limited:
+- remote access is only possible using a local device as HomeKit "router" (i.e. an AppleTV 3rd/4th gen)
+- "sharing" to other users is currently not possible
  
 # Configuration 
 The configuration of the homebridge-knx plugin is done in the global config.json of homebridge. If you did not pass the -U parameter to homebridge, the directory for the config.json is /home/<user>/.homebridge
@@ -69,6 +74,8 @@ In the accessories section (the array within the brackets [ ]) you can insert as
 	    ]
     }
 ````                 
+The "name" of the "accessories" object is what Siri will observe.
+
 You have to add services in the following syntax:
 ````json
     {
