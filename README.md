@@ -25,7 +25,6 @@ This node module requires a running (and properly configured) knx daemon (knxd).
 ### Limitations
 Since homebridge-knx is not an Apple-certified HomeKit device some functions are limited:
 - remote access is only possible using a local device as HomeKit "router" (i.e. an AppleTV 3rd/4th gen)
-- "sharing" to other users is currently not possible
  
 # Configuration 
 The configuration of the homebridge-knx plugin is done in the global config.json of homebridge. If you did not pass the -U parameter to homebridge, the directory for the config.json is /home/<user>/.homebridge
