@@ -73,7 +73,7 @@ In the accessories section (the array within the brackets [ ]) you can insert as
 	    ]
     }
 ````                 
-The "name" of the "accessories" object is what Siri will observe.
+The "name" of the "service" object is what Siri will observe. Depending on the app either the "service" or the "accessories" name might be displayed. Do no mix languages here!
 
 You have to add services in the following syntax:
 ````json
