@@ -811,6 +811,12 @@ KNXDevice.prototype = {
 				listenaddresses = [config.Set].concat(config.Listen || []); // listen to all, even SET addresses 
 				
 			}
+
+			var listenaddressesNoRead = listenaddresses;
+			if ('ListenNoRead' in config) {
+				listenaddresses = listenaddresses.concat(config.ListenNoRead || []); 
+			}
+
 			if (listenaddresses.length>0) {
 				//this.log("Binding LISTEN");
 				// can read
@@ -835,7 +841,7 @@ KNXDevice.prototype = {
 					throw new Error("[ERROR] unknown type passed");
 				} 
 				this.log("["+ this.name +"]:["+myCharacteristic.displayName+"]: Issuing read requests on the KNX bus...");
-				this.knxreadarray(listenaddresses);
+				this.knxreadarray(listenaddressesNoRead);
 			}
 			return myCharacteristic; // for chaining or whatsoever
 		},
