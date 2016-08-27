@@ -44,7 +44,7 @@ var knxd = require('eibd');
 var Hapi = require('hapi');
 
 var Service, Characteristic; // passed default objects from hap-nodejs
-
+var alreadyScanned;
 
 
 function KNXPlatform(log, config){
@@ -466,6 +466,15 @@ KNXDevice.prototype = {
 			if (!groupAddress) {
 				return null;
 			}
+			if (!alreadyScanned) {
+				alreadyScanned = {};
+			} else {
+				if (alreadyScanned[groupAddress] == true) {
+					this.log("[knxdevice:knxread] group address already scanned "+groupAddress);
+					return null;
+				}
+			}
+			alreadyScanned[groupAddress] = true;
 			this.log("[knxdevice:knxread] preparing knx request for "+groupAddress);
 			var knxdConnection = new knxd.Connection();
 			// this.log("DEBUG in knxread: created empty connection, trying to connect socket to "+this.knxd_ip+":"+this.knxd_port);
