@@ -812,7 +812,7 @@ KNXDevice.prototype = {
 				
 			}
 
-			var listenaddressesNoRead = listenaddresses;
+			var listenaddressesToRead = listenaddresses;
 			if ('ListenNoRead' in config) {
 				listenaddresses = listenaddresses.concat(config.ListenNoRead || []); 
 			}
@@ -841,7 +841,7 @@ KNXDevice.prototype = {
 					throw new Error("[ERROR] unknown type passed");
 				} 
 				this.log("["+ this.name +"]:["+myCharacteristic.displayName+"]: Issuing read requests on the KNX bus...");
-				this.knxreadarray(listenaddressesNoRead);
+				this.knxreadarray(listenaddressesToRead);
 			}
 			return myCharacteristic; // for chaining or whatsoever
 		},
