@@ -102,11 +102,37 @@ function registry(homebridgeAPI) {
 module.exports = registry;
 
 
+//Function invoked when homebridge tries to restore cached accessory
+//Developer can configure accessory at here (like setup event handler)
+//Update current value
+
 /**
- * With plugin-2 system
- * Accessories are re-created by the homebridge itself, but without all the event functions etc.
+* configureAccessory() is invoked for each accessory homebridge restores from its persistence layer.
+* The restored accessory has all the homekit properties, but none of the implementation at this point of time.
+* This happens before the didFinishLaunching event.
+* 
+* @param {platformAccessory} accessory  
+*/
+KNXPlatform.prototype.configureAccessory = function(accessory) {
+	console.log("Plugin - Configure Accessory: " + accessory.displayName);
+
+	// set the accessory to reachable if plugin can currently process the accessory
+	// otherwise set to false and update the reachability later by invoking 
+	// accessory.updateReachability()
+	accessory.updateReachability(false);
+
+	// collect the accessories 
+	globs.restoredAccessories.push(accessory);
+}
+
+
+/**
+ * With plugin-2 system, accessories are re-created by the homebridge itself, 
+ * but without all the event functions etc.
  *
  * We need to re-connect all our accessories to the right functions
+ * 
+ * This is my event handler for the "didFinishLaunching" event of the newAPI
  */
 
 KNXPlatform.prototype.configure = function() {
@@ -193,28 +219,6 @@ function getAccessoryByUUID(accessories, uuid) {
 
 
 
-//Function invoked when homebridge tries to restore cached accessory
-//Developer can configure accessory at here (like setup event handler)
-//Update current value
-
-/**
- * configureAccessory() is invoked for each accessory homebridge restores from its persistence layer.
- * The restored accessory has all the homekit properties, but none of the implementation at this point of time.
- * This happens before the didFinishLaunching event.
- * 
- * @param {platformAccessory} accessory  
- */
-KNXPlatform.prototype.configureAccessory = function(accessory) {
-	console.log("Plugin - Configure Accessory: " + accessory.displayName);
-
-	// set the accessory to reachable if plugin can currently process the accessory
-	// otherwise set to false and update the reachability later by invoking 
-	// accessory.updateReachability()
-	accessory.updateReachability(false);
-
-	// collect the accessories 
-	globs.restoredAccessories.push(accessory);
-}
 
 
 /**** Handler will be invoked when user try to config your plugin
