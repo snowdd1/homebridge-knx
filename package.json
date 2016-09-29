@@ -1,6 +1,6 @@
 { 
 	"name": "homebridge-knx", 
-	"version": "0.2.7", 
+	"version": "0.2.8", 
 	"description": "homebridge shim for KNX home automation", 
 	"main": "index.js", 
 	"scripts": { 
@@ -10,7 +10,7 @@
 
 	"engines": { 
 		"node": ">4.0.0", 
-		"homebridge": "^0.3.0"
+		"homebridge": "^0.4.0"
 	 }, 
 
 	"repository": { 
@@ -36,13 +36,18 @@
 	"author": { 
 		"name": "Raoul", 
 		"e-mail": "<snowdd1.theelk@xoxy.net>", 
-		"url": "https://github.com/snowdd1/issues"
+		"url": "https://github.com/snowdd1"
 	 }, 
 
 	"contributors": [ 
 		{ 
 			"name": "EIBHomeControl", 
 			"url": "https://github.com/EIBHomeControl"
+		 }, 
+
+		{ 
+			"name": "bytefactory73", 
+			"url": "https://github.com/bytefactory73"
 		 }
 	 ], 
 

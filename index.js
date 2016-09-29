@@ -26,6 +26,9 @@ New 2015-11-18:
 New 2015-12-01
 - new flag for 'knxd_do_not_read_set_groups' true or false:
   when true neither READ requests are sent to the bus nor is listened to "SET" group addresses (you might duplicate them to "Listen":[] if required)
+New 2016-08-27
+- ListenNoRead for addresses that don't like having READ telegrams sent to
+  (thanks to bytefactory73)
  * 
  */
 

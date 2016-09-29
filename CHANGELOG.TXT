@@ -5,4 +5,5 @@
 0.2.4 merged bugfix for surplus "break;" from github user EIBHomeControl - thanks!
 0.2.5 added missing Outlet service; restored lost uuid_base attribute
 0.2.6 added new flag knxd_do_not_read_set_groups=true to config.json to avoid sending read requests for SET group addresses 
- 
+0.2.7 homebridge dependency 0.3
+0.2.8 homebridge dependency 0.4; ListenNoRead key added by bytefactory73
