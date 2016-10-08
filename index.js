@@ -66,8 +66,6 @@ function KNXPlatform(log, config, newAPI){
 	globs.Hapi = Hapi; // web server
 	KNXAccess.setGlobs(globs); // init link for module;
 	knxmonitor.startMonitor({host: globs.knxd_ip, port: globs.knxd_port});
-	// start the configuration server
-	require('./configserver/bin/www.js').initialize(globs);
 
 	// plugin-2 system: wait for the homebridge to finish restoring the accessories from its own persistence layer.
 	if (newAPI) {
@@ -81,7 +79,8 @@ function KNXPlatform(log, config, newAPI){
 
 /**
  * Registers the plugin with homebridge. Will be called by homebridge if found in directory structure and package.json
- * is right This function needs to be exported.
+ * is right 
+ * This function needs to be exported.
  * 
  * @param {object} homebridgeAPI - The API Object made available by homebridge. Contains the HAP type library e.g.
  * 
@@ -172,7 +171,7 @@ KNXPlatform.prototype.configure = function() {
 		if (matchAcc) {
 			// we found one
 			globs.info('Matched an accessory: ' + currAcc.DeviceName + ' === ' + matchAcc.displayName);
-			// Instanciate and pass the existing platformAccessory
+			// Instantiate and pass the existing platformAccessory
 			globs.devices.push(new accConstructor(globs,foundAccessories[int],matchAcc));
 		} else {
 			// this one is new
