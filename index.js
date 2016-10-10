@@ -1,11 +1,11 @@
-/*****
+/*
  * Platform shim for use with nfarina's homebridge plugin system 
  * This is the version for plugin support
  * ******************************************************************************************** 
  * 
 ALL NEW VERSION WITH OWN PERSISTENCE LAYER (file based, anyhow)
+ECMA-Script 2015 (6.0) Language
 
-Changes for Plugin-2.0 PR for testing!
  */
 
 
@@ -32,7 +32,7 @@ var KNXAccess = require("./lib/knxaccess");
 function KNXPlatform(log, config, newAPI){
 	var that = this;
 	this.log = log;
-	this.Old_config = config;
+	//this.Old_config = config;
 
 	// new API for creating accessory and such.
 	globs.newAPI = newAPI; 
@@ -143,7 +143,7 @@ KNXPlatform.prototype.configure = function() {
 	globs.info('We think homebridge has restored '+ globs.restoredAccessories.length + ' accessories.');
 
 	
-	/**************** read the config the first time 
+	/* *************** read the config the first time 
 	 * 
 	 */
 	if (!this.config.GroupAddresses){
@@ -159,6 +159,7 @@ KNXPlatform.prototype.configure = function() {
 
 
 	//create array of accessories
+	/** @type {lib/knxdevice.js~knxDevice[]} */
 	globs.devices = [];
 
 	for (var int = 0; int < foundAccessories.length; int++) {
@@ -217,4 +218,13 @@ function getAccessoryByUUID(accessories, uuid) {
 	return undefined;
 }
 
-
+/**
+ * Search the globs object's devices[] array for an knxDevice with name 'name'
+ */
+globs.getDeviceByName = function(name) {
+	for (var idevice = 0; idevice < globs.devices.length; idevice++) {
+		var oDevice = globs.devices[idevice];
+		if (oDevice.name===name) {return oDevice;}
+	}
+	return undefined;
+};
