@@ -12,10 +12,9 @@ ECMA-Script 2015 (6.0) Language
 'use strict';
 
 var knxd = require('eibd');
-var Hapi = require('hapi');
+//var Hapi = require('hapi');
 var accConstructor = require('./lib/knxdevice.js');
 var userOpts = require('./lib/user').User;
-
 var Service, Characteristic; // passed default objects from hap-nodejs
 var globs = {}; // the storage for cross module data pooling;
 var iterate = require('./lib/iterate');
@@ -63,7 +62,6 @@ function KNXPlatform(log, config, newAPI){
 	globs.knxd_port = this.config.knxd_port || 6720;
 	globs.log = log;
 	globs.knxmonitor = knxmonitor;
-	globs.Hapi = Hapi; // web server
 	KNXAccess.setGlobs(globs); // init link for module;
 	knxmonitor.startMonitor({host: globs.knxd_ip, port: globs.knxd_port});
 

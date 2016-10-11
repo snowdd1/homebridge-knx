@@ -28,3 +28,5 @@ node_modules
 config.json
 notes.txt
 /knx_config.json
+
+.settings/tern.eclipse.ide.core.prefs
