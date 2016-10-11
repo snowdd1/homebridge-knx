@@ -62,6 +62,9 @@ function KNXPlatform(log, config, newAPI){
 	globs.knxd_port = this.config.knxd_port || 6720;
 	globs.log = log;
 	globs.knxmonitor = knxmonitor;
+	/** To store all unique read requests @type {string[]} */
+	globs.readRequests = {}; 
+	
 	KNXAccess.setGlobs(globs); // init link for module;
 	knxmonitor.startMonitor({host: globs.knxd_ip, port: globs.knxd_port});
 
@@ -192,6 +195,8 @@ KNXPlatform.prototype.configure = function() {
 	globs.info('Saving config file!');
 	userOpts.storeConfig();
 	
+	// we're done, now issue the startup read requests to the bus
+	require('./lib/knxaccess.js').knxreadhash(globs.readRequests);
 };
 
 /** returns an accessory from an array of accessories if the context property is matched, or undefined.
