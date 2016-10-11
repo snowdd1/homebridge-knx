@@ -46,7 +46,7 @@ Characteristics without group addresses can only be used by a `handler`
 
 ##handler
 New in version 0.3 of homebridge-knx is a little add-in concept, allowing additional functionality to be added without changing the big mass of the code.  
-`handler`s are defined as javascript files in `/lib/addins` and need to follow some restrictions *[more to come here]*
+`handler`s are defined as javascript files in `/lib/addins` and need to (follow some restrictions.)[https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md]  
 To assign a handler to a service the **handler** keyword is used, see example below.
 
 ##KNXObjects
