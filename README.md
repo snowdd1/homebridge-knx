@@ -14,12 +14,12 @@ A lot of changes at once
 # Assumptions
 Without using a special handler (add-in) for the service, homebridge-knx assumes the following:
 
-|HomeKit type|KNX addresses DPT|
------------------------------
-|Boolean|DPT1|
-|Integer|DPT5|
-|Percentage|DPT5.001|
-|Float|DPT9|
+HomeKit type | KNX addresses DPT   
+-------- | ------  
+Boolean | DPT1  
+Integer | DPT5  
+Percentage | DPT5.001  
+Float | DPT9  
 
 
 # knx_config.json
@@ -36,37 +36,8 @@ Without using a special handler (add-in) for the service, homebridge-knx assumes
 ```
 Changed capitalization (harmonized)!  
 
-Like before, *Devices* have *Services*. New: The *Characteristics* are an Array.  
-Characteristics are listed as objects (i.e. in braces {}), they need a *Type* like "On".  
-*Set* and *Listen* can be arrays of addresses.  
-For a characteristic of DPT1 and DPT5 the values can be reversed by adding the *"Reverse": true* keyword to the characteristic.  
-If you need to specify the data point type (see assumptions above) you can do so with *DPT*    
-
-```json
-			"Services": [ 
-				{ 
-					"ServiceType": "Lightbulb", 
-					"ServiceName": "Living Room North Lamp", 
-					"Characteristics": [ 
-						{ 
-							"Type": "On", 
-							"Set": "1/1/6",
-							"Listen": ["1/1/63"],
-							"Reverse": true,
-							"DPT": "DPT1"
-						 }, 
-
-```
-
-## "Reverse": true
-instead of ~~1/2/3R~~
-
-## DPT
-Supported are DPT1, DPT5, DPT5.001, DPT9
-
-
-
+See the [complete Doc!](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/knx_config.json.md).
 
 
 # Add-ins
-Add-in (aka handlers) can change the default behavior.
+Add-in (aka handlers) can change the default behavior. [See the article](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md)
