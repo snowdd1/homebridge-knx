@@ -25,7 +25,7 @@ Each device needs a section `Services`. Here all functionality of the device is 
 #Services
 `Services` again is an array of objects, each representing a *homekit service*.  
 Each service **must** have:
-- a unique `ServiceName` (regarding changing names in a paired instance [see Devices](#Devices) )
+- a unique `ServiceName` (regarding changing names in a paired instance [see Devices](#devices) )
 - a known *homekit* `ServiceType`
 - a `Characteristics` section, containing all the variables that homekit can handle.    
 A service **can** have:  
