@@ -20,12 +20,30 @@ var HandlerPattern = require('./handlerpattern.js');
  * @extends HandlerPattern
  */
 class GiraJalousieActuator extends HandlerPattern {
+	/****
+	 * onKNXValueChange is invoked if a Bus value for one of the bound addresses is received
+	 * 
+	 */
+	onKNXValueChange(field, oldValue, knxValue) {
 	...
+	}
+	/****
+	 * onHKValueChange is invoked if HomeKit is changing characteristic values
+	 * 
+	 */
+	onHKValueChange(field, oldValue, newValue) {
+	...
+	}
 }
 ``` 
-
- 
-
+The two methods `onKNXValueChange()` and `onHKValueChange()` are mandatory.  
 
 ## API
+
+Using the local object `this.myAPI` the handler can talk to homekit and to the KNX bus:
+
+###this.myAPI.setValue (field, value)  
+Sets a **homekit** value for a local characteristic
+- {string} field - The type/name of the characteristic, like "On" for lightbulb power
+- {number} value - the value for the characteristic, dependent on the characteristic's type
 
