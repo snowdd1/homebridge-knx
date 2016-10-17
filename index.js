@@ -8,7 +8,6 @@ ECMA-Script 2015 (6.0) Language
 
  */
 
-
 'use strict';
 
 var knxd = require('eibd');
@@ -21,6 +20,7 @@ var iterate = require('./lib/iterate');
 var knxmonitor = require('./lib/knxmonitor');
 var KNXAccess = require("./lib/knxaccess");
 
+var http = require('http');
 /**
  * KNXPlatform
  * 
@@ -28,13 +28,13 @@ var KNXAccess = require("./lib/knxaccess");
  * @param {function} log - logging function for console etc. out
  * @param {object} config - configuration object from global config.json
  */
-function KNXPlatform(log, config, newAPI){
+function KNXPlatform(log, config, newAPI) {
 	var that = this;
 	this.log = log;
 	//this.Old_config = config;
 
 	// new API for creating accessory and such.
-	globs.newAPI = newAPI; 
+	globs.newAPI = newAPI;
 	/**
 	 * Talkative Info spitting thingy. 
 	 * @param {string} comment
@@ -63,18 +63,20 @@ function KNXPlatform(log, config, newAPI){
 	globs.log = log;
 	globs.knxmonitor = knxmonitor;
 	/** To store all unique read requests @type {string[]} */
-	globs.readRequests = {}; 
-	
+	globs.readRequests = {};
+
 	KNXAccess.setGlobs(globs); // init link for module;
-	knxmonitor.startMonitor({host: globs.knxd_ip, port: globs.knxd_port});
+	knxmonitor.startMonitor({
+		host : globs.knxd_ip,
+		port : globs.knxd_port
+	});
 
 	// plugin-2 system: wait for the homebridge to finish restoring the accessories from its own persistence layer.
 	if (newAPI) {
-		newAPI.on('didFinishLaunching', function () {
+		newAPI.on('didFinishLaunching', function() {
 			globs.info('homebridge event didFinishLaunching');
 			this.configure();
-		}.bind(this)
-		);
+		}.bind(this));
 	}
 
 }
@@ -102,18 +104,17 @@ function registry(homebridgeAPI) {
 
 module.exports = registry;
 
-
 //Function invoked when homebridge tries to restore cached accessory
 //Developer can configure accessory at here (like setup event handler)
 //Update current value
 
 /**
-* configureAccessory() is invoked for each accessory homebridge restores from its persistence layer.
-* The restored accessory has all the homekit properties, but none of the implementation at this point of time.
-* This happens before the didFinishLaunching event.
-* 
-* @param {platformAccessory} accessory  
-*/
+ * configureAccessory() is invoked for each accessory homebridge restores from its persistence layer.
+ * The restored accessory has all the homekit properties, but none of the implementation at this point of time.
+ * This happens before the didFinishLaunching event.
+ * 
+ * @param {platformAccessory} accessory  
+ */
 KNXPlatform.prototype.configureAccessory = function(accessory) {
 	console.log("Plugin - Configure Accessory: " + accessory.displayName);
 
@@ -125,7 +126,6 @@ KNXPlatform.prototype.configureAccessory = function(accessory) {
 	// collect the accessories 
 	globs.restoredAccessories.push(accessory);
 };
-
 
 /**
  * With plugin-2 system, accessories are re-created by the homebridge itself, 
@@ -140,24 +140,21 @@ KNXPlatform.prototype.configure = function() {
 	globs.info('Configuration starts');
 	// homebridge has now finished restoring the accessories from its persistence layer.
 	// Now we need to get their implementation back to them
-	
-	globs.info('We think homebridge has restored '+ globs.restoredAccessories.length + ' accessories.');
 
-	
+	globs.info('We think homebridge has restored ' + globs.restoredAccessories.length + ' accessories.');
+
 	/* *************** read the config the first time 
 	 * 
 	 */
-	if (!this.config.GroupAddresses){
+	if (!this.config.GroupAddresses) {
 		this.config.GroupAddresses = [];
 	}
-
 
 	// iterate through all devices the platform my offer
 	// for each device, create an accessory
 
 	// read accessories from file !!!!!
-	var foundAccessories = this.config.Devices || []; 
-
+	var foundAccessories = this.config.Devices || [];
 
 	//create array of accessories
 	/** @type {lib/knxdevice.js~knxDevice[]} */
@@ -165,38 +162,62 @@ KNXPlatform.prototype.configure = function() {
 
 	for (var int = 0; int < foundAccessories.length; int++) {
 		var currAcc = foundAccessories[int];
-		this.log("Reading from config: Device/Accessory " + (int+1) + " of " + foundAccessories.length);
-		
-		globs.info("Match device ["+currAcc.DeviceName+"]");
-		
+		this.log("Reading from config: Device/Accessory " + (int + 1) + " of " + foundAccessories.length);
+
+		globs.info("Match device [" + currAcc.DeviceName + "]");
+
 		//match them to the restored accessories:
-		var matchAcc = getAccessoryByUUID(globs.restoredAccessories, currAcc.UUID); 
+		var matchAcc = getAccessoryByUUID(globs.restoredAccessories, currAcc.UUID);
 		if (matchAcc) {
 			// we found one
 			globs.info('Matched an accessory: ' + currAcc.DeviceName + ' === ' + matchAcc.displayName);
 			// Instantiate and pass the existing platformAccessory
-			globs.devices.push(new accConstructor(globs,foundAccessories[int],matchAcc));
+			globs.devices.push(new accConstructor(globs, foundAccessories[int], matchAcc));
 		} else {
 			// this one is new
 			globs.info('New accessory found: ' + currAcc.DeviceName);
-			globs.devices.push(new accConstructor(globs,foundAccessories[int]));
+			globs.devices.push(new accConstructor(globs, foundAccessories[int]));
 		}
 		// do not construct here: var acc = new accConstructor(globs,foundAccessories[int]);
 
-		this.log("Done with ["+currAcc.DeviceName+"] accessory");	
-	}	
-	
-	
-	
+		this.log("Done with [" + currAcc.DeviceName + "] accessory");
+	}
+
 	// now the globs.devices contains an array of working accessories, that are not yet passed to homebridge
-	globs.info('We have read '+ globs.devices.length + ' devices from file.');
+	globs.info('We have read ' + globs.devices.length + ' devices from file.');
 
 	//now we need to store our updated config file to disk, or else all that is in vain next startup!
 	globs.info('Saving config file!');
 	userOpts.storeConfig();
+
+
+	// start the tiny web server for deleting orphaned devices
+	globs.info('BEFORE http.createServer');
+	this.requestServer = http.createServer(function(request, response) {
+		globs.info('http.createServer CALLBACK FUNCTION');
+		if (request.url === "/list") {
+			//response.writeHead(200);
+			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
+			response.write('<BODY>');
+			response.write('Restored devices from homebridge cache:<BR><BR>');
+			for (var idev = 0; idev < globs.restoredAccessories.length; idev++) {
+				var tdev = globs.restoredAccessories[idev];
+				response.write('Device ' + tdev.displayName + '<BR>');
+			}
+			response.end('</BODY>');
+		}
+
+	}.bind(this));
+	globs.info('BEFORE requestServer.listen');
+	this.requestServer.listen(18081, function() {
+		console.log("Server Listening...localhost:18081/list");
+	});
+
 	
 	// we're done, now issue the startup read requests to the bus
 	require('./lib/knxaccess.js').knxreadhash(globs.readRequests);
+
+	
 };
 
 /** returns an accessory from an array of accessories if the context property is matched, or undefined.
@@ -209,7 +230,7 @@ function getAccessoryByUUID(accessories, uuid) {
 	globs.info('--compare----------------');
 	for (var ina = 0; ina < accessories.length; ina++) {
 		var thisAcc = accessories[ina];
-		globs.info('Comparing ' + thisAcc.UUID + ' === ' + uuid + ' ==>' + (thisAcc.UUID === uuid) );
+		globs.info('Comparing ' + thisAcc.UUID + ' === ' + uuid + ' ==>' + (thisAcc.UUID === uuid));
 		//console.log(thisAcc); // spit it out
 		if (thisAcc.UUID === uuid) {
 			globs.info('---------------done---');
@@ -227,7 +248,9 @@ function getAccessoryByUUID(accessories, uuid) {
 globs.getDeviceByName = function(name) {
 	for (var idevice = 0; idevice < globs.devices.length; idevice++) {
 		var oDevice = globs.devices[idevice];
-		if (oDevice.name===name) {return oDevice;}
+		if (oDevice.name === name) {
+			return oDevice;
+		}
 	}
 	return undefined;
 };
