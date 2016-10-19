@@ -181,6 +181,7 @@ KNXPlatform.prototype.configure = function() {
 			// we found one
 			globs.debug('Matched an accessory: ' + currAcc.DeviceName + ' === ' + matchAcc.displayName);
 			// Instantiate and pass the existing platformAccessory
+			matchAcc.active=true;
 			globs.devices.push(new accConstructor(globs, foundAccessories[int], matchAcc));
 		} else {
 			// this one is new
@@ -222,15 +223,30 @@ KNXPlatform.prototype.configure = function() {
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
 			response.write('Restored devices from homebridge cache:<BR><BR>');
-
-			for (var idev = 0; idev < globs.restoredAccessories.length; idev++) {
-				var tdev = globs.restoredAccessories[idev];
-				if (tdev.UUID) {
-					response.write('Device ' + tdev.displayName + ' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> <BR>');
+			var idev=0, tdev={};
+			for (idev = 0; idev < globs.restoredAccessories.length; idev++) {
+				tdev = globs.restoredAccessories[idev];
+				// debug spit-out:
+				//response.write('<BR><HR><BR>' + JSON.stringify(tdev) + '<BR><BR>');
+				globs.debug(tdev.UUID);
+				if (tdev.UUID !== 'ERASED') {
+					response.write('Device ' + tdev.displayName + ' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ');
+					if (!tdev.active) {
+						response.write (' (orphaned) ');
+					}
+					response.write(' <BR>');
+				}
+			}
+			response.write('<HR><BR>Devices from homebridge-knx config:<BR><BR>');
+			for (idev = 0; idev < globs.devices.length; idev++) {
+				tdev = globs.devices[idev].getPlatformAccessory();
+				if (tdev.UUID!=='ERASED') {
+					response.write('Device ' + tdev.displayName + ' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> '+' <BR>');
 					// debug spit-out:
 					//response.write(JSON.stringify(tdev) + '<BR><BR>');
 				}
 			}
+			
 			response.end('</BODY>');
 		} else if (reqparsed[0] === 'delete') {
 			// now delete the accessory from homebridge
@@ -240,7 +256,13 @@ KNXPlatform.prototype.configure = function() {
 				var delAcc = getAccessoryByUUID(globs.restoredAccessories, params.UUID);
 				if (delAcc) {
 					globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [ delAcc ]);
-					delAcc.UUID = "";
+					delAcc.UUID = "ERASED";
+				} else {
+					delAcc = getAccessoryByUUID(globs.devices, params.UUID);
+					if (delAcc) {
+						globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [ delAcc ]);
+						delAcc.UUID = "ERASED";
+					}
 				}
 				response.end('<HEAD><meta http-equiv="refresh" content="0; url=http:/list" /></HEAD><BODY> done. Go back in browser and refresh</BODY>');
 			}
