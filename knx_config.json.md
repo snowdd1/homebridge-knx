@@ -63,15 +63,15 @@ Handlers can use service-local constants in their code. This allows using the sa
 {
     "platform": "KNX",
     "name": "KNX",
-    "knxd_ip": "192.168.178.212",
+    "knxd_ip": "192.168.178.100",
     "knxd_port": 6720,
     "Devices": [
         {
-            "DeviceName": "Arbeitszimmerlampe",
+            "DeviceName": "Desk lamp",
             "Services": [
                 {
                     "ServiceType": "Lightbulb",
-                    "ServiceName": "Bürolampe",
+                    "ServiceName": "Office desk lamp",
                     "Characteristics": [
                         {
                             "Type": "On",
@@ -87,12 +87,12 @@ Handlers can use service-local constants in their code. This allows using the sa
             ]
         },
         {
-            "DeviceName": "Arbeitszimmerrollo",
+            "DeviceName": "Office rolling shutter",
             "Services": [
                 {
                     "ServiceType": "WindowCovering",
                     "Handler": "GiraJalousieActuator",
-                    "ServiceName": "Büro-Rollo",
+                    "ServiceName": "Office blinds",
                     "Characteristics": [
                         {
                             "Type": "TargetPosition",
@@ -123,14 +123,12 @@ Handlers can use service-local constants in their code. This allows using the sa
                         "2/3/46"
                     ],
                     "LocalConstants": {
-                        "SomeVariable_notUsedHere": "SomeValue",
-                        "OtherBlinds_notUsedHere": "OfficeShutter"
+                        "SomeVariable": "SomeValue notUsedHere",
+                        "OtherBlinds": "OfficeShutter notUsedHere"
                     }
                 }
             ]
         }
-    ],
-    "GroupAddresses": []
-
+    ]
 }
 ```
