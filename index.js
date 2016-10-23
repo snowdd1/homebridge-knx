@@ -12,7 +12,7 @@ ECMA-Script 2015 (6.0) Language
 
 var knxd = require('eibd');
 //var Hapi = require('hapi');
-var accConstructor = require('./lib/knxdevice.js');
+var AccConstructor = require('./lib/knxdevice.js');
 var userOpts = require('./lib/user').User;
 var Service, Characteristic; // passed default objects from hap-nodejs
 var globs = {}; // the storage for cross module data pooling;
@@ -181,12 +181,12 @@ KNXPlatform.prototype.configure = function() {
 			// we found one
 			globs.debug('Matched an accessory: ' + currAcc.DeviceName + ' === ' + matchAcc.displayName);
 			// Instantiate and pass the existing platformAccessory
-			matchAcc.active=true;
-			globs.devices.push(new accConstructor(globs, foundAccessories[int], matchAcc));
+			matchAcc.active = true;
+			globs.devices.push(new AccConstructor(globs, foundAccessories[int], matchAcc));
 		} else {
 			// this one is new
 			globs.debug('New accessory found: ' + currAcc.DeviceName);
-			globs.devices.push(new accConstructor(globs, foundAccessories[int]));
+			globs.devices.push(new AccConstructor(globs, foundAccessories[int]));
 		}
 		// do not construct here: var acc = new accConstructor(globs,foundAccessories[int]);
 
@@ -223,16 +223,17 @@ KNXPlatform.prototype.configure = function() {
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
 			response.write('Restored devices from homebridge cache:<BR><BR>');
-			var idev=0, tdev={};
+			var idev = 0, tdev = {};
 			for (idev = 0; idev < globs.restoredAccessories.length; idev++) {
 				tdev = globs.restoredAccessories[idev];
 				// debug spit-out:
 				//response.write('<BR><HR><BR>' + JSON.stringify(tdev) + '<BR><BR>');
 				globs.debug(tdev.UUID);
 				if (tdev.UUID !== 'ERASED') {
-					response.write('Device ' + tdev.displayName + ' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ');
+					response.write('Device ' + tdev.displayName);
+					response.write(' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ');
 					if (!tdev.active) {
-						response.write (' (orphaned) ');
+						response.write(' (orphaned) ');
 					}
 					response.write(' <BR>');
 				}
@@ -240,31 +241,39 @@ KNXPlatform.prototype.configure = function() {
 			response.write('<HR><BR>Devices from homebridge-knx config:<BR><BR>');
 			for (idev = 0; idev < globs.devices.length; idev++) {
 				tdev = globs.devices[idev].getPlatformAccessory();
-				if (tdev.UUID!=='ERASED') {
-					response.write('Device ' + tdev.displayName + ' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> '+' <BR>');
+				if (tdev.UUID !== 'ERASED') {
+					response.write('Device ' + tdev.displayName);
+					response.write(' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ' + ' <BR>');
 					// debug spit-out:
 					//response.write(JSON.stringify(tdev) + '<BR><BR>');
 				}
 			}
-			
+
 			response.end('</BODY>');
 		} else if (reqparsed[0] === 'delete') {
 			// now delete the accessory from homebridge
 			globs.debug("delete accessory with UUID ");
+
 			if (params.UUID) {
-				globs.debug(params.UUID);
-				var delAcc = getAccessoryByUUID(globs.restoredAccessories, params.UUID);
-				if (delAcc) {
-					globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [ delAcc ]);
-					delAcc.UUID = "ERASED";
-				} else {
-					delAcc = getAccessoryByUUID(globs.devices, params.UUID);
+				try {
+					globs.debug(params.UUID);
+					var delAcc = getAccessoryByUUID(globs.restoredAccessories, params.UUID);
 					if (delAcc) {
 						globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [ delAcc ]);
 						delAcc.UUID = "ERASED";
+					} else {
+						delAcc = getAccessoryByUUID(globs.devices, params.UUID);
+						if (delAcc) {
+							globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [ delAcc ]);
+							delAcc.UUID = "ERASED";
+						}
 					}
+					globs.debug(params.UUID + ' deleted');
+				} catch (err) {
+					globs.errorlog('ERR Could not delete accessory with UUID ' + params.UUID);
+				} finally {
+					response.end('<HEAD><meta http-equiv="refresh" content="0; url=http:/list" /></HEAD><BODY> done. Go back in browser and refresh</BODY>');
 				}
-				response.end('<HEAD><meta http-equiv="refresh" content="0; url=http:/list" /></HEAD><BODY> done. Go back in browser and refresh</BODY>');
 			}
 		} else {
 			// any other URL
