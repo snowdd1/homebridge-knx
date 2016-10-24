@@ -1,14 +1,16 @@
-# NEW
+# homebridge-knx Version 0.3.0 (alpha testing state)
+## NEW
 This is going to be something completely new.
 
 This is (probably) not the repo you're looking for...
 
 # The only thing that changes is _everything_
 A lot of changes at once 
-- own persistence (own file) instead of shared config.json with homebridge
+- own persistence (own file) instead of shared config.json with homebridge *(knx_config.json in homebridge home directory, next to homebridge's config.json)*
 - all new concept: no native services any more, but using the defaults from HAP-NodeJS
-- all new concept: define group addresses with more parameters and assign them to characteristics
-- tidied up the room: new keywords for the knx_config.json (buh, a lot of work for you to do!)
+- you can now assign *any* characteristic to *any* service, until Apple's homekit says that's incomplient.
+- ~~all new concept: define group addresses with more parameters and assign them to characteristics~~
+- tidied up the room: new keywords for the *knx_config.json* (buh, a lot of work for you to do!)
 
 
 # Assumptions
