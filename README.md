@@ -1,9 +1,10 @@
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]  [![Build status][appveyor-image]][appveyor-url] [![Build status][codeship-image]][codeship-url] [![Dependency status][david-dm-image]][david-dm-url]   
 
-# homebridge-knx
-KNX platform shim for homebridge.
-This cannot run stand-alone!
+# homebridge-knx Version 0.2.x
+KNX platform shim for homebridge.  
+This cannot run stand-alone!  
+*If you are looking for Version 0.3.x please go to https://github.com/snowdd1/homebridge-knx/tree/plugin-2.0 !*
 
 ## This Work In Progress, use carefully.
 Please also visit [homebridge github homepage](https://github.com/nfarina/homebridge) first.
