@@ -44,10 +44,10 @@ For the group addresses it is possible to define a *data point type* `DPT` (curr
 
 Characteristics without group addresses can only be used by a `handler`
 
-##handler
+##Handler
 New in version 0.3 of homebridge-knx is a little add-in concept, allowing additional functionality to be added without changing the big mass of the code.  
-`handler`s are defined as javascript files in `/lib/addins` and need to (follow some restrictions.)[https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md]  
-To assign a handler to a service the **handler** keyword is used, see example below.
+`handler`s are defined as javascript files in `/lib/addins` and need to [follow some restrictions.](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md)  
+To assign a handler to a service the **Handler** keyword is used, see example below.
 
 ##KNXObjects
 Handlers can make use of KNX group addresses that are not connected directly to characteristics. To allow references to those addresses, they are defined as if they were characteristics. 
@@ -55,7 +55,7 @@ Handlers can make use of KNX group addresses that are not connected directly to 
 - Definition of `DPT` **is mandatory** as the data point type cannot be inferred from a homekit characteristic!  
 
 ##LocalConstants
-Handlers can use service-local constants in their code. This allows using the same handler for alike-but-not-equal use cases. 
+Handlers can use service-local constants in their code. This allows using the same handler for alike-but-not-equal use cases. The values from the `LocalConstants` can be used in the handler code. This allows re-using the same handler for multiple objects that differ by more than group addresses.
 
 
 #Example
