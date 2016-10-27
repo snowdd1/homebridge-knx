@@ -40,14 +40,16 @@ There is a Javascript file containing all valid services and characteristics loc
 ##Characteristics
 Each characteristic is an object containing at least a `Type` field. Types can be "On" for power, "Brightness" for dimmable lights etc.  
 Characteristics **can** have assigned group addresses in the `Set` and `Listen` arrays.
-For the group addresses it is possible to define a *data point type* `DPT` (currently valid are DPT1, DPT5, DPT5.001, DPT9).
+For the group addresses it is possible to define a *data point type* `DPT` (currently valid are DPT1, DPT5, DPT5.001, DPT9).  
+For boolean and percentage types it is possible to *reverse* the read/write value between HomeKit and KNX.
 
 Characteristics without group addresses can only be used by a `handler`
 
 ##Handler
 New in version 0.3 of homebridge-knx is a little add-in concept, allowing additional functionality to be added without changing the big mass of the code.  
 `handler`s are defined as javascript files in `/lib/addins` and need to [follow some restrictions.](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md)  
-To assign a handler to a service the **Handler** keyword is used, see example below.
+To assign a handler to a service the **Handler** keyword is used, see example below.  
+Handlers cannot use the `Reverse` keyword for DPT1 and DPT5.001 types, this has to be taken care in the handler's programming.  
 
 ##KNXObjects
 Handlers can make use of KNX group addresses that are not connected directly to characteristics. To allow references to those addresses, they are defined as if they were characteristics. 
