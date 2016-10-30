@@ -62,7 +62,7 @@ homebridge-knx@0.3.0-beta2 ../node_modules/homebridge-knx
 pi@homebridge-dev:~/z_test $
 ```
 
-Then put the configuration files *knx_config.json* and *KNX-sample-config.json* (as *config.json*) into ~/.homebridge, and adapte them to your needs (knxd address and some test devices in knx_config.json).
+Then put the configuration files *knx_config.json* and *KNX-sample-config.json* (as *config.json*) into ~/.homebridge, and adapt them to your needs (knxd address and some test devices in knx_config.json).
 
 Happy testing!
 
