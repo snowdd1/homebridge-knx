@@ -1,4 +1,4 @@
-# homebridge-knx Version 0.3.0 (alpha testing state)
+# homebridge-knx Version 0.3.0-beta 
 ## NEW
 This is going to be something completely new.
 
@@ -43,3 +43,27 @@ See the [complete Doc!](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.
 
 # Add-ins
 Add-in (aka handlers) can change the default behavior. [See the article](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md)
+
+# Installation
+If you have read through here, you probably qualify as intrepid enough to install insufficiently tested software on your device.
+  
+I recommend using a dedicated directory, and do not install it *globally* as root.  
+Here's my sample installation for the beta on a **raspberry pi** (that has everything installed to use the non-beta, like **node**):  
+
+```shell
+pi@homebridge-dev:~ $ mkdir z_test
+pi@homebridge-dev:~ $ cd z_test/
+pi@homebridge-dev:~/z_test $ npm install homebridge
+...
+pi@homebridge-dev:~/z_test $ npm install homebridge-knx@beta
+homebridge-knx@0.3.0-beta2 ../node_modules/homebridge-knx
+├── eibd@0.3.5
+└── debug@2.2.0 (ms@0.7.1)
+pi@homebridge-dev:~/z_test $
+```
+
+Then put the configuration files *knx_config.json* and *KNX-sample-config.json* (as *config.json*) into ~/.homebridge, and adapte them to your needs (knxd address and some test devices in knx_config.json).
+
+Happy testing!
+
+
