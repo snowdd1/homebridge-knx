@@ -71,4 +71,6 @@ The new (well, 1/2016) API of homebridge allows homebridge to cache the accessor
 
 As a consequence remain devices, that homebridge-knx does not reconnnect to at start-up, stale and unreachable in HomeKit. To remove those shadows from HomeKit, use the little web server at `<your-homebridge>:18081/list`
 
+![image](https://cloud.githubusercontent.com/assets/11786396/19836160/5d1ddcde-9e98-11e6-8dc2-e621aceb1055.png)  
+Clicking on the `delete from cache` link will **only** remove the devices from the current homebridge instance and their cache, **not** from the *knx_config.json*, that means they will be rediscovered upon next startup as new device in the default room!
 
