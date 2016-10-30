@@ -62,8 +62,13 @@ homebridge-knx@0.3.0-beta2 ../node_modules/homebridge-knx
 pi@homebridge-dev:~/z_test $
 ```
 
-Then put the configuration files *knx_config.json* and *KNX-sample-config.json* (as *config.json*) into ~/.homebridge, and adapt them to your needs (knxd address and some test devices in knx_config.json).
+Then put the configuration files *knx_config.json* and *KNX-sample-config.json* (as *config.json*) into `~/.homebridge`, and adapt them to your needs (knxd address and some test devices in `knx_config.json`). You do not need a `platform` section in `config.json`any more!
 
 Happy testing!
+
+# Removing stale accessories from homebridge cache
+The new (well, 1/2016) API of homebridge allows homebridge to cache the accessories for platforms that can add or remove accessories during runtime. As a next step in evolution, homebridge-knx already connects to that API.  
+
+As a consequence remain devices, that homebridge-knx does not reconnnect to at start-up, stale and unreachable in HomeKit. To remove those shadows from HomeKit, use the little web server at `<your-homebridge>:18081/list`
 
 
