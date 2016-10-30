@@ -107,6 +107,14 @@ function registry(homebridgeAPI) {
 	globs.Characteristic = Characteristic;
 	globs.API = homebridgeAPI;
 
+	/* load our custom types
+	 * 
+	 */
+	require('./lib/customtypes/knxthermostat.js')(homebridgeAPI);
+	
+	//debug
+	iterate(globs.API.hap.Characteristic.KNXThermAtHome);
+	iterate(globs.API.hap.Characteristic.On);
 	// third parameter dynamic = true
 	homebridgeAPI.registerPlatform("homebridge-knx", "KNX", KNXPlatform, true); //update signature for plugin-2
 	//homebridgeAPI.registerPlatform("homebridge-knx", "KNX", KNXPlatform, false); //update signature 
