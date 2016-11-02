@@ -74,3 +74,10 @@ As a consequence remain devices, that homebridge-knx does not reconnnect to at s
 ![image](https://cloud.githubusercontent.com/assets/11786396/19836160/5d1ddcde-9e98-11e6-8dc2-e621aceb1055.png)  
 Clicking on the `delete from cache` link will **only** remove the devices from the current homebridge instance and their cache, **not** from the *knx_config.json*, that means they will be rediscovered upon next startup as new device in the default room!
 
+# Killing homebridge
+**This is for debugging of your knx_config.json only.** If you need homebridge to restart, you can use the setting `"AllowKillHomebridge":true` in your knx_config.json (right on top where the knxd properties are).  
+You'll get a new link at the bottom of the page at `<your-homebridge>:18081/list` that will homebridge-knx to throw an excpetion ("Committed_Suicide") which then causes homebridge to fail.  
+*You should remove this setting after completing your knx_config.json for security reasons!* 
+
+
+
