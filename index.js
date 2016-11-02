@@ -155,6 +155,7 @@ KNXPlatform.prototype.configureAccessory = function(accessory) {
 
 KNXPlatform.prototype.configure = function() {
 	globs.info('Configuration starts');
+	userOpts.LogHomebridgeKNXSTarts();
 	// homebridge has now finished restoring the accessories from its persistence layer.
 	// Now we need to get their implementation back to them
 
