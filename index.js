@@ -308,9 +308,11 @@ KNXPlatform.prototype.configure = function() {
 
 	}.bind(this));
 	globs.debug('BEFORE requestServer.listen');
-	this.requestServer.listen(18081, function() {
-		console.log("Server Listening...localhost:18081/list");
-	});
+	if (this.config.AllowWebserver) {
+		this.requestServer.listen(18081, function() {
+			console.log("Server Listening...localhost:18081/list");
+		});
+	}
 
 	// we're done, now issue the startup read requests to the bus
 	require('./lib/knxaccess.js').knxreadhash(globs.readRequests);

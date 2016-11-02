@@ -69,6 +69,8 @@ Happy testing!
 # Removing stale accessories from homebridge cache
 The new (well, 1/2016) API of homebridge allows homebridge to cache the accessories for platforms that can add or remove accessories during runtime. As a next step in evolution, homebridge-knx already connects to that API.  
 
+**Allow homebridge-knx to start the webserver by adding `"AllowWebserver":true,` at the beginning of your knx_config.json!**
+
 As a consequence remain devices, that homebridge-knx does not reconnnect to at start-up, stale and unreachable in HomeKit. To remove those shadows from HomeKit, use the little web server at `<your-homebridge>:18081/list`
 
 ![image](https://cloud.githubusercontent.com/assets/11786396/19836160/5d1ddcde-9e98-11e6-8dc2-e621aceb1055.png)  

@@ -3,16 +3,18 @@ homebridge-knx expects the following structure in the `knx_config.json`:
 
 ```
 {
-    "platform": "KNX",
-    "name": "KNX",
     "knxd_ip": "192.168.1.1",
     "knxd_port": 6720,
+    "AllowWebserver": true,
+    "AllowKillHomebridge": false,
     "Devices": [
     ]
 }
 ```
 `192.168.1.1` has to be changed to your [knxd](https://github.com/knxd/knxd) installation, and `6720` to the port you are using (6720 is default).  
-`platform` and `name` need exactly to be as above.
+`platform` and `name` have become obsolete.  
+`AllowWebserver`: if set to true, homebridge-knx will start a tiny webserver on port 18081 to allow the removal of devices from homebridge cache (and the running instance). Enable for debugging, disable for secure productive operation! 
+`AllowKillHomebridge`: if set to true, you'll get a link at the tiny web browser allowing to force a shutdown of homebridge by throwing an exception. You should reset that to false after debugging, because it allows anyone with access to the webserver to shut down your homebridge instance. 
 
 `Devices` is an array of objects, each representing an *homekit accessory*. 
 
@@ -66,10 +68,9 @@ homebridge-knx creates a unique UUID for each device newly discovered in the *kn
 #Example
 ```
 {
-    "platform": "KNX",
-    "name": "KNX",
     "knxd_ip": "192.168.178.100",
     "knxd_port": 6720,
+    "AllowKillHomebridge": true,
     "Devices": [
         {
             "DeviceName": "Desk lamp",
@@ -128,8 +129,7 @@ homebridge-knx creates a unique UUID for each device newly discovered in the *kn
                         "2/3/46"
                     ],
                     "LocalConstants": {
-                        "SomeVariable": "SomeValue notUsedHere",
-                        "OtherBlinds": "OfficeShutter notUsedHere"
+                        "TimeOutSecs": 23
                     }
                 }
             ]
