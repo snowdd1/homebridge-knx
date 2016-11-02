@@ -229,7 +229,7 @@ KNXPlatform.prototype.configure = function() {
 		 */
 		if (request.url === "/list") {
 			//response.writeHead(200);
-			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
+			response.write('<HEAD><meta http-equiv="content-type" content="text/html; charset=utf-8"><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
 			response.write('Restored devices from homebridge cache:<BR><BR>');
 			var idev = 0, tdev = {};
@@ -290,7 +290,7 @@ KNXPlatform.prototype.configure = function() {
 		} else if (reqparsed[0] === 'kill') {
 			// commit suicide
 			if (that.config.AllowKillHomebridge===true) {
-				response.end('<HEAD><meta http-equiv="refresh" content="60; url=http:/list" /></HEAD><BODY> Committed suicide. Reloading in 60 seconds.</BODY>');
+				response.end('<HEAD><meta http-equiv="refresh" content="20; url=http:/list" /></HEAD><BODY> Committed suicide. Reloading in 20 seconds.</BODY>');
 				var timerX = setTimeout(function() {
 					throw "Commited_Suicide";
 				}, 500);
