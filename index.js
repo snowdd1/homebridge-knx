@@ -113,8 +113,8 @@ function registry(homebridgeAPI) {
 	require('./lib/customtypes/knxthermostat.js')(homebridgeAPI);
 	
 	//debug
-	iterate(globs.API.hap.Characteristic.KNXThermAtHome);
-	iterate(globs.API.hap.Characteristic.On);
+	//iterate(globs.API.hap.Characteristic.KNXThermAtHome);
+	//iterate(globs.API.hap.Characteristic.On);
 	// third parameter dynamic = true
 	homebridgeAPI.registerPlatform("homebridge-knx", "KNX", KNXPlatform, true); //update signature for plugin-2
 	//homebridgeAPI.registerPlatform("homebridge-knx", "KNX", KNXPlatform, false); //update signature 
@@ -134,7 +134,7 @@ module.exports = registry;
  * @param {platformAccessory} accessory
  */
 KNXPlatform.prototype.configureAccessory = function(accessory) {
-	console.log("Plugin - Configure Accessory: " + accessory.displayName);
+	console.log("Plugin - Configure Accessory: " + accessory.displayName + " --> Added to restoredAccessories[]");
 
 	// set the accessory to reachable if plugin can currently process the accessory
 	// otherwise set to false and update the reachability later by invoking 
