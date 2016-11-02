@@ -210,6 +210,7 @@ KNXPlatform.prototype.configure = function() {
 
 	// start the tiny web server for deleting orphaned devices
 	globs.debug('BEFORE http.createServer');
+	var that=this;
 	this.requestServer = http.createServer(function(request, response) {
 		globs.debug('http.createServer CALLBACK FUNCTION URL=' + request.url);
 		var reqparsed = request.url.substr(1).split('?');
@@ -256,7 +257,10 @@ KNXPlatform.prototype.configure = function() {
 					//response.write(JSON.stringify(tdev) + '<BR><BR>');
 				}
 			}
-
+			if (that.config.AllowKillHomebridge===true) {
+				response.write(' <br><hr><br><a href="/kill">Kill homebridge</a> by throwing an Error. Use this to restart HomeBridge if you have it configured as a self-starting service ' + ' <BR>');
+			}
+			
 			response.end('</BODY>');
 		} else if (reqparsed[0] === 'delete') {
 			// now delete the accessory from homebridge
@@ -283,6 +287,15 @@ KNXPlatform.prototype.configure = function() {
 					response.end('<HEAD><meta http-equiv="refresh" content="0; url=http:/list" /></HEAD><BODY> done. Go back in browser and refresh</BODY>');
 				}
 			}
+		} else if (reqparsed[0] === 'kill') {
+			// commit suicide
+			if (that.config.AllowKillHomebridge===true) {
+				response.end('<HEAD><meta http-equiv="refresh" content="60; url=http:/list" /></HEAD><BODY> Committed suicide. Reloading in 60 seconds.</BODY>');
+				var timerX = setTimeout(function() {
+					throw "Commited_Suicide";
+				}, 500);
+			}
+		
 		} else {
 			// any other URL
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
