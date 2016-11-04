@@ -212,6 +212,8 @@ KNXPlatform.prototype.configure = function() {
 	// start the tiny web server for deleting orphaned devices
 	globs.debug('BEFORE http.createServer');
 	var that=this;
+	this.startUpDateAndTime = new Date();
+	this.startUpDateAndTimeString = this.startUpDateAndTime.toString();
 	this.requestServer = http.createServer(function(request, response) {
 		globs.debug('http.createServer CALLBACK FUNCTION URL=' + request.url);
 		var reqparsed = request.url.substr(1).split('?');
@@ -232,6 +234,8 @@ KNXPlatform.prototype.configure = function() {
 			//response.writeHead(200);
 			response.write('<HEAD><meta http-equiv="content-type" content="text/html; charset=utf-8"><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
+			response.write('homebridge-knx started at ' + that.startUpDateAndTimeString);
+			response.write('<hr>');
 			response.write('Restored devices from homebridge cache:<BR><BR>');
 			var idev = 0, tdev = {};
 			for (idev = 0; idev < globs.restoredAccessories.length; idev++) {
