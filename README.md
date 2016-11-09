@@ -1,8 +1,8 @@
-# homebridge-knx Version 0.3.0-beta 
-## NEW
-This is going to be something completely new.
+# homebridge-knx Version 0.3.0 
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]  [![Build status][appveyor-image]][appveyor-url] [![Dependency status][david-dm-image]][david-dm-url]   
 
-This is (probably) not the repo you're looking for...
+## NEW
+This **is** something completely new.
 
 # The only thing that changes is _everything_
 A lot of changes at once 
@@ -82,4 +82,12 @@ You'll get a new link at the bottom of the page at `<your-homebridge>:18081/list
 *You should remove this setting after completing your knx_config.json for security reasons!* 
 
 
+[npm-url]: https://npmjs.org/package/homebridge-knx
+[downloads-image]: http://img.shields.io/npm/dm/homebridge-knx.svg
+[npm-image]: http://img.shields.io/npm/v/homebridge-knx.svg
 
+[appveyor-image]:https://ci.appveyor.com/api/projects/status/bsu9w9ar8pboc2nj?svg=true
+[appveyor-url]:https://ci.appveyor.com/project/snowdd1/homebridge-knx
+
+[david-dm-url]:https://david-dm.org/snowdd1/homebridge-knx
+[david-dm-image]:https://david-dm.org/snowdd1/homebridge-knx.svg

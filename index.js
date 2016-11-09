@@ -5,7 +5,6 @@
  * 
 ALL NEW VERSION WITH OWN PERSISTENCE LAYER (file based, anyhow)
 ECMA-Script 2015 (6.0) Language
-
  */
 
 'use strict';
@@ -201,6 +200,7 @@ KNXPlatform.prototype.configure = function() {
 
 		globs.info("Done with [" + currAcc.DeviceName + "] accessory");
 	}
+	this.knxd_do_not_read_set_groups = config.knxd_do_not_read_set_groups ? true:false; // convert trueish to true
 
 	// now the globs.devices contains an array of working accessories, that are not yet passed to homebridge
 	globs.info('We have read ' + globs.devices.length + ' devices from file.');

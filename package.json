@@ -1,7 +1,7 @@
 { 
 	"name": "homebridge-knx", 
-	"version": "0.3.0-beta9", 
-	"description": "homebridge shim for KNX home automation. This is a beta version of 0.3.0", 
+	"version": "0.3.0", 
+	"description": "homebridge shim for KNX home automation.", 
 	"main": "index.js", 
 	"scripts": { 
 		"test": "echo \"Error: no test specified\" && exit 1", 
@@ -43,6 +43,14 @@
 		{ 
 			"name": "EIBHomeControl", 
 			"url": "https://github.com/EIBHomeControl"
+		 }, 
+		{ 
+			"name": "Michael", 
+			"url": "https://github.com/misc2000"
+		 }, 
+		{ 
+			"name": "bytefactory73", 
+			"url": "https://github.com/bytefactory73"
 		 }
 	 ], 
 
