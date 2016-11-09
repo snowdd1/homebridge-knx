@@ -1,0 +1,92 @@
+{
+    "platform": "KNX",
+    "name": "KNX",
+    "knxd_ip": "192.168.178.212",
+    "knxd_port": 6720,
+    "Devices": [
+        {
+            "DeviceName": "Arbeitszimmerlampe",
+            "Services": [
+                {
+                    "ServiceType": "Lightbulb",
+                    "ServiceName": "Bürolampe",
+                    "Characteristics": [
+                        {
+                            "Type": "On",
+                            "Set": [
+                                "1/3/5"
+                            ],
+                            "Listen": [
+                                "1/3/5"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "DeviceName": "Arbeitszimmerrollo",
+            "Services": [
+                {
+                    "ServiceType": "WindowCovering",
+                    "Handler": "GiraJalousieActuator",
+                    "ServiceName": "Büro-Rollo",
+                    "Characteristics": [
+                        {
+                            "Type": "TargetPosition",
+                            "Set": [
+                                "2/3/46"
+                            ],
+                            "DPT": "DPT5"
+                        },
+                        {
+                            "Type": "CurrentPosition",
+                            "Listen": [
+                                "2/3/26"
+                            ]
+                        },
+                        {
+                            "Type": "PositionState"
+                        }
+                    ],
+                    "KNXObjects": [
+                        {
+                            "Type": "ShutterMove",
+                            "Listen": "2/3/6",
+                            "DPT": "DPT1"
+                        }
+                    ],
+                    "KNXReadRequests": [
+                        "2/3/26",
+                        "2/3/46"
+                    ],
+                    "LocalConstants": {
+                        "SomeVariable_notUsedHere": "SomeValue",
+                        "OtherBlinds_notUsedHere": "OfficeShutter"
+                    }
+                }
+            ]
+        },
+                {
+            "DeviceName": "TestDevice",
+            "hint": "Sample to show characteristics without KNX addresses",
+            "Services": [
+                {
+                    "ServiceType": "LockMechanism",
+                    "Handler": "DummyHandler",
+                    "ServiceName": "Türschloss",
+                    "Characteristics": [
+                        {
+                            "Type": "LockCurrentState"
+                        },
+                        {
+                            "Type": "LockTargetState"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "GroupAddresses": []
+
+}
