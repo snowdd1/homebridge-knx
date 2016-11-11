@@ -53,6 +53,7 @@ function KNXPlatform(log, config, newAPI) {
 	/* our own config file */
 
 	globs.debug("Trying to load user settings");
+	userOpts.setStoragePath(newAPI.user.storagePath()); // get path from homebridge!
 	globs.debug(userOpts.configPath());
 	this.config = userOpts.loadConfig();
 	globs.config = this.config;

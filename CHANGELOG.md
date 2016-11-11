@@ -1,4 +1,4 @@
-#Changelog vor Version 0.3.x
+#Changelog for Version 0.3.x
 
 ##0.3.1-a
 Updated README only
