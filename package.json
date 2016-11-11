@@ -1,6 +1,6 @@
 { 
 	"name": "homebridge-knx", 
-	"version": "0.3.1", 
+	"version": "0.3.1-a", 
 	"description": "homebridge shim for KNX home automation.", 
 	"main": "index.js", 
 	"scripts": { 
