@@ -1,5 +1,5 @@
 # homebridge-knx Version 0.3.0 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]  [![Build status][appveyor-image]][appveyor-url] [![Dependency status][david-dm-image]][david-dm-url]   
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url][![Dependency status][david-dm-image]][david-dm-url]   
 
 ## NEW
 This **is** something completely new.
@@ -85,9 +85,5 @@ You'll get a new link at the bottom of the page at `<your-homebridge>:18081/list
 [npm-url]: https://npmjs.org/package/homebridge-knx
 [downloads-image]: http://img.shields.io/npm/dm/homebridge-knx.svg
 [npm-image]: http://img.shields.io/npm/v/homebridge-knx.svg
-
-[appveyor-image]:https://ci.appveyor.com/api/projects/status/bsu9w9ar8pboc2nj?svg=true
-[appveyor-url]:https://ci.appveyor.com/project/snowdd1/homebridge-knx
-
 [david-dm-url]:https://david-dm.org/snowdd1/homebridge-knx
 [david-dm-image]:https://david-dm.org/snowdd1/homebridge-knx.svg

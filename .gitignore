@@ -30,3 +30,4 @@ notes.txt
 
 
 .settings/tern.eclipse.ide.core.prefs
+*.tern-project
