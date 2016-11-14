@@ -76,5 +76,17 @@ Returns a local constant's value. Local constants are stored in the service's su
 - returns {primitive} - Dependent on the constant's type  
 *Comment: This is not intended to be a complete home server replacement. It is thought to be a mapping aid for homekit*
 
-	
+###this.myAPI.getProperty(field,property)
+Get a characteristics property. Used for getting the minValue or maxValue or stepValue properties from the homekit characteristic, which might be overwritten by values in the knx_config.json file. Watch out, these use the hap-nodejs-syntax, not the knx_config-syntax. 
+- {string} field - The name of the characteristic
+- {string} property - The name of the property
+- returns either a value, or an array, depending on *property*  
+**Known homekit properties:**  
+* format: <one of Characteristic.Formats>,
+*  unit: <one of Characteristic.Units>,
+*  minValue: <minimum value for numeric characteristics>,
+*  maxValue: <maximum value for numeric characteristics>,
+*  minStep: <smallest allowed increment for numeric characteristics>,
+*  perms: array of [Characteristic.Perms] like [Characteristic.Perms.READ, Characteristic.Perms.WRITE]
+
 
