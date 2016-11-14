@@ -1,5 +1,9 @@
 #Changelog for Version 0.3.x
 
+##0.3.2
+- Fixed `-U <path> not being used for knx_config.json path
+- added new getProperty() method to add-in API
+
 ##0.3.1-a
 Updated README only
 
