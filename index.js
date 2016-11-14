@@ -9,13 +9,12 @@ ECMA-Script 2015 (6.0) Language required
 
 'use strict';
 
-var knxd = require('eibd');
-//var Hapi = require('hapi');
+
 var AccConstructor = require('./lib/knxdevice.js');
 var userOpts = require('./lib/user').User;
 var Service, Characteristic; // passed default objects from hap-nodejs
 var globs = {}; // the storage for cross module data pooling;
-var iterate = require('./lib/iterate');
+//var iterate = require('./lib/iterate');
 var knxmonitor = require('./lib/knxmonitor');
 var KNXAccess = require("./lib/knxaccess");
 
@@ -96,7 +95,7 @@ function KNXPlatform(log, config, newAPI) {
  * Registers the plugin with homebridge. Will be called by homebridge if found in directory structure and package.json
  * is right This function needs to be exported.
  * 
- * @param {object} homebridgeAPI - The API Object made available by homebridge. Contains the HAP type library e.g.
+ * @param {homebridge/lib/api.js/API} homebridgeAPI - The API Object made available by homebridge. Contains the HAP type library e.g.
  * 
  */
 function registry(homebridgeAPI) {
@@ -185,6 +184,7 @@ KNXPlatform.prototype.configure = function() {
 		globs.debug("Match device [" + currAcc.DeviceName + "]");
 
 		//match them to the restored accessories:
+		/** @type {homebridge/lib/platformAccessory.js/PlatformAccessory} */
 		var matchAcc = getAccessoryByUUID(globs.restoredAccessories, currAcc.UUID);
 		if (matchAcc) {
 			// we found one
@@ -326,9 +326,9 @@ KNXPlatform.prototype.configure = function() {
 /**
  * returns an accessory from an array of accessories if the context property is matched, or undefined.
  * 
- * @param {hap-nodejs/lib/platformAccessory[]} accessories The array of accessories.
- * @param {Object} context The context object (presumably a string) to be matched.
- * @return {hap-nodejs/lib/platformAccessory} or undefined
+ * @param {homebridge/lib/platformAccessory.js~PlatformAccessory[]} accessories The array of accessories.
+ * @param {String} uuid The context object (presumably a string) to be matched.
+ * @return {homebridge/lib/platformAccessory.js~PlatformAccessory} or undefined
  * 
  */
 function getAccessoryByUUID(accessories, uuid) {
