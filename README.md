@@ -16,9 +16,11 @@ This node module requires a running (and properly configured) knx daemon (knxd).
 ### Installation and running
 -  Install homebridge first, [see there](https://github.com/nfarina/homebridge); nfarina recommends a global install as super user. It's a server tool, so we can safely assume that the person that installes it is sufficiently  priviledged to do so. `sudo npm install -g homebridge`
 -  then install this package to `<any>` directory you want; If you installed homebridge globally I recommend to do so with homebridge-knx: `sudo npm install -g homebridge-knx`
--  configure homebridge and its plugins. You might start by copying the [`KNX-sample-config.json`](https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json) to a new folder `.homebridge` in your user folder (on a default installation raspberry, it's `/users/pi`) and rename it to config.json
+-  configure homebridge and its plugins. You might start by copying the [`KNX-sample-config.json`](https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json) to a new folder `.homebridge` in your user folder (on a default installation raspberry, it's `/home/pi`) and rename it to config.json
+- Then put the configuration file*knx_config.json* into `~/.homebridge`, and adapt them to your needs (knxd address and some test devices in `knx_config.json`). You do not need a `platform` section in `config.json`any more!
 -  Eliminate everything (especially all group addresses) that might harm your KNX installation. Sending bus telegrams to your alarm device might wake the neighbourhood unpleasantly!
 -  when done, start homebridge with `homebridge`. If you have chosen a local install, go to the homebridge folder and do a `bin/homebridge --plugin-path <any>/homebridge-knx` with the path to the homebridge-knx installation.
+
 
 ### Limitations
 Since homebridge-knx is not an Apple-certified HomeKit device some functions are limited:
@@ -68,25 +70,6 @@ See the [complete Doc!](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.
 # Add-ins
 Add-in (aka handlers) can change the default behavior. [See the article](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md)
 
-# Installation
-If you have read through here, you probably qualify as intrepid enough to install insufficiently tested software on your device.
-  
-I recommend using a dedicated directory, and do not install it *globally* as root.  
-Here's my sample installation for the beta on a **raspberry pi** (that has everything installed to use the non-beta, like **node**):  
-
-```shell
-pi@homebridge-dev:~ $ mkdir z_test
-pi@homebridge-dev:~ $ cd z_test/
-pi@homebridge-dev:~/z_test $ npm install homebridge
-...
-pi@homebridge-dev:~/z_test $ npm install homebridge-knx@beta
-homebridge-knx@0.3.0-beta2 ../node_modules/homebridge-knx
-├── eibd@0.3.5
-└── debug@2.2.0 (ms@0.7.1)
-pi@homebridge-dev:~/z_test $
-```
-
-Then put the configuration files *knx_config.json* and *KNX-sample-config.json* (as *config.json*) into `~/.homebridge`, and adapt them to your needs (knxd address and some test devices in `knx_config.json`). You do not need a `platform` section in `config.json`any more!
 
 Happy testing!
 
