@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Homebridge-knx : KNX platform shim for homebridge">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Homebridge-knx</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/snowdd1/homebridge-knx">View on GitHub</a>
+
+          <h1 id="project_title">Homebridge-knx</h1>
+          <h2 id="project_tagline">KNX platform shim for homebridge</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/snowdd1/homebridge-knx/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/snowdd1/homebridge-knx/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="homebridge-knx-version-03" class="anchor" href="#homebridge-knx-version-03" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>homebridge-knx Version 0.3</h1>
+
+<p><a href="https://npmjs.org/package/homebridge-knx"><img src="http://img.shields.io/npm/v/homebridge-knx.svg" alt="NPM version"></a> <a href="https://npmjs.org/package/homebridge-knx"><img src="http://img.shields.io/npm/dm/homebridge-knx.svg" alt="Downloads"></a><a href="https://david-dm.org/snowdd1/homebridge-knx"><img src="https://david-dm.org/snowdd1/homebridge-knx.svg" alt="Dependency status"></a>   </p>
+
+<p>KNX platform shim for homebridge.
+<strong>This cannot run stand-alone in node!</strong></p>
+
+<p>Please also visit <a href="https://github.com/nfarina/homebridge">homebridge github homepage</a> first.</p>
+
+<p>Latest to homebridge-knx changes can be found in the <a href="CHANGELOG.md">CHANGELOG.md</a></p>
+
+<h3>
+<a id="this-can-only-be-used-with-the-new-homebridge-049-and-node-400" class="anchor" href="#this-can-only-be-used-with-the-new-homebridge-049-and-node-400" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>This can only be used with the new homebridge &gt;=0.4.9 and Node &gt;=4.0.0</h3>
+
+<h3>
+<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prerequisites</h3>
+
+<p>This node module requires a running (and properly configured) knx daemon (knxd). You can find the latest version <a href="https://github.com/knxd/knxd">here</a>. I have mirrored an ancient snapshot that runs stable <em>with my configuration</em> (raspberry 1b, busware pigator single with knx module) but has not been tested otherwise. I cannot support the knxd. Please address issues directly at the <a href="https://github.com/knxd/knxd/issues">knxd issue pages</a>. It might help to search the existing issues, as your problem might have been solved already.  </p>
+
+<h3>
+<a id="installation-and-running" class="anchor" href="#installation-and-running" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation and running</h3>
+
+<ul>
+<li> Install homebridge first, <a href="https://github.com/nfarina/homebridge">see there</a>; nfarina recommends a global install as super user. It's a server tool, so we can safely assume that the person that installes it is sufficiently  priviledged to do so. <code>sudo npm install -g homebridge</code>
+</li>
+<li> then install this package to <code>&lt;any&gt;</code> directory you want; If you installed homebridge globally I recommend to do so with homebridge-knx: <code>sudo npm install -g homebridge-knx</code>
+</li>
+<li> configure homebridge and its plugins. You might start by copying the <a href="KNX-sample-config.json"><code>KNX-sample-config.json</code></a> to a new folder <code>.homebridge</code> in your user folder (on a default installation raspberry, it's <code>/home/pi</code>) and rename it to config.json</li>
+<li>Then put the configuration file<em>knx_config.json</em> into <code>~/.homebridge</code>, and adapt them to your needs (knxd address and some test devices in <code>knx_config.json</code>). You do not need a <code>platform</code> section in <code>config.json</code>any more!</li>
+<li> Eliminate everything (especially all group addresses) that might harm your KNX installation. Sending bus telegrams to your alarm device might wake the neighbourhood unpleasantly!</li>
+<li> when done, start homebridge with <code>homebridge</code>. If you have chosen a local install, go to the homebridge folder and do a <code>bin/homebridge --plugin-path &lt;any&gt;/homebridge-knx</code> with the path to the homebridge-knx installation.</li>
+</ul>
+
+<h3>
+<a id="limitations" class="anchor" href="#limitations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Limitations</h3>
+
+<p>Since homebridge-knx is not an Apple-certified HomeKit device some functions are limited:</p>
+
+<ul>
+<li>remote access is only possible using a local device as HomeKit "router" (i.e. an AppleTV 3rd/4th gen, or an iPad running iOS10)</li>
+</ul>
+
+<h2>
+<a id="new-version-030" class="anchor" href="#new-version-030" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NEW VERSION 0.3.0</h2>
+
+<p>This <strong>is</strong> something completely new.</p>
+
+<h1>
+<a id="the-only-thing-that-changes-is-everything" class="anchor" href="#the-only-thing-that-changes-is-everything" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The only thing that changes is <em>everything</em>
+</h1>
+
+<p>A lot of changes at once </p>
+
+<ul>
+<li>own persistence (own file) instead of shared config.json with homebridge <em>(knx_config.json in homebridge home directory, next to homebridge's config.json)</em>
+</li>
+<li>all new concept: no native services any more, but using the defaults from HAP-NodeJS</li>
+<li>you can now assign <em>any</em> characteristic to <em>any</em> service, until Apple's homekit says that's incomplient.</li>
+<li><del>all new concept: define group addresses with more parameters and assign them to characteristics</del></li>
+<li>tidied up the room: new keywords for the <em>knx_config.json</em> (buh, a lot of work for you to do!)</li>
+</ul>
+
+<h1>
+<a id="assumptions" class="anchor" href="#assumptions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Assumptions</h1>
+
+<p>Without using a special handler (add-in) for the service, homebridge-knx assumes the following:</p>
+
+<table>
+<thead>
+<tr>
+<th>HomeKit type</th>
+<th>KNX addresses DPT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Boolean</td>
+<td>DPT1</td>
+</tr>
+<tr>
+<td>Integer</td>
+<td>DPT5</td>
+</tr>
+<tr>
+<td>Percentage</td>
+<td>DPT5.001</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>DPT9</td>
+</tr>
+</tbody>
+</table>
+
+<h1>
+<a id="knx_configjson" class="anchor" href="#knx_configjson" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>knx_config.json</h1>
+
+<p><em>Devices</em> instead of <em>accessories</em>:  </p>
+
+<div class="highlight highlight-source-json"><pre>    <span class="pl-s"><span class="pl-pds">"</span>Devices<span class="pl-pds">"</span></span>: [ 
+        { 
+            <span class="pl-s"><span class="pl-pds">"</span>DeviceName<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>device name<span class="pl-pds">"</span></span> 
+            <span class="pl-ii">...</span>
+        }
+    ]</pre></div>
+
+<p>Changed capitalization (harmonized)!  </p>
+
+<p>See the <a href="knx_config.json.md">complete Doc!</a>.</p>
+
+<h1>
+<a id="add-ins" class="anchor" href="#add-ins" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add-ins</h1>
+
+<p>Add-in (aka handlers) can change the default behavior. <a href="handler-add-in.md">See the article</a></p>
+
+<h1>
+<a id="removing-stale-accessories-from-homebridge-cache" class="anchor" href="#removing-stale-accessories-from-homebridge-cache" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Removing stale accessories from homebridge cache</h1>
+
+<p>The new (well, 1/2016) API of homebridge allows homebridge to cache the accessories for platforms that can add or remove accessories during runtime. As a next step in evolution, homebridge-knx already connects to that API.  </p>
+
+<p><strong>Allow homebridge-knx to start the webserver by adding <code>"AllowWebserver":true,</code> at the beginning of your knx_config.json!</strong></p>
+
+<p>As a consequence remain devices, that homebridge-knx does not reconnnect to at start-up, stale and unreachable in HomeKit. To remove those shadows from HomeKit, use the little web server at <code>&lt;your-homebridge&gt;:18081/list</code></p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/11786396/19836160/5d1ddcde-9e98-11e6-8dc2-e621aceb1055.png" alt="image"><br>
+Clicking on the <code>delete from cache</code> link will <strong>only</strong> remove the devices from the current homebridge instance and their cache, <strong>not</strong> from the <em>knx_config.json</em>, that means they will be rediscovered upon next startup as new device in the default room!</p>
+
+<h1>
+<a id="killing-homebridge" class="anchor" href="#killing-homebridge" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Killing homebridge</h1>
+
+<p><strong>This is for debugging of your knx_config.json only.</strong> If you need homebridge to restart, you can use the setting <code>"AllowKillHomebridge":true</code> in your knx_config.json (right on top where the knxd properties are).<br>
+You'll get a new link at the bottom of the page at <code>&lt;your-homebridge&gt;:18081/list</code> that will homebridge-knx to throw an excpetion ("Committed_Suicide") which then causes homebridge to fail.<br>
+<em>You should remove this setting after completing your knx_config.json for security reasons!</em> </p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Homebridge-knx maintained by <a href="https://github.com/snowdd1">snowdd1</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
