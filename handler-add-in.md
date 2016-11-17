@@ -7,7 +7,8 @@ Several functions available in a KNX wired smart home have no 1:1 relation to Ap
 The [example](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/lib/addins/GiraJalousieActuator.js) I prepared shows:
 - Using of un-connected group addresses.
 - Data manipulation 
-
+  
+**_This is not intended to be a complete home server replacement. It is thought to be a mapping aid for homekit_**  
 
 ## Structure
 
@@ -75,7 +76,6 @@ Returns a characteristic's value from another device/service.
 Returns a local constant's value. Local constants are stored in the service's sub-section "LocalConstants" and can be used to store referenced services and referenced devices for use with **getGlobalValue()** if you need to make functionality of one service dependent on a value from another service/device. *Example: a homekit blocker switch: If that switch is on, all handlers refuse to send values to the KNX bus.*
 - {string} field - The name of the constant
 - returns {primitive} - Dependent on the constant's type  
-*Comment: This is not intended to be a complete home server replacement. It is thought to be a mapping aid for homekit*
 
 ###this.myAPI.getProperty(field,property)
 Get a characteristics property. Used for getting the minValue or maxValue or stepValue properties from the homekit characteristic, which might be overwritten by values in the knx_config.json file. Watch out, these use the hap-nodejs-syntax, not the knx_config-syntax. 
