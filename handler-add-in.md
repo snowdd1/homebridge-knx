@@ -60,6 +60,7 @@ Writes a value **to the KNX bus**. Requires a "Set" address in the characteristi
   -  "DPT5" for 1 byte 0..255, 
   -  "DPT5.001" for automatic conversion from decimal 0..100 to 0..255 or 
   -  "DPT1" for boolean
+  -  "DPT9" for floating point (2-byte low precision)
 
 
 ###this.myAPI.getGlobalValue(device, service, field)
@@ -82,11 +83,11 @@ Get a characteristics property. Used for getting the minValue or maxValue or ste
 - {string} property - The name of the property
 - returns either a value, or an array, depending on *property*  
 **Known homekit properties:**  
-* format: <one of Characteristic.Formats>,
-*  unit: <one of Characteristic.Units>,
-*  minValue: <minimum value for numeric characteristics>,
-*  maxValue: <maximum value for numeric characteristics>,
-*  minStep: <smallest allowed increment for numeric characteristics>,
-*  perms: array of [Characteristic.Perms] like [Characteristic.Perms.READ, Characteristic.Perms.WRITE]
+* format: one of [Characteristic.Formats](https://github.com/KhaosT/HAP-NodeJS/blob/master/lib/Characteristic.js#L62),
+*  unit: one of [Characteristic.Units](https://github.com/KhaosT/HAP-NodeJS/blob/master/lib/Characteristic.js#L78),
+*  minValue: minimum value for numeric characteristics,
+*  maxValue: maximum value for numeric characteristics,
+*  minStep: smallest allowed increment for numeric characteristics,
+*  perms: array of \[Characteristic.Perms\] like [Characteristic.Perms.READ, Characteristic.Perms.WRITE](https://github.com/KhaosT/HAP-NodeJS/blob/master/lib/Characteristic.js#L88)
 
 
