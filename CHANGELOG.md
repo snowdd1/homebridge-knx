@@ -1,5 +1,15 @@
 #Changelog for Version 0.3.x
 
+##0.3.3
+- included new addins
+  -  **WindowCoveringTilt** by giase82/Christof
+  -  **GiaseGarageDoorOpener** by giase82/Christof
+  - RGB light test addin
+- some code cleaning
+- Known Issues
+  - `Reverse` not working reliably in some cases https://github.com/snowdd1/homebridge-knx/issues/67
+  - Not filtering invalid responses before answering to homekit https://github.com/snowdd1/homebridge-knx/issues/66
+
 ##0.3.2
 - Fixed `-U <path> not being used for knx_config.json path
 - added new getProperty() method to add-in API

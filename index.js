@@ -221,6 +221,7 @@ KNXPlatform.prototype.configure = function() {
 		if (reqparsed[1]) {
 			paramstemp = reqparsed[1].split('&');
 			for (var i = 0; i < paramstemp.length; i++) {
+				/** @type {string[]} */
 				var b = paramstemp[i].split('=');
 				params[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
 			}
