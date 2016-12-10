@@ -40,12 +40,69 @@ There is a Javascript file containing all valid services and characteristics loc
 
  
 ##Characteristics
-Each characteristic is an object containing at least a `Type` field. Types can be "On" for power, "Brightness" for dimmable lights etc.  
+Each characteristic is an object containing **at least** a `Type` field. Types can be "On" for power, "Brightness" for dimmable lights etc.  
 Characteristics **can** have assigned group addresses in the `Set` and `Listen` arrays.
-For the group addresses it is possible to define a *data point type* `DPT` (currently valid are DPT1, DPT5, DPT5.001, DPT9).  
-For boolean and percentage types it is possible to *reverse* the read/write value between HomeKit and KNX.
+For the group addresses it is possible to define a *data point type* `DPT` (currently valid are DPT1, DPT5, DPT5.001, DPT9). Characteristics without group addresses can only be used by a `handler`.
+  
+For **boolean and percentage types** it is possible to *reverse* the read/write value between HomeKit and KNX (Restrictions: Only if it is a boolean or a percentage for **HomeKit**, some of the types that support only 0 and 1 are integer anyway; Service must not have a handler, see chapter below).
 
-Characteristics without group addresses can only be used by a `handler`
+For **enumerative type**, such as TargetHeatingCoolingState with a given list of possible values, it is possible to restrict **Apple's Home** app even more with the "ValidValues" array keyword.
+
+For **continuous value types**, such as temperatures, the minimum and maximum values that define the range can be modfied with the "MaxValue" and "MinValue" keywords. Required for Temperatures in Celsius in middle/norther Europe at least, as Apple (designed in California, made in China) expected no sub-zero temperatures.     
+
+Some exmples:
+```json
+"Characteristics": [
+    {
+        "Type": "On",
+        "Set": [
+            "1/3/5"
+        ],
+        "Listen": [
+            "1/3/5"
+        ]
+    }
+]
+```
+
+with **"Reverse"**
+```json
+"Characteristics": [
+    {
+        "Type": "On",
+        "Set": [
+            "1/3/5"
+        ],
+        "Listen": [
+            "1/3/5"
+        ],
+        "Reverse": true
+    }
+]
+```
+
+With **"ValidValues"**, to remove "Cool" from the list of Target States:
+```json
+{
+    "Type": "TargetHeatingCoolingState",
+    "Listen": [
+        "14/1/97"
+    ],
+	"ValidValues":[0,1,3]
+}
+```                      
+
+Modifying **Min and Max**: 
+```
+{
+    "Type": "CurrentTemperature",
+    "Listen": [
+        "7/1/11"
+    ],
+    "MaxValue": 60,
+    "MinValue": -20
+}
+```
 
 ##Handler
 New in version 0.3 of homebridge-knx is a little add-in concept, allowing additional functionality to be added without changing the big mass of the code.  
