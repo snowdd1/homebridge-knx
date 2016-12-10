@@ -46,7 +46,7 @@ For the group addresses it is possible to define a *data point type* `DPT` (curr
   
 For **boolean and percentage types** it is possible to *reverse* the read/write value between HomeKit and KNX (Restrictions: Only if it is a boolean or a percentage for **HomeKit**, some of the types that support only 0 and 1 are integer anyway; Service must not have a handler, see chapter below).
 
-For **enumerative type**, such as TargetHeatingCoolingState with a given list of possible values, it is possible to restrict **Apple's Home** app even more with the "ValidValues" array keyword.
+For **enumerative type**, such as TargetHeatingCoolingState with a given list of possible values, it is possible to restrict **Apple's Home** app even more with the "ValidValues" array keyword. Only working with **new** services. If the service is read into homekit database, this is stored there and not read again. If you need to change tha valid values, you have to remove the service from homekit and re-add it again.
 
 For **continuous value types**, such as temperatures, the minimum and maximum values that define the range can be modfied with the "MaxValue" and "MinValue" keywords. Required for Temperatures in Celsius in middle/norther Europe at least, as Apple (designed in California, made in China) expected no sub-zero temperatures.     
 
