@@ -1,5 +1,14 @@
 #Changelog for Version 0.3.x
 
+##0.3.4
+- Bugfixes
+  - #66 Invalid values returned for enumerated-code characteristics
+  - #67 `Reverse` keyword did not work at all
+  - #69 group address validation is wrong
+
+- New *mini* feature
+  - new keyword "ValidValues" allows to restrict the options in homekit apps such as Apple's **Home**. Others might not yet support that (Elgato Eve 2.5.1 does not, e.g.)
+
 ##0.3.3
 - included new addins
   -  **WindowCoveringTilt** by giase82/Christof
