@@ -11,7 +11,8 @@ Latest to homebridge-knx changes can be found in the [CHANGELOG.md](CHANGELOG.md
 ### This can only be used with the new homebridge >=0.4.9 and Node >=4.0.0
 
 ### Prerequisites
-This node module requires a running (and properly configured) knx daemon (knxd). You can find the latest version [here](https://github.com/knxd/knxd). I have mirrored an ancient snapshot that runs stable *with my configuration* (raspberry 1b, busware pigator single with knx module) but has not been tested otherwise. I cannot support the knxd. Please address issues directly at the [knxd issue pages](https://github.com/knxd/knxd/issues). It might help to search the existing issues, as your problem might have been solved already.  
+This node module requires a running (and properly configured) **knx daemon (knxd)**. You can find the latest version [here](https://github.com/knxd/knxd).  
+I cannot support the knxd. Please address issues directly at the [knxd issue pages](https://github.com/knxd/knxd/issues). It might help to search the existing issues, as your problem might have been solved already.  
 
 ### Installation and running
 -  Install homebridge first, [see there](https://github.com/nfarina/homebridge); nfarina recommends a global install as super user. It's a server tool, so we can safely assume that the person that installes it is sufficiently  priviledged to do so. `sudo npm install -g homebridge`

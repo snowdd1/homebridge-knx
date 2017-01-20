@@ -95,7 +95,7 @@ function KNXPlatform(log, config, newAPI) {
  * Registers the plugin with homebridge. Will be called by homebridge if found in directory structure and package.json
  * is right This function needs to be exported.
  * 
- * @param {homebridge/lib/api.js/API} homebridgeAPI - The API Object made available by homebridge. Contains the HAP type library e.g.
+ * @param {homebridge/lib/api.js~API} homebridgeAPI - The API Object made available by homebridge. Contains the HAP type library e.g.
  * 
  */
 function registry(homebridgeAPI) {

@@ -1,5 +1,9 @@
 #Changelog for Version 0.3.x
 
+##0.3.5
+- Enhancements
+  - #72 Allow 16 bit addresses (extended address structure, might be incompatible with older devices; in case of doubt restrict your address range to (15/7/255) as in ETS 3 and before)
+
 ##0.3.4
 - Bugfixes
   - #66 Invalid values returned for enumerated-code characteristics
