@@ -1,5 +1,9 @@
 #Changelog for Version 0.3.x
 
+###0.3.7
+- Enhancements
+  - Does not send values to homekit that haven't changed. Might take some pressure from the Lightbulb with dimmer-going-havoc issue, though it doesn't solve it completely.
+  
 ###0.3.6
 - Bugfixes
   - #79 Wrong assumption about FORMAT and UNIT of homekit types referring to PERCENTAGES
