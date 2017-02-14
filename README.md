@@ -1,4 +1,4 @@
-# homebridge-knx Version 0.3.0 
+# homebridge-knx Version 0.3 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url][![Dependency status][david-dm-image]][david-dm-url]   
 
 KNX platform shim for homebridge.
@@ -8,7 +8,7 @@ Please also visit [homebridge github homepage](https://github.com/nfarina/homebr
 
 Latest to homebridge-knx changes can be found in the [CHANGELOG.md](CHANGELOG.md)
 
-### This can only be used with the new homebridge >=0.4.9 and Node >=4.0.0
+### This can only be used with the new homebridge >=0.4.9 and Node >=6.0.0
 
 ### Prerequisites
 This node module requires a running (and properly configured) **knx daemon (knxd)**. You can find the latest version [here](https://github.com/knxd/knxd).  
