@@ -1,5 +1,9 @@
 #Changelog for Version 0.3.x
 
+###0.3.6
+- Bugfixes
+  - #79 Wrong assumption about FORMAT and UNIT of homekit types referring to PERCENTAGES
+
 ###0.3.5-a
 - Enhancements
   - #60 Experimental RBG light controller updated. Should now convert from HomeKit to RGB and from KNX RGB to Homekit HSB. Untested. Have no hardware.  
