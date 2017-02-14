@@ -28,6 +28,8 @@ node_modules
 config.json
 notes.txt
 
-
-.settings/tern.eclipse.ide.core.prefs
-*.tern-project
+# eclipse local files
+.settings
+.gitattributes
+.jshintrc
+.tern-project
