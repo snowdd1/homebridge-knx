@@ -1,6 +1,6 @@
 { 
 	"name": "homebridge-knx", 
-	"version": "0.3.6", 
+	"version": "0.3.7", 
 	"description": "homebridge shim for KNX home automation.", 
 	"main": "index.js", 
 	"scripts": { 
@@ -51,7 +51,11 @@
 		{ 
 			"name": "bytefactory73", 
 			"url": "https://github.com/bytefactory73"
-		 }
+		 },
+		 		{ 
+			"name": "Christof", 
+			"url": "https://github.com/giase82"
+		 }, 
 	 ], 
 
 	"license": "GPL-2.0", 
