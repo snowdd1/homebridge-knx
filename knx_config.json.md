@@ -20,7 +20,8 @@ homebridge-knx expects the following structure in the `knx_config.json`:
 
 #Devices
 `Devices` must have a unique `DeviceName`. The name cannot be changed in the config file after pairing with homekit, because homekit *copies* it into its database. You can change the name of the device in homekit afterwards; unless you erase your home or un-pair homebridge it will keep the changed name.  
-In Apple's `Home` app (or other homekit enabled apps) devices can get assigned to rooms.
+In Apple's `Home` app (or other homekit enabled apps) devices can get assigned to rooms.  
+As HomeKit can only handle 100 accessories (devices) per bridge, and homebridge bundles them all into one, it is recommended to bundle all functionality into one device per room. It is also less work to do when assigning the services to the rooms, as all services of one device are placed in one room automatically.   
 
 Each device needs a section `Services`. Here all functionality of the device is defined.
 
@@ -123,14 +124,14 @@ homebridge-knx creates a unique UUID for each device newly discovered in the *kn
 **Do not alter these fields** unless you want to force homebridge-knx to accept this as a **new** device or service, rendering the old one stale and unreachable.
 
 #Example
-```
+```json
 {
     "knxd_ip": "192.168.178.100",
     "knxd_port": 6720,
     "AllowKillHomebridge": true,
     "Devices": [
         {
-            "DeviceName": "Desk lamp",
+            "DeviceName": "Office",
             "Services": [
                 {
                     "ServiceType": "Lightbulb",
@@ -146,12 +147,7 @@ homebridge-knx creates a unique UUID for each device newly discovered in the *kn
                             ]
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "DeviceName": "Office rolling shutter",
-            "Services": [
+                },
                 {
                     "ServiceType": "WindowCovering",
                     "Handler": "GiraJalousieActuator",
