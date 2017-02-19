@@ -1,6 +1,6 @@
 { 
 	"name": "homebridge-knx", 
-	"version": "0.3.8", 
+	"version": "0.3.9", 
 	"description": "homebridge shim for KNX home automation.", 
 	"main": "index.js", 
 	"scripts": { 
@@ -43,19 +43,23 @@
 		{ 
 			"name": "EIBHomeControl", 
 			"url": "https://github.com/EIBHomeControl"
-		 }, 
+		}, 
 		{ 
 			"name": "Michael", 
 			"url": "https://github.com/misc2000"
-		 }, 
+		}, 
 		{ 
 			"name": "bytefactory73", 
 			"url": "https://github.com/bytefactory73"
-		 },
+		},
 		 		{ 
 			"name": "Christof", 
 			"url": "https://github.com/giase82"
-		 } 
+		} ,
+		{
+			"name": "Matevz Gacnik",
+			"url": "https://github.com/matevzg"
+		}
 	 ], 
 
 	"license": "GPL-2.0", 

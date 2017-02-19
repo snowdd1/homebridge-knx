@@ -1,5 +1,9 @@
 #Changelog for Version 0.3.x
-
+###0.3.9
+- New Add-in!
+  - for CO2Sensors, thanks to [Matevz Gacnik](https://github.com/matevzg)! He was so kind to put it in [Issue 85](https://github.com/snowdd1/homebridge-knx/issues/85) for me to publish it.
+  - Translates definable limits to HomeKit specific status values. See the [example in the code](https://github.com/snowdd1/homebridge-knx/blob/master/lib/addins/AirQualityCO2.js#L44)
+   
 ###0.3.8
 - Documentation of knx_config.json changed: [Recommend to place all services in a room into one device](https://github.com/snowdd1/homebridge-knx/blob/master/knx_config.json.md#devices). [Issue 83](https://github.com/snowdd1/homebridge-knx/issues/83)  
 Thanks to [Matevž Gačnik](https://github.com/matevzg) for pointing that out.
