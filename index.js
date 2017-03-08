@@ -100,6 +100,20 @@ function KNXPlatform(log, config, newAPI) {
  */
 function registry(homebridgeAPI) {
 	console.log("homebridge API version: " + homebridgeAPI.version);
+	
+	/*
+	 * Experimental: Look for a user file called knx-ignore.txt in the user config path.
+	 * If it is there, exit here and DO NOT REGISTER the platform
+	 */
+	let fs = require('fs');
+	let path = require('path');
+	let checkfilepath = path.join(homebridgeAPI.user.storagePath(), 'knx-ignore.txt');
+	if (fs.existsSync(checkfilepath)) {
+		console.log('[WARNING] Found blocking file, exiting now. To load homebridge-knx, remove '+ checkfilepath);
+		return;
+	}
+	// END OF INSERTION FOR BRANCH ignore-option
+	
 	Service = homebridgeAPI.hap.Service;
 	Characteristic = homebridgeAPI.hap.Characteristic;
 	globs.Service = Service;
