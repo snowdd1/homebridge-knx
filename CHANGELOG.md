@@ -2,6 +2,9 @@
 ###0.3.10
 - New Add-in
   - From the German [knx-user-forum.de](https://knx-user-forum.de/forum/projektforen/knxd/1068186-zentral-aus) the idea of having a one-way switch to shut off central functions such as switching lights off all at once was voiced, so here it is: [**OneWaySwitch** handler](https://github.com/snowdd1/homebridge-knx/blob/master/lib/addins/OneWaySwitch.js)
+  
+- Ignore Option
+  -  For those who want to (for whatever reason) run multiple homebridge instances on the same machine whilst having them globally installed, now a file named `**knx-ignore.txt**` in the homebridge-configuration folder (of the respective instance, defaults to `~/.homebridge` ) prevents the loading of homebridge-knx.
    
 ###0.3.9
 - New Add-in!
