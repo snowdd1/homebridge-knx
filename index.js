@@ -6,6 +6,7 @@
 ALL NEW VERSION WITH OWN PERSISTENCE LAYER (file based, anyhow)
 ECMA-Script 2015 (6.0) Language required
  */
+/* jshint esversion: 6, strict: true, node: true */
 
 'use strict';
 
