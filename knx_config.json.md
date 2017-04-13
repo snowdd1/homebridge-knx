@@ -98,7 +98,7 @@ Modifying **Min and Max**:
 {
     "Type": "CurrentTemperature",
     "Listen": [
-        "7/1/11"
+        "7/1/11" 
     ],
     "MaxValue": 60,
     "MinValue": -20
@@ -123,7 +123,7 @@ Handlers can use service-local constants in their code. This allows using the sa
 homebridge-knx creates a unique UUID for each device newly discovered in the *knx_config.json* and writes that back to the file. Similar, a unique `subtype` field is created for each service.  
 **Do not alter these fields** unless you want to force homebridge-knx to accept this as a **new** device or service, rendering the old one stale and unreachable.
 
-#Example
+# Example
 ```json
 {
     "knxd_ip": "192.168.178.100",
