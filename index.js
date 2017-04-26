@@ -18,6 +18,7 @@ var globs = {}; // the storage for cross module data pooling;
 //var iterate = require('./lib/iterate');
 var knxmonitor = require('./lib/knxmonitor');
 var KNXAccess = require("./lib/knxaccess");
+var getServiceData = require("./lib/servicedata"); // the data for the web server to show available services and characteristics
 
 var http = require('http');
 /**
@@ -126,6 +127,12 @@ function registry(homebridgeAPI) {
 	 */
 	require('./lib/customtypes/knxthermostat.js')(homebridgeAPI);
 	
+	/*
+	 *  get the data for the web server (show available services and characteristics)
+	 */
+	
+	globs.webdata = getServiceData(globs);
+	
 	//debug
 	//iterate(globs.API.hap.Characteristic.KNXThermAtHome);
 	//iterate(globs.API.hap.Characteristic.On);
@@ -222,7 +229,9 @@ KNXPlatform.prototype.configure = function() {
 	//now we need to store our updated config file to disk, or else all that is in vain next startup!
 	globs.info('Saving config file!');
 	userOpts.storeConfig();
-
+	
+	
+	/*********************************************************************************/
 	// start the tiny web server for deleting orphaned devices
 	globs.debug('BEFORE http.createServer');
 	var that=this;
@@ -280,8 +289,15 @@ KNXPlatform.prototype.configure = function() {
 			if (that.config.AllowKillHomebridge===true) {
 				response.write(' <br><hr><br><a href="/kill">Kill homebridge</a> by throwing an Error. Use this to restart HomeBridge if you have it configured as a self-starting service ' + ' <BR>');
 			}
-			
+			response.write(`<HR><BR>Available pages are <br>
+					<a href="/list">list devices</a> and <br>
+					<a href="/availservices">list available services</a><br>
+					 <a href="/availcharacteristics">list available characteristics</a>
+					`);
+			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
+
 		} else if (reqparsed[0] === 'delete') {
 			// now delete the accessory from homebridge
 			globs.debug("delete accessory with UUID ");
@@ -316,11 +332,138 @@ KNXPlatform.prototype.configure = function() {
 				}, 500);
 			}
 		
+		} else if (reqparsed[0] === 'availservices') {
+			// list the Services that homebridge knows about
+			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
+			response.write('<BODY>');
+			response.write('<h1>Available services for homebridge are: </h1>');
+			for (let srvName in globs.webdata.servData) {
+				if (globs.webdata.servData.hasOwnProperty(srvName)) {
+					let srv = globs.webdata.servData[srvName];
+					response.write('<a href="/servicedata?name='+ srvName+'">' + srv.displayName + ' (' + srv.localized.en.displayName +')</a><BR>');
+				}
+				
+			}  
+			response.write(`<HR><BR>Available pages are <br>
+			<a href="/list">list devices</a> and <br>
+			<a href="/availservices">list available services</a><br>
+			 <a href="/availcharacteristics">list available characteristics</a>
+			`);
+			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write(JSON.stringify(params) + '<BR>');
+			response.end('</BODY>');	
+		} else if (reqparsed[0] === 'availcharacteristics') {
+			// list the Services that homebridge knows about
+			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
+			response.write('<BODY>');
+			response.write('<h1>Available characteristics for homebridge are: </h1>');
+			for (let chrName in globs.webdata.charData) {
+				if (globs.webdata.charData.hasOwnProperty(chrName)) {
+					let chr = globs.webdata.charData[chrName];
+					response.write('<a href="/chardata?name='+ chr.displayName+'">' + chr.displayName + '</a><BR>');
+				}
+			}  
+			response.write(`<HR><BR>Available pages are <br>
+					<a href="/list">list devices</a> and <br>
+					<a href="/availservices">list available services</a><br>
+					 <a href="/availcharacteristics">list available characteristics</a>
+					`);
+			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write(JSON.stringify(params) + '<BR>');
+			response.end('</BODY>');	
+		} else if (reqparsed[0] === 'servicedata') {
+			// show service
+			globs.debug("list service characteristics");
+			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
+			response.write('<BODY>');
+			if (params.name && globs.webdata.availableServices.Services[params.name]) {
+				let service1 = globs.webdata.availableServices.Services[params.name];
+				let disp1 = globs.webdata.servData[params.name];
+				response.write('<H1>' + disp1.displayName +'</H1>');
+				response.write(`<H2>Mandatory characteristics</H2>`);
+				response.write(`<H4>Mandatory characteristics are created automatically by homebridge. If they are not connected to group addresses they are dysfunct although displayed in HomeKit apps.</H4>`);
+				for (let chrName in service1.characteristics) { // service1.characteristics is a numbered array !!!
+					if (service1.characteristics.hasOwnProperty(chrName)) {
+						//console.log('Searching for '+service1.characteristics[chrName].displayName);
+						//console.dir(globs.webdata.charData);
+						let chr1 = globs.webdata.charData[service1.characteristics[chrName].displayName];
+						response.write('<a href="/chardata?name='+ chr1.displayName+'">' + chr1.objectName + '</a> ('+ chr1.localized.en.displayName+ ') <BR>'); // TODO localisation
+					}
+					
+				}  
+				response.write(`<H2>Optional characteristics</H2>`);
+				response.write(`<H4>Optional characteristics are created if listed in configuration. Any other characteristic might also work, these are thought by Apple to work best with the service</H4>`);
+				for (let chrName in service1.optionalCharacteristics) { // service1.characteristics is a numbered array !!!
+					if (service1.optionalCharacteristics.hasOwnProperty(chrName)) {
+						//console.log('Searching for '+service1.optionalCharacteristics[chrName].displayName);
+						//console.dir(globs.webdata.charData);
+						let chr1 = globs.webdata.charData[service1.optionalCharacteristics[chrName].displayName];
+						response.write('<a href="/chardata?name='+ chr1.displayName+'">' + chr1.objectName + '</a> ('+ chr1.localized.en.displayName+ ') <BR>');  // TODO localisation
+					}
+					
+				}  
+			} else {
+				response.write('<H1>Error in URL</H1>');
+			}
+			response.write(`<HR><BR>Available pages are <br>
+					<a href="/list">list devices</a> and <br>
+					<a href="/availservices">list available services</a><br>
+					 <a href="/availcharacteristics">list available characteristics</a>
+					`);
+			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write(JSON.stringify(params) + '<BR>');
+			response.end('</BODY>');
+		} else if (reqparsed[0] === 'chardata') {
+			// show characteristic
+			globs.debug("list characteristic");
+			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
+			response.write('<BODY>');
+			if (params.name && globs.webdata.charData[params.name]) {
+				let disp1 = globs.webdata.charData[params.name];
+				let char1 = globs.webdata.availableCharacteristics[disp1.objectName];
+				response.write('<H1>' + disp1.displayName +'</H1>');
+				response.write(`<H2>Properties</H2>`);
+				response.write(`<H4>Properties define the behaviour of the characteristic</H4>`);
+				for (let prop in char1) { // service1.characteristics is a numbered array !!!
+					if (char1.hasOwnProperty(prop)) {
+						//console.log('Searching for '+service1.characteristics[chrName].displayName);
+						//console.dir(globs.webdata.charData);
+						if (prop!=='props') {
+							response.write(prop + ': '+ char1[prop] +' <BR>'); // TODO localisation
+						} else {
+							for (let pp in char1[prop]) {
+								if (char1[prop].hasOwnProperty(pp)) {
+									response.write(pp + ': '+ char1[prop][pp] +' <BR>'); // TODO localisation
+								}
+							}
+						}
+						
+					}
+					
+				}  
+
+			} else {
+				response.write('<H1>Error in URL</H1>');
+				console.dir(globs.webdata.charData);
+			}
+			response.write(`<HR><BR>Available pages are <br>
+					<a href="/list">list devices</a> and <br>
+					<a href="/availservices">list available services</a><br>
+					 <a href="/availcharacteristics">list available characteristics</a>
+					`);
+			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write(JSON.stringify(params) + '<BR>');
+			response.end('</BODY>');
 		} else {
 			// any other URL
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
-			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write(`<BR>Available pages are <br>
+					<a href="/list">list devices</a> and <br>
+					<a href="/availservices">list available services</a><br>
+					 <a href="/availcharacteristics">list available characteristics</a>
+					`);
+			response.write('<h1>URL<h1/><BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
 
