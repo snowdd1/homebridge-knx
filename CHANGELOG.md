@@ -1,4 +1,13 @@
 #Changelog for Version 0.3.x
+
+## 0.3.11
+- tiny internal web server has newe pages:
+  - /availservices shows the services from hap-nodejs 
+  - /availcharacteristics shows the characteristics from hap-nodejs
+  - these pages are linked
+  - localization is prepared but not implemented yet
+  - properties of the characteristics are listed but not explained
+
 ### 0.3.10-b
 - Just pushing dependency to eibd to beyond 0.3.8, which was faulty (and it was my fault.)
 ## 0.3.10
@@ -73,11 +82,11 @@ Updated README only
 - Updated `debug` dependency to latest stable version 2.3.0  
 - Removed a legacy line of code that was never executed
 
-##0.3.0
+## 0.3.0
 ###initial release
 
 
-#Version numbering conventions
+# Version numbering conventions
 **First digit** - Major version; if =0 then software is assumed to be not production ready (in this case - it's open source non-commercial and therefore use at own risk!)  
 **Second digit** - Minor version number; Increase of minor version should not break compatibility, unless **first digit was 0**  
 **Third digit** - Patch number, unless **first digit was 0**; then minor version  
