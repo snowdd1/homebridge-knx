@@ -116,7 +116,8 @@ Handlers can make use of KNX group addresses that are not connected directly to 
 - The `Type` field is a freely definable name field (uniqueness within the service required). 
 - Definition of `DPT` **is mandatory** as the data point type cannot be inferred from a homekit characteristic!  
 
-## LocalConstants
+## KNXReadRequests
+All addresses listed in that array are sent to the bus with a READ request telegram at the start of homebridge-knx. They are not ergularly polled. Use active status objects instead.## LocalConstants
 Handlers can use service-local constants in their code. This allows using the same handler for alike-but-not-equal use cases. The values from the `LocalConstants` can be used in the handler code. This allows re-using the same handler for multiple objects that differ by more than group addresses.
 
 ## UUID and subtype
