@@ -14,7 +14,7 @@ The [example](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/lib/addi
 
 Any handler needs to extend HandlerPattern:
 
-```javascript
+``` javascript
 var HandlerPattern = require('./handlerpattern.js');
 /**
  * @class A custom handler for the GIRA 216100 "Jalousie Aktor" (rolling shutter/blinds actuator)   
@@ -36,24 +36,25 @@ class GiraJalousieActuator extends HandlerPattern {
 	...
 	}
 }
-``` 
+```
+
 The two methods `onKNXValueChange()` and `onHKValueChange()` are mandatory.  
 
 ## API
 
 Using the local object `this.myAPI` the handler can talk to homekit and to the KNX bus:
 
-###this.myAPI.setValue(field, value)  
+### this.myAPI.setValue(field, value)  
 Sets a **homekit** value for a local characteristic
 - {string} field - The type/name of the characteristic, like "On" for lightbulb power
 - {number} value - the value for the characteristic, dependent on the characteristic's type
 
-###this.myAPI.getValue(field)
+### this.myAPI.getValue(field)
 Returns a local characteristic's value
 - {string} field - The name of the characteristic, like "On" for lightbulb power
 - returns {number} - Dependent on the charceristic's type
 	 
-###this.myAPI.knxWrite(field, value, dptype)
+### this.myAPI.knxWrite(field, value, dptype)
 Writes a value **to the KNX bus**. Requires a "Set" address in the characteristic
 - {string} field - The name of the characteristic, like "On" for lightbulb power
 - {primitive} value - The value to be sent.
@@ -64,7 +65,7 @@ Writes a value **to the KNX bus**. Requires a "Set" address in the characteristi
   -  "DPT9" for floating point (2-byte low precision)
 
 
-###this.myAPI.getGlobalValue(device, service, field)
+### this.myAPI.getGlobalValue(device, service, field)
 Returns a characteristic's value from another device/service.
 - {string} device - unique name of the device as in the configuration
 - {string} service - unique name of the service as in the configuration
@@ -72,12 +73,12 @@ Returns a characteristic's value from another device/service.
 - returns {number}
 
 
-###this.myAPI.getLocalConstant(field)
+### this.myAPI.getLocalConstant(field)
 Returns a local constant's value. Local constants are stored in the service's sub-section "LocalConstants" and can be used to store referenced services and referenced devices for use with **getGlobalValue()** if you need to make functionality of one service dependent on a value from another service/device. *Example: a homekit blocker switch: If that switch is on, all handlers refuse to send values to the KNX bus.*
 - {string} field - The name of the constant
 - returns {primitive} - Dependent on the constant's type  
 
-###this.myAPI.getProperty(field,property)
+### this.myAPI.getProperty(field,property)
 Get a characteristics property. Used for getting the minValue or maxValue or stepValue properties from the homekit characteristic, which might be overwritten by values in the knx_config.json file. Watch out, these use the hap-nodejs-syntax, not the knx_config-syntax. 
 - {string} field - The name of the characteristic
 - {string} property - The name of the property
