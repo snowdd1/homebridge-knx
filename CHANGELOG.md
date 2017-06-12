@@ -1,5 +1,9 @@
 #Changelog for Version 0.3.x
 
+
+- changed logging of KNX value changes: [type INFO changed to DEBUG to avoid filling the logs, #93](https://github.com/snowdd1/homebridge-knx/issues/93) 
+- commented out the code stub [throwing an exception at homebridge start, #89](https://github.com/snowdd1/homebridge-knx/issues/89)
+
 ## 0.3.11
 - tiny internal web server has newe pages:
   - /availservices shows the services from hap-nodejs 
@@ -9,7 +13,8 @@
   - properties of the characteristics are listed but not explained
 
 ### 0.3.10-b
-- Just pushing dependency to eibd to beyond 0.3.8, which was faulty (and it was my fault.)
+- Just pushing dependency to eibd to beyond 0.3.8, which was faulty (and it was my fault.)  
+
 ## 0.3.10
 - New Add-in
   - From the German [knx-user-forum.de](https://knx-user-forum.de/forum/projektforen/knxd/1068186-zentral-aus) the idea of having a one-way switch to shut off central functions such as switching lights off all at once was voiced, so here it is: [**OneWaySwitch** handler](https://github.com/snowdd1/homebridge-knx/blob/master/lib/addins/OneWaySwitch.js)
