@@ -93,5 +93,5 @@ You'll get a new link at the bottom of the page at `<your-homebridge>:18081/list
 [npm-url]: https://npmjs.org/package/homebridge-knx
 [downloads-image]: http://img.shields.io/npm/dm/homebridge-knx.svg
 [npm-image]: http://img.shields.io/npm/v/homebridge-knx.svg
-[david-dm-url]:https://david-dm.org/snowdd1/homebridge-knx
-[david-dm-image]:https://david-dm.org/snowdd1/homebridge-knx.svg
+[david-dm-url]: https://david-dm.org/snowdd1/homebridge-knx
+[david-dm-image]: https://david-dm.org/snowdd1/homebridge-knx.svg

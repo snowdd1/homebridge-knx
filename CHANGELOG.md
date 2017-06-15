@@ -3,6 +3,8 @@
 
 - changed logging of KNX value changes: [type INFO changed to DEBUG to avoid filling the logs, #93](https://github.com/snowdd1/homebridge-knx/issues/93) 
 - commented out the code stub [throwing an exception at homebridge start, #89](https://github.com/snowdd1/homebridge-knx/issues/89)
+- allow **Reverse keyword** for UINT8 homekit types that have only 0,1 as valid values [(treat as boolean) #91](https://github.com/snowdd1/homebridge-knx/issues/91#issuecomment-305266948)
+
 
 ## 0.3.11
 - tiny internal web server has newe pages:
