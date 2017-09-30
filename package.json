@@ -1,6 +1,6 @@
 { 
 	"name": "homebridge-knx", 
-	"version": "0.3.10-b", 
+	"version": "0.3.12", 
 	"description": "homebridge shim for KNX home automation.", 
 	"main": "index.js", 
 	"scripts": { 
@@ -10,7 +10,7 @@
 
 	"engines": { 
 		"node": ">6.0.0", 
-		"homebridge": ">=0.4.16"
+		"homebridge": ">=0.4.28"
 	 }, 
 
 	"repository": { 
@@ -59,6 +59,10 @@
 		{
 			"name": "Matevz Gacnik",
 			"url": "https://github.com/matevzg"
+		} , 
+		{
+			"name": "G Kuehn",
+			"url": "https://github.com/gkuehn001"
 		}
 	 ], 
 

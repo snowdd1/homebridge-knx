@@ -1,9 +1,13 @@
 #Changelog for Version 0.3.x
 
+## 0.3.12
 
 - changed logging of KNX value changes: [type INFO changed to DEBUG to avoid filling the logs, #93](https://github.com/snowdd1/homebridge-knx/issues/93) 
 - commented out the code stub [throwing an exception at homebridge start, #89](https://github.com/snowdd1/homebridge-knx/issues/89)
-- allow **Reverse keyword** for UINT8 homekit types that have only 0,1 as valid values [(treat as boolean) #91](https://github.com/snowdd1/homebridge-knx/issues/91#issuecomment-305266948)
+- ~~allow **Reverse keyword** for UINT8 homekit types that have only 0,1 as valid values [(treat as boolean) #91](https://github.com/snowdd1/homebridge-knx/issues/91#issuecomment-305266948)~~ *Had to be skipped for complete rework of data value validation in HAP-nodeJS v.0.4.32 and beyond* 
+- The parameter "AllowWebserver" now has a companion "WebserverPort" if you want to use something different than 18081 (or want to run two instances in parallel as I did)
+- requires homebridge 0.4.28
+- [merged fix](https://github.com/snowdd1/homebridge-knx/pull/103) from [gkuehn001](https://github.com/gkuehn001) for [true/false vs. 1/0 responses from Siri and home app](https://github.com/nfarina/homebridge/commit/b6f382950ceba1b640808ffdc1de358c4738ec09) for OneWaySwitch handler
 
 
 ## 0.3.11
@@ -90,11 +94,11 @@ Updated README only
 - Removed a legacy line of code that was never executed
 
 ## 0.3.0
-###initial release
+initial release
 
 
 # Version numbering conventions
 **First digit** - Major version; if =0 then software is assumed to be not production ready (in this case - it's open source non-commercial and therefore use at own risk!)  
 **Second digit** - Minor version number; Increase of minor version should not break compatibility, unless **first digit was 0**  
 **Third digit** - Patch number, unless **first digit was 0**; then minor version  
-**Appendices** - Sub-Patch; no code change; documentation changes only! Will usually **not** be published to **NPM**
+**Appendices** - Sub-Patch; usually no code change; documentation changes only! Will usually **not** be published to **NPM**
