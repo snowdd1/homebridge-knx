@@ -8,7 +8,7 @@ Please also visit [homebridge github homepage](https://github.com/nfarina/homebr
 
 Latest to homebridge-knx changes can be found in the [CHANGELOG.md](CHANGELOG.md)
 
-### This can only be used with the new homebridge >=0.4.9 and Node >=6.0.0
+### This can only be used with the new homebridge >=0.4.28 and Node >=6.0.0
 
 ### Prerequisites
 This node module requires a running (and properly configured) **knx daemon (knxd)**. You can find the latest version [here](https://github.com/knxd/knxd).  
@@ -79,7 +79,7 @@ The new (well, 1/2016) API of homebridge allows homebridge to cache the accessor
 
 **Allow homebridge-knx to start the webserver by adding `"AllowWebserver":true,` at the beginning of your knx_config.json!**
 
-As a consequence remain devices, that homebridge-knx does not reconnnect to at start-up, stale and unreachable in HomeKit. To remove those shadows from HomeKit, use the little web server at `<your-homebridge>:18081/list`
+As a consequence remain devices, that homebridge-knx does not reconnnect to at start-up, stale and unreachable in HomeKit. To remove those shadows from HomeKit, use the little web server at `<your-homebridge>:18081/list`. You might change the web server port with `"WebserverPort":18082` or whatever port suits you. 
 
 ![image](https://cloud.githubusercontent.com/assets/11786396/19836160/5d1ddcde-9e98-11e6-8dc2-e621aceb1055.png)  
 Clicking on the `delete from cache` link will **only** remove the devices from the current homebridge instance and their cache, **not** from the *knx_config.json*, that means they will be rediscovered upon next startup as new device in the default room!

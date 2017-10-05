@@ -1,4 +1,9 @@
-#Changelog for Version 0.3.x
+# Changelog for Version 0.3.x
+
+## 0.3.13
+- bump required packages to new versions: 
+  - node-eibd to 0.3.9 (regression!)
+  - debug to 3.1.0 
 
 ## 0.3.12
 

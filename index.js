@@ -282,8 +282,7 @@ KNXPlatform.prototype.configure = function() {
 				if (tdev.UUID !== 'ERASED') {
 					response.write('Device ' + tdev.displayName);
 					response.write(' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ' + ' <BR>');
-					// debug spit-out:
-					//response.write(JSON.stringify(tdev) + '<BR><BR>');
+// TODO: List Services here - Services are the prime homekit objects!
 				}
 			}
 			if (that.config.AllowKillHomebridge===true) {
