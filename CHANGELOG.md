@@ -1,5 +1,10 @@
 # Changelog for Version 0.3.x
 
+## 0.3.14
+- fix [bug #122](https://github.com/snowdd1/homebridge-knx/issues/122) with wrongly spelled service reference in custom API
+- fix [bug #123]() with  missing integer typer UINT12 and UINT32 which are now used in Homekit(c) types
+- bump dependencies to actual versions
+
 ## 0.3.13
 - bump required packages to new versions: 
   - node-eibd to 0.3.9 (regression!)
@@ -16,7 +21,7 @@
 
 
 ## 0.3.11
-- tiny internal web server has newe pages:
+- tiny internal web server has new pages:
   - /availservices shows the services from hap-nodejs 
   - /availcharacteristics shows the characteristics from hap-nodejs
   - these pages are linked
