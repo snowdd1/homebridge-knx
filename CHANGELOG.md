@@ -1,5 +1,9 @@
 # Changelog for Version 0.3.x
 
+
+## 0.3.16
+- bugfix for a scaling issue with the new handler in 0.3.15
+
 ## 0.3.15
 - new handler for Dimmers to avoid Apple's **Home**(c) app's disastrous handling of On and Brightness events. Thanks [dlt-](https://github.com/dlt-) for [pointing that out](https://github.com/snowdd1/homebridge-knx/issues/47#issuecomment-325161018). I rewrote it to make it more customizable, and to avoid flickering of the slider in the app due to knx responses. 
 - new Readme design :-)
