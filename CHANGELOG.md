@@ -1,5 +1,9 @@
 # Changelog for Version 0.3.x
 
+## 0.3.15
+- new handler for Dimmers to avoid Apple's **Home**(c) app's disastrous handling of On and Brightness events. Thanks [dlt-](https://github.com/dlt-) for [pointing that out](https://github.com/snowdd1/homebridge-knx/issues/47#issuecomment-325161018). I rewrote it to make it more customizable, and to avoid flickering of the slider in the app due to knx responses. 
+- new Readme design :-)
+
 ## 0.3.14
 - fix [bug #122](https://github.com/snowdd1/homebridge-knx/issues/122) with wrongly spelled service reference in custom API
 - fix [bug #123]() with  missing integer typer UINT12 and UINT32 which are now used in Homekit(c) types

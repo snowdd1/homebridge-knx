@@ -23,23 +23,6 @@ I cannot support the knxd. Please address issues directly at the [knxd issue pag
 -  when done, start homebridge with `homebridge`. If you have chosen a local install, go to the homebridge folder and do a `bin/homebridge --plugin-path <any>/homebridge-knx` with the path to the homebridge-knx installation.
 
 
-### Limitations
-Since homebridge-knx is not an Apple-certified HomeKit device some functions are limited:
-- remote access is only possible using a local device as HomeKit "router" (i.e. an AppleTV 3rd/4th gen, or an iPad running iOS10)
-
-
-## NEW VERSION 0.3.0
-This **is** something completely new.
-
-# The only thing that changes is _everything_
-A lot of changes at once 
-- own persistence (own file) instead of shared config.json with homebridge *(knx_config.json in homebridge home directory, next to homebridge's config.json)*
-- all new concept: no native services any more, but using the defaults from HAP-NodeJS
-- you can now assign *any* characteristic to *any* service, until Apple's homekit says that's incomplient.
-- ~~all new concept: define group addresses with more parameters and assign them to characteristics~~
-- tidied up the room: new keywords for the *knx_config.json* (buh, a lot of work for you to do!)
-
-
 # Assumptions
 Without using a special handler (add-in) for the service, homebridge-knx assumes the following:
 
@@ -52,25 +35,11 @@ Float | DPT9
 
 
 # knx_config.json
-
-*Devices* instead of *accessories*:  
-
-```json
-	"Devices": [ 
-		{ 
-			"DeviceName": "device name" 
-			...
-		}
-	]
-```
-Changed capitalization (harmonized)!  
-
 See the [complete Doc!](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/knx_config.json.md).
 
 
 # Add-ins
-Add-in (aka handlers) can change the default behavior. [See the article](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md)
-
+Add-in (aka "handlers") can change the default behavior. [See the article](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md)
 
 Happy testing!
 
@@ -83,6 +52,10 @@ As a consequence remain devices, that homebridge-knx does not reconnnect to at s
 
 ![image](https://cloud.githubusercontent.com/assets/11786396/19836160/5d1ddcde-9e98-11e6-8dc2-e621aceb1055.png)  
 Clicking on the `delete from cache` link will **only** remove the devices from the current homebridge instance and their cache, **not** from the *knx_config.json*, that means they will be rediscovered upon next startup as new device in the default room!
+
+# Looking up service types and characteristics  
+If you have the webserver enabled (see above), you can get an auto-generated web-page with all the service types and their characteristics from homebridge. See the links at the bottom of your server's list page.
+
 
 # Killing homebridge
 **This is for debugging of your knx_config.json only.** If you need homebridge to restart, you can use the setting `"AllowKillHomebridge":true` in your knx_config.json (right on top where the knxd properties are).  
