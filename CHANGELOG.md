@@ -1,5 +1,12 @@
 # Changelog for Version 0.3.x
 
+## DEV
+- new call hooks for custom handlers. Invented by [ctschach](https://github.com/ctschach/homebridge-knx/commit/5829bf2a1ccf2fa34e37b4d55d87c763a0d5e786), the custom handlers now get informed when the service is ready 
+  - `onServiceInit()`  
+  and when all devices are loaded and initialized
+  - `onHomeKitReady()`
+
+
 
 ## 0.3.16
 - bugfix for a scaling issue with the new handler in 0.3.15

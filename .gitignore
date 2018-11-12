@@ -35,3 +35,6 @@ notes.txt
 .tern-project
 .project
 .CHANGELOG.md.html
+*.njsproj
+.vs/homebridge-knx/v15/.suo
+*.sln
