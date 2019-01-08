@@ -27,3 +27,11 @@ build/Release
 node_modules
 config.json
 notes.txt
+
+# eclipse local files
+.settings
+.gitattributes
+.jshintrc
+.tern-project
+.project
+.CHANGELOG.md.html
