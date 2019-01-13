@@ -1,5 +1,7 @@
 # Changelog for Version 0.3.x
 
+## 0.3.17
+- bugfix for an issue in which external KNX switching off of a dimmable light was not recognized by the dimmer handler. Thanks to [Michael](https://github.com/misc2000) for his [PR 136](https://github.com/snowdd1/homebridge-knx/pull/136)
 
 ## 0.3.16
 - bugfix for a scaling issue with the new handler in 0.3.15
