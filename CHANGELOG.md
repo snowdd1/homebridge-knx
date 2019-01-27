@@ -1,5 +1,8 @@
 # Changelog for Version 0.3.x
 
+## 0.3.19
+- new feature: [EIBHomeControl](https://github.com/EIBHomeControl) contributed a simple security system handler.
+
 ## 0.3.18
 - bugfix for shutter state (opening/closing) being shown in home app reversed (yes, home app now uses the PositionState value in ios12.1+)
 
