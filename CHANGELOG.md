@@ -1,5 +1,8 @@
 # Changelog for Version 0.3.x
 
+## 0.3.18
+- bugfix for shutter state (opening/closing) being shown in home app reversed (yes, home app now uses the PositionState value in ios12.1+)
+
 ## 0.3.17
 - bugfix for an issue in which external KNX switching off of a dimmable light was not recognized by the dimmer handler. Thanks to [Michael](https://github.com/misc2000) for his [PR 136](https://github.com/snowdd1/homebridge-knx/pull/136)
 
