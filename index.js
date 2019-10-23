@@ -66,6 +66,7 @@ function KNXPlatform(log, config, newAPI) {
 	 * - GroupAddresses object
 	 * - Devices Object
 	 */
+	globs.knxd = this.config.knxd || true;
 	globs.knxd_ip = this.config.knxd_ip;
 	globs.knxd_port = this.config.knxd_port || 6720;
 	globs.log = log;
@@ -78,6 +79,7 @@ function KNXPlatform(log, config, newAPI) {
 	globs.readRequests = {};
 
 	KNXAccess.setGlobs(globs); // init link for module;
+	knxmonitor.setGlobs(globs);
 	knxmonitor.startMonitor({
 		host : globs.knxd_ip,
 		port : globs.knxd_port
@@ -288,11 +290,7 @@ KNXPlatform.prototype.configure = function() {
 			if (that.config.AllowKillHomebridge===true) {
 				response.write(' <br><hr><br><a href="/kill">Kill homebridge</a> by throwing an Error. Use this to restart HomeBridge if you have it configured as a self-starting service ' + ' <BR>');
 			}
-			response.write(`<HR><BR>Available pages are <br>
-					<a href="/list">list devices</a> and <br>
-					<a href="/availservices">list available services</a><br>
-					 <a href="/availcharacteristics">list available characteristics</a>
-					`);
+			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
 			response.write('URL<BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
@@ -343,11 +341,7 @@ KNXPlatform.prototype.configure = function() {
 				}
 				
 			}  
-			response.write(`<HR><BR>Available pages are <br>
-			<a href="/list">list devices</a> and <br>
-			<a href="/availservices">list available services</a><br>
-			 <a href="/availcharacteristics">list available characteristics</a>
-			`);
+			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
 			response.write('URL<BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');	
@@ -362,11 +356,7 @@ KNXPlatform.prototype.configure = function() {
 					response.write('<a href="/chardata?name='+ chr.displayName+'">' + chr.displayName + '</a><BR>');
 				}
 			}  
-			response.write(`<HR><BR>Available pages are <br>
-					<a href="/list">list devices</a> and <br>
-					<a href="/availservices">list available services</a><br>
-					 <a href="/availcharacteristics">list available characteristics</a>
-					`);
+			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
 			response.write('URL<BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');	
@@ -379,8 +369,8 @@ KNXPlatform.prototype.configure = function() {
 				let service1 = globs.webdata.availableServices.Services[params.name];
 				let disp1 = globs.webdata.servData[params.name];
 				response.write('<H1>' + disp1.displayName +'</H1>');
-				response.write(`<H2>Mandatory characteristics</H2>`);
-				response.write(`<H4>Mandatory characteristics are created automatically by homebridge. If they are not connected to group addresses they are dysfunct although displayed in HomeKit apps.</H4>`);
+				response.write('<H2>Mandatory characteristics</H2>');
+				response.write('<H4>Mandatory characteristics are created automatically by homebridge. If they are not connected to group addresses they are dysfunct although displayed in HomeKit apps.</H4>');
 				for (let chrName in service1.characteristics) { // service1.characteristics is a numbered array !!!
 					if (service1.characteristics.hasOwnProperty(chrName)) {
 						//console.log('Searching for '+service1.characteristics[chrName].displayName);
@@ -390,8 +380,8 @@ KNXPlatform.prototype.configure = function() {
 					}
 					
 				}  
-				response.write(`<H2>Optional characteristics</H2>`);
-				response.write(`<H4>Optional characteristics are created if listed in configuration. Any other characteristic might also work, these are thought by Apple to work best with the service</H4>`);
+				response.write('<H2>Optional characteristics</H2>');
+				response.write('<H4>Optional characteristics are created if listed in configuration. Any other characteristic might also work, these are thought by Apple to work best with the service</H4>');
 				for (let chrName in service1.optionalCharacteristics) { // service1.characteristics is a numbered array !!!
 					if (service1.optionalCharacteristics.hasOwnProperty(chrName)) {
 						//console.log('Searching for '+service1.optionalCharacteristics[chrName].displayName);
@@ -404,11 +394,7 @@ KNXPlatform.prototype.configure = function() {
 			} else {
 				response.write('<H1>Error in URL</H1>');
 			}
-			response.write(`<HR><BR>Available pages are <br>
-					<a href="/list">list devices</a> and <br>
-					<a href="/availservices">list available services</a><br>
-					 <a href="/availcharacteristics">list available characteristics</a>
-					`);
+			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
 			response.write('URL<BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
@@ -421,8 +407,8 @@ KNXPlatform.prototype.configure = function() {
 				let disp1 = globs.webdata.charData[params.name];
 				let char1 = globs.webdata.availableCharacteristics[disp1.objectName];
 				response.write('<H1>' + disp1.displayName +'</H1>');
-				response.write(`<H2>Properties</H2>`);
-				response.write(`<H4>Properties define the behaviour of the characteristic</H4>`);
+				response.write('<H2>Properties</H2>');
+				response.write('<H4>Properties define the behaviour of the characteristic</H4>');
 				for (let prop in char1) { // service1.characteristics is a numbered array !!!
 					if (char1.hasOwnProperty(prop)) {
 						//console.log('Searching for '+service1.characteristics[chrName].displayName);
@@ -445,11 +431,7 @@ KNXPlatform.prototype.configure = function() {
 				response.write('<H1>Error in URL</H1>');
 				console.dir(globs.webdata.charData);
 			}
-			response.write(`<HR><BR>Available pages are <br>
-					<a href="/list">list devices</a> and <br>
-					<a href="/availservices">list available services</a><br>
-					 <a href="/availcharacteristics">list available characteristics</a>
-					`);
+			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
 			response.write('URL<BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
@@ -457,11 +439,7 @@ KNXPlatform.prototype.configure = function() {
 			// any other URL
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
-			response.write(`<BR>Available pages are <br>
-					<a href="/list">list devices</a> and <br>
-					<a href="/availservices">list available services</a><br>
-					 <a href="/availcharacteristics">list available characteristics</a>
-					`);
+			response.write('<BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
 			response.write('<h1>URL<h1/><BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
