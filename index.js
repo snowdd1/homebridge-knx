@@ -66,7 +66,7 @@ function KNXPlatform(log, config, newAPI) {
 	 * - GroupAddresses object
 	 * - Devices Object
 	 */
-	globs.knxd = this.config.knxd || true;
+	globs.knxd = this.config.knxd;
 	globs.knxd_ip = this.config.knxd_ip;
 	globs.knxd_port = this.config.knxd_port || 6720;
 	globs.log = log;
@@ -456,7 +456,7 @@ KNXPlatform.prototype.configure = function() {
 	}
 
 	// we're done, now issue the startup read requests to the bus
-	require('./lib/knxaccess.js').knxreadhash(globs.readRequests);
+	KNXAccess.knxreadhash(globs.readRequests);
 
 };
 
