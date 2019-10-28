@@ -12,7 +12,7 @@ Latest to homebridge-knx changes can be found in the [CHANGELOG.md](CHANGELOG.md
 
 ### Quickstart for adding History Services
 
-Please visit the [knx_config-fakegato-history.json](https://github.com/ctschach/homebridge-knx/blob/master/knx_config-fakegato-history.json.md) file to see examples on how to add history services to you config.
+Please visit the [knx_config-fakegato-history.json](hhttps://github.com/ctschach/homebridge-knx/blob/fg-history/knx_config-fakegato-history.json.md) file to see examples on how to add history services to you config.
 
 
 ### This can only be used with the new homebridge >=0.4.28 and Node >=6.0.0
