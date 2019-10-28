@@ -35,8 +35,14 @@ notes.txt
 .tern-project
 .project
 .CHANGELOG.md.html
+<<<<<<< HEAD
 obj/Debug/homebridge-knx.njsproj.CoreCompileInputs.cache
 obj/Debug/homebridge-knx.njsproj.FileListAbsolute.txt
 obj/Debug/homebridge-knx.njsprojAssemblyReference.cache
 .vs/homebridge-knx/v15/.suo
 homebridge-knx.njsproj
+=======
+*.njsproj
+.vs/homebridge-knx/v15/.suo
+*.sln
+>>>>>>> remotes/origin/handlerInitEvent
