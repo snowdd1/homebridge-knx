@@ -1,6 +1,6 @@
 { 
 	"name": "homebridge-knx", 
-	"version": "0.3.19", 
+	"version": "0.3.19-fghistory", 
 	"description": "homebridge shim for KNX home automation.", 
 	"main": "index.js", 
 	"scripts": { 
@@ -30,7 +30,9 @@
 
 	"dependencies": { 
 		"eibd": "^0.4.0", 
-		"debug": "^4.1.0"
+		"debug": "^4.1.0",
+     		"fakegato-history": "^0.5.5",
+ 		"homebridge-lib": "^4.4.0"
 	 }, 
 
 	"author": { 
@@ -63,7 +65,10 @@
 		{
 			"name": "G Kuehn",
 			"url": "https://github.com/gkuehn001"
-		}
+ 		},
+ 		{
+ 			"name": "Carsten Tschach",
+ 			"url": "https://github.com/ctschach"
 	 ], 
 
 	"license": "GPL-2.0", 
