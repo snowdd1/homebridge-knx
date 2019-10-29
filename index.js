@@ -254,7 +254,7 @@ KNXPlatform.prototype.configure = function() {
             var myKNXService = matchAcc.services[i_serv];
             if (myKNXService.customServiceAPI && myKNXService.customServiceAPI.handler) {
                 if (typeof myKNXService.customServiceAPI.handler.onHomeKitReady === 'function') {
-                    this.globs.debug(matchAcc.name + "/" + myKNXService.name +": Custom Handler onHomeKitReady()");
+                    globs.debug(matchAcc.name + "/" + myKNXService.name +": Custom Handler onHomeKitReady()");
                     myKNXService.customServiceAPI.handler.onHomeKitReady();
                 }
             }
