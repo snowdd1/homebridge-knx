@@ -1,6 +1,17 @@
 # Changelog for Version 0.3.x
 
 =======
+## 0.3.19-FGHISTORY
+- Added eve-related ServiceTypes and Characteristics
+- Added support for Fakegate-History (History in eve Homekit app)
+- Added easier support for custom ServicesTypes and Characteristics via CustomHomeKitTypes.
+- Added support for DPT12, DPT13, DPT14 (to support 4-byte integer and float values)
+- Added a bunch of custom Handlers (mostly used for eve implementation)
+  - Added custom Handler "HistoryMotion" to manage additional characteristics used by Eve motion.
+  - Added custom Handler "HistoryDoor" to manage additional characteristics used by Eve door.
+  - Added custom Handler "HistoryPower" to manage additional characteristics used by Eve Power / Eve Outlet.
+  - Added custom Handler "ValveControl" to support a Sprinkler System with automatic timeout
+
 ## 0.3.19-DEV
 - new call hooks for custom handlers. Invented by [ctschach](https://github.com/ctschach/homebridge-knx/commit/5829bf2a1ccf2fa34e37b4d55d87c763a0d5e786), the custom handlers now get informed when the service is ready 
   - `onServiceInit()`  
