@@ -26,9 +26,9 @@ Click on any of the eve-Services to see their homebridge and eve specific charac
 
 ## Configuration
 
-Each device can have an optional parameter called "HistoryType". So far fakegato-history service supports the following types: "weather", "energy", "room", "door", motion" or "thermo".
+Each device can have an optional parameter called "HistoryType". So far fakegato-history service supports the following types: "weather", "energy", "room", "door", motion", "switch" or "thermo".
 
-In homebridge-knx the following history types have been successfully tested and can be fully used without any additional implementations: "weather", "door" and "motion".
+In homebridge-knx the following history types have been successfully tested and can be fully used without any additional implementations: "weather", "door", "motion" and "switch".
 
 
 ## Temperature & Humidity sensor (weather history)
@@ -206,13 +206,15 @@ This is just sample config to capture power consumption with an switch/outlet. T
                             "Type": "eveCurrentConsumption",
                             "Listen": [
                                 "4/7/223"
-                            ]
+                            ],
+                            "DPT": "DPT13"
                         },
                         {
                             "Type": "eveTotalConsumption",
                             "Listen": [
                                 "4/7/224"
-                            ]
+                            ],
+                            "DPT": "DPT14"
                         },
                         {
                             "Type": "eveElectricCurrent",
