@@ -1,5 +1,8 @@
 # Changelog for Version 0.3.x
 
+## 0.3.20
+- thanks to hints in #149 I found another glitch in the dimmer handler, which was there for ... well, let's settle for "a long time" :-)
+
 ## 0.3.19
 - new feature: [EIBHomeControl](https://github.com/EIBHomeControl) contributed a simple security system handler.
 
