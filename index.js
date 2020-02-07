@@ -232,14 +232,14 @@ KNXPlatform.prototype.configure = function() {
 	
 
     // here needs the hook for global "finished" event to go into
-
+    
     for (var i = 0; i < globs.devices.length; i++) {
-        matchAcc = globs.devices[i];
-        for (var i_serv = 0; i_serv < matchAcc.services.length; i_serv++) {
-            var myKNXService = matchAcc.services[i_serv];
+        let matchAcc2 = globs.devices[i];
+        for (var i_serv = 0; i_serv < matchAcc2.services.length; i_serv++) {
+            var myKNXService = matchAcc2.services[i_serv];
             if (myKNXService.customServiceAPI && myKNXService.customServiceAPI.handler) {
                 if (typeof myKNXService.customServiceAPI.handler.onHomeKitReady === 'function') {
-                    this.globs.debug(matchAcc.name + "/" + myKNXService.name +": Custom Handler onHomeKitReady()");
+                    globs.debug(matchAcc2.name + "/" + myKNXService.name +": Custom Handler onHomeKitReady()");
                     myKNXService.customServiceAPI.handler.onHomeKitReady();
                 }
             }
@@ -247,9 +247,7 @@ KNXPlatform.prototype.configure = function() {
 
     }
 
-    //TODO: Inform all devices that homekit has now finished loading
-
-
+ 
 	/*********************************************************************************/
 	// start the tiny web server for deleting orphaned devices
 	globs.debug('BEFORE http.createServer');
