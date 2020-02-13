@@ -170,6 +170,36 @@ The custom handler "HistoryDoor" will take care of increasing the counter for "T
 ```
 
 
+## Switch (switch history)
+
+With the latest additons to the fakegato history library you can also monitor the status of switches in your history witin the Eve.app.  No custom handler is needed for this.
+
+```
+        {
+            "DeviceName": "Leinwand Beamer",
+            "Services": [
+                {
+                    "ServiceType": "Switch",
+                    "ServiceName": "Leinwand Beamer",
+                    "Characteristics": [
+                        {
+                            "Type": "On",
+                            "Set": [
+                                "2/1/80"
+                            ],
+                            "Listen": [
+                                "2/1/80"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "HistoryType": "switch"
+        },
+
+```
+
+
 
 ## Outlet (power history)
 
