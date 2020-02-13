@@ -247,22 +247,20 @@ KNXPlatform.prototype.configure = function() {
 	
 
     // here needs the hook for global "finished" event to go into
-
+    
     for (var i = 0; i < globs.devices.length; i++) {
-        matchAcc = globs.devices[i];
-        for (var i_serv = 0; i_serv < matchAcc.services.length; i_serv++) {
-            var myKNXService = matchAcc.services[i_serv];
+        let matchAcc2 = globs.devices[i];
+        for (var i_serv = 0; i_serv < matchAcc2.services.length; i_serv++) {
+            var myKNXService = matchAcc2.services[i_serv];
             if (myKNXService.customServiceAPI && myKNXService.customServiceAPI.handler) {
                 if (typeof myKNXService.customServiceAPI.handler.onHomeKitReady === 'function') {
-                    globs.debug(matchAcc.name + "/" + myKNXService.name +": Custom Handler onHomeKitReady()");
+                    globs.debug(matchAcc2.name + "/" + myKNXService.name +": Custom Handler onHomeKitReady()");
                     myKNXService.customServiceAPI.handler.onHomeKitReady();
                 }
             }
         }
 
     }
-
-    //TODO: Inform all devices that homekit has now finished loading
 
 
 	/*********************************************************************************/
@@ -393,8 +391,8 @@ KNXPlatform.prototype.configure = function() {
 			for (let chrName in globs.webdata.charData) {
 				if (globs.webdata.charData.hasOwnProperty(chrName)) {
 					let chr = globs.webdata.charData[chrName];
- 					response.write('<a href="/chardata?name='+ chr.displayName+'">' + chr.displayName + ' (' + chr.objectName + ')</a><BR>');
 					//response.write('<a href="/chardata?name='+ chr.displayName+'">' + chr.displayName + '</a><BR>');
+ 					response.write('<a href="/chardata?name='+ chr.displayName+'">' + chr.displayName + ' (' + chr.objectName + ')</a><BR>');
 				}
 			}  
 			response.write(`<HR><BR>Available pages are <br>
