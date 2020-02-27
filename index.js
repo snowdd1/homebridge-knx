@@ -11,7 +11,7 @@ ECMA-Script 2015 (6.0) Language required
 'use strict';
 
 
-var AccConstructor = require('./lib/knxdevice.js');
+var KNXDevice = require('./lib/knxdevice.js');
 var userOpts = require('./lib/user').User;
 var Service, Characteristic; // passed default objects from hap-nodejs
 var globs = {}; // the storage for cross module data pooling;
@@ -215,11 +215,11 @@ KNXPlatform.prototype.configure = function() {
 			globs.debug('Matched an accessory: ' + currAcc.DeviceName + ' === ' + matchAcc.displayName);
 			// Instantiate and pass the existing platformAccessory
 			matchAcc.active = true;
-			globs.devices.push(new AccConstructor(globs, foundAccessories[int], matchAcc));
+			globs.devices.push(new KNXDevice(globs, foundAccessories[int], matchAcc));
 		} else {
 			// this one is new
 			globs.debug('New accessory found: ' + currAcc.DeviceName);
-			globs.devices.push(new AccConstructor(globs, foundAccessories[int]));
+			globs.devices.push(new KNXDevice(globs, foundAccessories[int]));
 		}
 		// do not construct here: var acc = new accConstructor(globs,foundAccessories[int]);
 
@@ -232,7 +232,24 @@ KNXPlatform.prototype.configure = function() {
 	globs.info('Saving config file!');
 	userOpts.storeConfig();
 	
-	
+
+    // here needs the hook for global "finished" event to go into
+    
+    for (var i = 0; i < globs.devices.length; i++) {
+        let matchAcc2 = globs.devices[i];
+        for (var i_serv = 0; i_serv < matchAcc2.services.length; i_serv++) {
+            var myKNXService = matchAcc2.services[i_serv];
+            if (myKNXService.customServiceAPI && myKNXService.customServiceAPI.handler) {
+                if (typeof myKNXService.customServiceAPI.handler.onHomeKitReady === 'function') {
+                    globs.debug(matchAcc2.name + "/" + myKNXService.name +": Custom Handler onHomeKitReady()");
+                    myKNXService.customServiceAPI.handler.onHomeKitReady();
+                }
+            }
+        }
+
+    }
+
+ 
 	/*********************************************************************************/
 	// start the tiny web server for deleting orphaned devices
 	globs.debug('BEFORE http.createServer');
