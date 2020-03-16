@@ -135,12 +135,8 @@ function registry(homebridgeAPI) {
 	
 	globs.webdata = getServiceData(globs);
 	
-	//debug
-	//iterate(globs.API.hap.Characteristic.KNXThermAtHome);
-	//iterate(globs.API.hap.Characteristic.On);
 	// third parameter dynamic = true
 	homebridgeAPI.registerPlatform("homebridge-knx", "KNX", KNXPlatform, true); //update signature for plugin-2
-	//homebridgeAPI.registerPlatform("homebridge-knx", "KNX", KNXPlatform, false); //update signature 
 }
 
 module.exports = registry;
