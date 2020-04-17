@@ -1,6 +1,6 @@
 {
 	"name": "homebridge-knx",
-	"version": "0.3.19",
+	"version": "0.3.22",
 	"description": "homebridge shim for KNX home automation.",
 	"main": "index.js",
 	"scripts": {
@@ -24,8 +24,10 @@
 		"eibd",
 		"EIB",
 		"Siri"
-	],
+	 ],
+
 	"dependencies": {
+		"knx": "^2.3.6",
 		"eibd": "^0.4.0",
 		"debug": "^4.1.0"
 	},
@@ -58,6 +60,10 @@
 		{
 			"name": "G Kuehn",
 			"url": "https://github.com/gkuehn001"
+		},
+		{
+			"name": "Paul",
+			"url": "https://github.com/c-o-m-m-a-n-d-e-r"
 		}
 	],
 	"license": "GPL-2.0",
