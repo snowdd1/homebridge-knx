@@ -26,9 +26,9 @@
 		"Siri"
 	],
 	"dependencies": {
-		"knx": "^2.3.6",
+		"debug": "^4.1.0",
 		"eibd": "^0.4.0",
-		"debug": "^4.1.0"
+		"knx": "^2.3.6"
 	},
 	"author": {
 		"name": "Raoul",

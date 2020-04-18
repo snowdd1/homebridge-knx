@@ -1,15 +1,14 @@
 /*
- * Platform shim for use with nfarina's homebridge plugin system 
+ * Platform shim for use with nfarina's homebridge plugin system
  * This is the version for plugin support
- * ******************************************************************************************** 
- * 
+ * ********************************************************************************************
+ *
 ALL NEW VERSION WITH OWN PERSISTENCE LAYER (file based, anyhow)
 ECMA-Script 2015 (6.0) Language required
  */
 /* jshint esversion: 6, strict: true, node: true */
 
 'use strict';
-
 
 var KNXDevice = require('./lib/knxdevice.js');
 var userOpts = require('./lib/user').User;
@@ -20,10 +19,13 @@ var knxmonitor = require('./lib/knxmonitor');
 var KNXAccess = require("./lib/knxaccess");
 var getServiceData = require("./lib/servicedata"); // the data for the web server to show available services and characteristics
 
+// Define a custom require that treats requires in the remote addins as local
+global.knxRequire = name => require(`${name}`);
+
 var http = require('http');
 /**
  * KNXPlatform
- * 
+ *
  * @constructor
  * @param {function} log - logging function for console etc. out
  * @param {object} config - configuration object from global config.json
@@ -37,9 +39,9 @@ function KNXPlatform(log, config, newAPI) {
 	globs.newAPI = newAPI;
 	/**
 	 * Talkative Info spitting thingy.
-	 * 
+	 *
 	 * @param {string} comment
-	 * 
+	 *
 	 */
 	globs.info = function(comment) {
 		that.log.info(comment);
@@ -73,7 +75,7 @@ function KNXPlatform(log, config, newAPI) {
 	globs.knxmonitor = knxmonitor;
 	/**
 	 * To store all unique read requests
-	 * 
+	 *
 	 * @type {string[]}
 	 */
 	globs.readRequests = {};
@@ -98,13 +100,13 @@ function KNXPlatform(log, config, newAPI) {
 /**
  * Registers the plugin with homebridge. Will be called by homebridge if found in directory structure and package.json
  * is right This function needs to be exported.
- * 
+ *
  * @param {homebridge/lib/api.js~API} homebridgeAPI - The API Object made available by homebridge. Contains the HAP type library e.g.
- * 
+ *
  */
 function registry(homebridgeAPI) {
 	console.log("homebridge API version: " + homebridgeAPI.version);
-	
+
 	/*
 	 * Experimental: Look for a user file called knx-ignore.txt in the user config path.
 	 * If it is there, exit here and DO NOT REGISTER the platform
@@ -117,7 +119,7 @@ function registry(homebridgeAPI) {
 		return;
 	}
 	// END OF INSERTION FOR BRANCH ignore-option
-	
+
 	Service = homebridgeAPI.hap.Service;
 	Characteristic = homebridgeAPI.hap.Characteristic;
 	globs.Service = Service;
@@ -125,16 +127,16 @@ function registry(homebridgeAPI) {
 	globs.API = homebridgeAPI;
 
 	/* load our custom types
-	 * 
+	 *
 	 */
 	require('./lib/customtypes/knxthermostat.js')(homebridgeAPI);
-	
+
 	/*
 	 *  get the data for the web server (show available services and characteristics)
 	 */
-	
+
 	globs.webdata = getServiceData(globs);
-	
+
 	// third parameter dynamic = true
 	homebridgeAPI.registerPlatform("homebridge-knx", "KNX", KNXPlatform, true); //update signature for plugin-2
 }
@@ -149,26 +151,26 @@ module.exports = registry;
  * configureAccessory() is invoked for each accessory homebridge restores from its persistence layer. The restored
  * accessory has all the homekit properties, but none of the implementation at this point of time. This happens before
  * the didFinishLaunching event.
- * 
+ *
  * @param {platformAccessory} accessory
  */
 KNXPlatform.prototype.configureAccessory = function(accessory) {
 	console.log("Plugin - Configure Accessory: " + accessory.displayName + " --> Added to restoredAccessories[]");
 
 	// set the accessory to reachable if plugin can currently process the accessory
-	// otherwise set to false and update the reachability later by invoking 
+	// otherwise set to false and update the reachability later by invoking
 	// accessory.updateReachability()
 	accessory.updateReachability(false);
 
-	// collect the accessories 
+	// collect the accessories
 	globs.restoredAccessories.push(accessory);
 };
 
 /**
  * With plugin-2 system, accessories are re-created by the homebridge itself, but without all the event functions etc.
- * 
+ *
  * We need to re-connect all our accessories to the right functions
- * 
+ *
  * This is my event handler for the "didFinishLaunching" event of the newAPI
  */
 
@@ -180,8 +182,8 @@ KNXPlatform.prototype.configure = function() {
 
 	globs.debug('We think homebridge has restored ' + globs.restoredAccessories.length + ' accessories.');
 
-	/* *************** read the config the first time 
-	 * 
+	/* *************** read the config the first time
+	 *
 	 */
 	if (!this.config.GroupAddresses) {
 		this.config.GroupAddresses = [];
@@ -227,10 +229,10 @@ KNXPlatform.prototype.configure = function() {
 	//now we need to store our updated config file to disk, or else all that is in vain next startup!
 	globs.info('Saving config file!');
 	userOpts.storeConfig();
-	
+
 
     // here needs the hook for global "finished" event to go into
-    
+
     for (var i = 0; i < globs.devices.length; i++) {
         let matchAcc2 = globs.devices[i];
         for (var i_serv = 0; i_serv < matchAcc2.services.length; i_serv++) {
@@ -245,7 +247,7 @@ KNXPlatform.prototype.configure = function() {
 
     }
 
- 
+
 	/*********************************************************************************/
 	// start the tiny web server for deleting orphaned devices
 	globs.debug('BEFORE http.createServer');
@@ -341,7 +343,7 @@ KNXPlatform.prototype.configure = function() {
 					throw "Commited_Suicide";
 				}, 500);
 			}
-		
+
 		} else if (reqparsed[0] === 'availservices') {
 			// list the Services that homebridge knows about
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
@@ -352,12 +354,12 @@ KNXPlatform.prototype.configure = function() {
 					let srv = globs.webdata.servData[srvName];
 					response.write('<a href="/servicedata?name='+ srvName+'">' + srv.displayName + ' (' + srv.localized.en.displayName +')</a><BR>');
 				}
-				
-			}  
+
+			}
 			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
 			response.write('URL<BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
-			response.end('</BODY>');	
+			response.end('</BODY>');
 		} else if (reqparsed[0] === 'availcharacteristics') {
 			// list the Services that homebridge knows about
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
@@ -368,11 +370,11 @@ KNXPlatform.prototype.configure = function() {
 					let chr = globs.webdata.charData[chrName];
 					response.write('<a href="/chardata?name='+ chr.displayName+'">' + chr.displayName + '</a><BR>');
 				}
-			}  
+			}
 			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
 			response.write('URL<BR><BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
-			response.end('</BODY>');	
+			response.end('</BODY>');
 		} else if (reqparsed[0] === 'servicedata') {
 			// show service
 			globs.debug("list service characteristics");
@@ -391,8 +393,8 @@ KNXPlatform.prototype.configure = function() {
 						let chr1 = globs.webdata.charData[service1.characteristics[chrName].displayName];
 						response.write('<a href="/chardata?name='+ chr1.displayName+'">' + chr1.objectName + '</a> ('+ chr1.localized.en.displayName+ ') <BR>'); // TODO localisation
 					}
-					
-				}  
+
+				}
 				response.write('<H2>Optional characteristics</H2>');
 				response.write('<H4>Optional characteristics are created if listed in configuration. Any other characteristic might also work, these are thought by Apple to work best with the service</H4>');
 				for (let chrName in service1.optionalCharacteristics) { // service1.characteristics is a numbered array !!!
@@ -402,8 +404,8 @@ KNXPlatform.prototype.configure = function() {
 						let chr1 = globs.webdata.charData[service1.optionalCharacteristics[chrName].displayName];
 						response.write('<a href="/chardata?name='+ chr1.displayName+'">' + chr1.objectName + '</a> ('+ chr1.localized.en.displayName+ ') <BR>');  // TODO localisation
 					}
-					
-				}  
+
+				}
 			} else {
 				response.write('<H1>Error in URL</H1>');
 			}
@@ -435,10 +437,10 @@ KNXPlatform.prototype.configure = function() {
 								}
 							}
 						}
-						
+
 					}
-					
-				}  
+
+				}
 
 			} else {
 				response.write('<H1>Error in URL</H1>');
@@ -475,11 +477,11 @@ KNXPlatform.prototype.configure = function() {
 
 /**
  * returns an accessory from an array of accessories if the context property is matched, or undefined.
- * 
+ *
  * @param {homebridge/lib/platformAccessory.js~PlatformAccessory[]} accessories The array of accessories.
  * @param {String} uuid The context object (presumably a string) to be matched.
  * @return {homebridge/lib/platformAccessory.js~PlatformAccessory} or undefined
- * 
+ *
  */
 function getAccessoryByUUID(accessories, uuid) {
 	globs.debug('--compare----------------');
