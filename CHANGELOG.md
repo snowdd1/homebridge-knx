@@ -1,7 +1,8 @@
 # Changelog for Version 0.3.x
 
 ## 0.3.24 
-- patched configuration to default to knxd again
+- patched configuration to default to knxd again. Fixes [#162](https://github.com/snowdd1/homebridge-knx/issues/162). See also changed documentation in [knx_config.json.md](https://github.com/snowdd1/homebridge-knx/blob/master/knx_config.json.md)
+
 ## 0.3.23 
 - With PR [#160](https://github.com/snowdd1/homebridge-knx/pull/161) Luehrsen added the ability to have local add-in directories. I hope that you all still continue to share your add-ins ("handler"s) via PRs here, so that all of us can benefit from the developments.
 - Homebridge made a leap to version 1.0.0 - with **bracking changes**:
