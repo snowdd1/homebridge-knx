@@ -5,6 +5,7 @@
 - Homebridge made a leap to version 1.0.0 - with **bracking changes**:
   - you all need to change your config.json and add the KNX platform manually! See updated sample file [https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json](https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json) and issue [#163](https://github.com/snowdd1/homebridge-knx/issues/163)
   - node version needs to be at least 10.0 now!
+- Dependency bump to current versions
 
 
 ## 0.3.22 
