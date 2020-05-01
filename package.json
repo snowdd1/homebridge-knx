@@ -1,6 +1,6 @@
 {
 	"name": "homebridge-knx",
-	"version": "0.3.22",
+	"version": "0.3.23",
 	"description": "homebridge shim for KNX home automation.",
 	"main": "index.js",
 	"scripts": {
@@ -8,7 +8,7 @@
 		"start": "echo \"Error: configure and run homebridge to start\" && exit 1"
 	},
 	"engines": {
-		"node": ">6.0.0",
+		"node": ">10.0.0",
 		"homebridge": ">=0.4.28"
 	},
 	"repository": {
@@ -63,6 +63,10 @@
 		{
 			"name": "Paul",
 			"url": "https://github.com/c-o-m-m-a-n-d-e-r"
+		},
+		{
+			"name":"Hendrik Luehrsen",
+			"url":"https://github.com/Luehrsen"
 		}
 	],
 	"license": "GPL-2.0",

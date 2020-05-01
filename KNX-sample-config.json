@@ -5,8 +5,8 @@
 		"port": 51826, 
 		"pin": "031-45-154"
 	},
-	"description": "This is an example configuration file for KNX platform shim",
-	"platforms": [
+	"description": "This is an example configuration file for KNX platform shim Updates for homebridge change https://github.com/homebridge/homebridge/pull/2481",
+	"platforms": [ {"name":"KNX", "platform":"KNX"}
 	],
 	"accessories": [
 	 ]

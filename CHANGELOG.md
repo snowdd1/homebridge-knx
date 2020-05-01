@@ -1,7 +1,15 @@
 # Changelog for Version 0.3.x
 
-## 0.3.22 (not yet released on npm, in testing)
-- thanks to [Paul](https://github.com/c-o-m-m-a-n-d-e-r), now knxd is not mandatory any more. And he fixed the typo in the GarageDoorAdvanced handler.
+## 0.3.23 
+- With PR [#160](https://github.com/snowdd1/homebridge-knx/pull/161) Luehrsen added the ability to have local add-in directories. I hope that you all still continue to share your add-ins ("handler"s) via PRs here, so that all of us can benefit from the developments.
+- Homebridge made a leap to version 1.0.0 - with **bracking changes**:
+  - you all need to change your config.json and add the KNX platform manually! See updated sample file [https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json](https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json) and issue [#163](https://github.com/snowdd1/homebridge-knx/issues/163)
+  - node version needs to be at least 10.0 now!
+
+
+## 0.3.22 
+- thanks to [Paul](https://github.com/c-o-m-m-a-n-d-e-r)'s PR #152, now knxd is not mandatory any more. Documentation will follow!
+- And he also fixed the typo in the GarageDoorAdvanced handler in #158. 
 
 ## 0.3.21
 - new call hooks for custom handlers. Invented by [ctschach](https://github.com/ctschach/homebridge-knx/commit/5829bf2a1ccf2fa34e37b4d55d87c763a0d5e786), the custom handlers now get informed when the service is ready 
