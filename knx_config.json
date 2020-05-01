@@ -1,5 +1,5 @@
 {
-    "knxd": false,
+    "knxconnection": "knxd",
     "knxd_ip": "192.168.178.212",
     "knxd_port": 6720,
     "AllowWebserver": true,

@@ -8,7 +8,7 @@ Please also visit [homebridge github homepage](https://github.com/nfarina/homebr
 
 Latest to homebridge-knx changes can be found in the [CHANGELOG.md](CHANGELOG.md)
 
-### This can only be used with the new homebridge >=0.4.28 and Node >=6.0.0
+### This can only be used with homebridge >=0.4.28 and Node >=10.19.0
 
 ### Prerequisites
 This node module requires a running (and properly configured) **knx daemon (knxd)**. You can find the latest version [here](https://github.com/knxd/knxd).  
