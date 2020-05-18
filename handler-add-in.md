@@ -35,6 +35,14 @@ class GiraJalousieActuator extends HandlerPattern {
 	onHKValueChange(field, oldValue, newValue) {
 	...
 	}
+	// when the service is ready 
+    onServiceInit() {
+		// optional, can be used to initialize local variables etc.
+	}
+    // when all devices are loaded and initialized
+    onHomeKitReady() {
+		// optional, can be used for more global things that require other plugins etc to be loaded too.
+	}
 }
 ```
 
