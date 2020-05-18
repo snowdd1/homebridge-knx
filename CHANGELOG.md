@@ -1,7 +1,7 @@
 # Changelog for Version 0.3.x
 
 ## 0.3.25
-- martijndierkx contributed an MDTJalousieActuator handler - Big thanks to him!
+- martijndierkx contributed an MDTJalousieActuator handler in PR #167 - Big thanks to him!
 - I updated the SimpleGarageDoor handler to accept two new local constants: "ResetOpenDoorContactTime" and "ResetCloseDoorContactTime" in Milliseconds if you want to issue an KNX "0" after a givin time, in case you don't want or must not have a relay powered all the time. Fixes German issue 65 from homebridge-knx-de at [https://github.com/snowdd1/homebridge-knx-de/issues/65]
 - And I updated the handler API doc to reflect the changes from v0.3.21; Actually the SimpleGarageDoor handler uses the new init event.
 
