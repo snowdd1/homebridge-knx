@@ -1,7 +1,8 @@
 # Changelog for Version 0.3.x
 
 ## 0.3.26
-- giase updated the ThermostatMode handler in #169 to be able to update the Bus value also from HomeKit
+- @giase82 updated the ThermostatMode handler in #169 to be able to update the Bus value also from HomeKit
+- Found another glitch in the knxaccess.js library where KNXJS was used even if it was not specified (regression from 0.3.24)
 
 ## 0.3.25
 - martijndierkx contributed an MDTJalousieActuator handler in PR #167 - Big thanks to him!
