@@ -43,13 +43,13 @@ function KNXPlatform(log, config, newAPI) {
 	 * @param {string} comment
 	 *
 	 */
-	globs.info = function(comment) {
+	globs.info = function (comment) {
 		that.log.info(comment);
 	};
-	globs.debug = function(comment) {
+	globs.debug = function (comment) {
 		that.log.debug(comment);
 	};
-	globs.errorlog = function(comment) {
+	globs.errorlog = function (comment) {
 		that.log.error(comment);
 	};
 
@@ -83,13 +83,13 @@ function KNXPlatform(log, config, newAPI) {
 	KNXAccess.setGlobs(globs); // init link for module;
 	knxmonitor.setGlobs(globs);
 	knxmonitor.startMonitor({
-		host : globs.knxd_ip,
-		port : globs.knxd_port
+		host: globs.knxd_ip,
+		port: globs.knxd_port
 	});
 
 	// plugin-2 system: wait for the homebridge to finish restoring the accessories from its own persistence layer.
 	if (newAPI) {
-		newAPI.on('didFinishLaunching', function() {
+		newAPI.on('didFinishLaunching', function () {
 			globs.info('homebridge event didFinishLaunching');
 			this.configure();
 		}.bind(this));
@@ -115,7 +115,7 @@ function registry(homebridgeAPI) {
 	let path = require('path');
 	let checkfilepath = path.join(homebridgeAPI.user.storagePath(), 'knx-ignore.txt');
 	if (fs.existsSync(checkfilepath)) {
-		console.log('[WARNING] Found blocking file, exiting now. To load homebridge-knx, remove '+ checkfilepath);
+		console.log('[WARNING] Found blocking file, exiting now. To load homebridge-knx, remove ' + checkfilepath);
 		return;
 	}
 	// END OF INSERTION FOR BRANCH ignore-option
@@ -154,7 +154,7 @@ module.exports = registry;
  *
  * @param {platformAccessory} accessory
  */
-KNXPlatform.prototype.configureAccessory = function(accessory) {
+KNXPlatform.prototype.configureAccessory = function (accessory) {
 	console.log("Plugin - Configure Accessory: " + accessory.displayName + " --> Added to restoredAccessories[]");
 
 	// set the accessory to reachable if plugin can currently process the accessory
@@ -174,7 +174,7 @@ KNXPlatform.prototype.configureAccessory = function(accessory) {
  * This is my event handler for the "didFinishLaunching" event of the newAPI
  */
 
-KNXPlatform.prototype.configure = function() {
+KNXPlatform.prototype.configure = function () {
 	globs.info('Configuration starts');
 	userOpts.LogHomebridgeKNXSTarts();
 	// homebridge has now finished restoring the accessories from its persistence layer.
@@ -231,30 +231,39 @@ KNXPlatform.prototype.configure = function() {
 	userOpts.storeConfig();
 
 
-    // here needs the hook for global "finished" event to go into
+	// here needs the hook for global "finished" event to go into
 
-    for (var i = 0; i < globs.devices.length; i++) {
-        let matchAcc2 = globs.devices[i];
-        for (var i_serv = 0; i_serv < matchAcc2.services.length; i_serv++) {
-            var myKNXService = matchAcc2.services[i_serv];
-            if (myKNXService.customServiceAPI && myKNXService.customServiceAPI.handler) {
-                if (typeof myKNXService.customServiceAPI.handler.onHomeKitReady === 'function') {
-                    globs.debug(matchAcc2.name + "/" + myKNXService.name +": Custom Handler onHomeKitReady()");
-                    myKNXService.customServiceAPI.handler.onHomeKitReady();
-                }
-            }
-        }
+	for (var i = 0; i < globs.devices.length; i++) {
+		let matchAcc2 = globs.devices[i];
+		for (var i_serv = 0; i_serv < matchAcc2.services.length; i_serv++) {
+			var myKNXService = matchAcc2.services[i_serv];
+			if (myKNXService.customServiceAPI && myKNXService.customServiceAPI.handler) {
+				if (typeof myKNXService.customServiceAPI.handler.onHomeKitReady === 'function') {
+					globs.debug(matchAcc2.name + "/" + myKNXService.name + ": Custom Handler onHomeKitReady()");
+					myKNXService.customServiceAPI.handler.onHomeKitReady();
+				}
+			}
+		}
 
-    }
+	}
 
 
 	/*********************************************************************************/
 	// start the tiny web server for deleting orphaned devices
 	globs.debug('BEFORE http.createServer');
-	var that=this;
+	var that = this;
 	this.startUpDateAndTime = new Date();
 	this.startUpDateAndTimeString = this.startUpDateAndTime.toString();
-	this.requestServer = http.createServer(function(request, response) {
+	this.blacklistedCharProps = {
+		"_events": true,
+		"_eventsCount": true,
+		"_maxListeners": true,
+		"iid": true,
+		"value": true,
+		"status": true,
+		"subscriptions": true
+	}
+	this.requestServer = http.createServer(function (request, response) {
 		globs.debug('http.createServer CALLBACK FUNCTION URL=' + request.url);
 		var reqparsed = request.url.substr(1).split('?');
 		var params = {};
@@ -275,9 +284,11 @@ KNXPlatform.prototype.configure = function() {
 			//response.writeHead(200);
 			response.write('<HEAD><meta http-equiv="content-type" content="text/html; charset=utf-8"><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
+			response.write('<h1>homebridge-knx</h1>');
 			response.write('homebridge-knx started at ' + that.startUpDateAndTimeString);
 			response.write('<hr>');
-			response.write('Restored devices from homebridge cache:<BR><BR>');
+			response.write('<h2>Restored devices from homebridge cache:</h2>');
+			response.write('<table><tr><th>Device</th><th>Actions</th></tr>');
 			var idev = 0, tdev = {};
 			for (idev = 0; idev < globs.restoredAccessories.length; idev++) {
 				tdev = globs.restoredAccessories[idev];
@@ -285,28 +296,31 @@ KNXPlatform.prototype.configure = function() {
 				//response.write('<BR><HR><BR>' + JSON.stringify(tdev) + '<BR><BR>');
 				globs.debug(tdev.UUID);
 				if (tdev.UUID !== 'ERASED') {
-					response.write('Device ' + tdev.displayName);
-					response.write(' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ');
+					response.write('<tr><td> ' + tdev.displayName);
+					response.write('</td><td><a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ');
 					if (!tdev.active) {
 						response.write(' (orphaned) ');
 					}
-					response.write(' <BR>');
+					response.write('</td></tr>');
 				}
 			}
-			response.write('<HR><BR>Devices from homebridge-knx config:<BR><BR>');
+			response.write('</table>');
+			response.write('<H2><BR>Devices from homebridge-knx config:</h2>');
+			response.write('<table><tr><th>Device</th><th>Actions</th></tr>');
 			for (idev = 0; idev < globs.devices.length; idev++) {
 				tdev = globs.devices[idev].getPlatformAccessory();
 				if (tdev.UUID !== 'ERASED') {
-					response.write('Device ' + tdev.displayName);
-					response.write(' <a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ' + ' <BR>');
-// TODO: List Services here - Services are the prime homekit objects!
+					response.write('<tr><td> ' + tdev.displayName);
+					response.write('</td><td><a href="/delete?UUID=' + tdev.UUID + '">[Delete from cache!]</a> ' + ' </td></tr>');
+					// TODO: List Services here - Services are the prime homekit objects!
 				}
 			}
-			if (that.config.AllowKillHomebridge===true) {
-				response.write(' <br><hr><br><a href="/kill">Kill homebridge</a> by throwing an Error. Use this to restart HomeBridge if you have it configured as a self-starting service ' + ' <BR>');
+			response.write('</table>');
+			if (that.config.AllowKillHomebridge === true) {
+				response.write(' <br><h2>Debug Activities</h2><br><a href="/kill">Kill homebridge</a> by throwing an Error. Use this to restart HomeBridge if you have it configured as a self-starting service ' + ' <BR>');
 			}
 			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
-			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write('<BR><BR>URL<BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
 
@@ -319,12 +333,12 @@ KNXPlatform.prototype.configure = function() {
 					globs.debug(params.UUID);
 					var delAcc = getAccessoryByUUID(globs.restoredAccessories, params.UUID);
 					if (delAcc) {
-						globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [ delAcc ]);
+						globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [delAcc]);
 						delAcc.UUID = "ERASED";
 					} else {
 						delAcc = getAccessoryByUUID(globs.devices, params.UUID);
 						if (delAcc) {
-							globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [ delAcc ]);
+							globs.newAPI.unregisterPlatformAccessories(undefined, undefined, [delAcc]);
 							delAcc.UUID = "ERASED";
 						}
 					}
@@ -337,9 +351,9 @@ KNXPlatform.prototype.configure = function() {
 			}
 		} else if (reqparsed[0] === 'kill') {
 			// commit suicide
-			if (that.config.AllowKillHomebridge===true) {
+			if (that.config.AllowKillHomebridge === true) {
 				response.end('<HEAD><meta http-equiv="refresh" content="20; url=http:/list" /></HEAD><BODY> Committed suicide. Reloading in 20 seconds.</BODY>');
-				var timerX = setTimeout(function() {
+				var timerX = setTimeout(function () {
 					throw "Commited_Suicide";
 				}, 500);
 			}
@@ -349,68 +363,72 @@ KNXPlatform.prototype.configure = function() {
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
 			response.write('<h1>Available services for homebridge are: </h1>');
+			response.write('<table><tr><th>ObjectName</th><th>Service Name</th></tr>');
 			for (let srvName in globs.webdata.servData) {
 				if (globs.webdata.servData.hasOwnProperty(srvName)) {
 					let srv = globs.webdata.servData[srvName];
-					response.write('<a href="/servicedata?name='+ srvName+'">' + srv.displayName + ' (' + srv.localized.en.displayName +')</a><BR>');
+					response.write('<tr><td><a href="/servicedata?name=' + srvName + '">' + srv.displayName + '</a></td><td>' + srv.localized.en.displayName + '</td></tr>');
 				}
 
 			}
+			response.write('</table>');
 			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
-			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write('<BR><BR>URL<BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
 		} else if (reqparsed[0] === 'availcharacteristics') {
-			// list the Services that homebridge knows about
+			// list the Characteristics that homebridge knows about
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
 			response.write('<h1>Available characteristics for homebridge are: </h1>');
+			response.write('<table><tr><th>Property</th><th>Value</th></tr>');
 			for (let chrName in globs.webdata.charData) {
 				if (globs.webdata.charData.hasOwnProperty(chrName)) {
 					let chr = globs.webdata.charData[chrName];
-					response.write('<a href="/chardata?name='+ chr.displayName+'">' + chr.displayName + '</a><BR>');
+					console.dir(chr);
+					response.write('<tr><td><a href="/chardata?name=' + chr.displayName + '">' + chr.displayName + '</a></td></tr>');
 				}
 			}
+			response.write('</table>');
 			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
-			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write('<BR><BR>URL<BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
 		} else if (reqparsed[0] === 'servicedata') {
 			// show service
-			globs.debug("list service characteristics");
 			response.write('<HEAD><TITLE>Homebridge-KNX</TITLE></HEAD>');
 			response.write('<BODY>');
 			if (params.name && globs.webdata.availableServices.Services[params.name]) {
 				let service1 = globs.webdata.availableServices.Services[params.name];
 				let disp1 = globs.webdata.servData[params.name];
-				response.write('<H1>' + disp1.displayName +'</H1>');
+				response.write('<H1>' + disp1.displayName + '</H1>');
 				response.write('<H2>Mandatory characteristics</H2>');
 				response.write('<H4>Mandatory characteristics are created automatically by homebridge. If they are not connected to group addresses they are dysfunct although displayed in HomeKit apps.</H4>');
+				response.write('<table><tr><th>ObjectName</th><th>Display Name</th></tr>');
 				for (let chrName in service1.characteristics) { // service1.characteristics is a numbered array !!!
 					if (service1.characteristics.hasOwnProperty(chrName)) {
-						//console.log('Searching for '+service1.characteristics[chrName].displayName);
-						//console.dir(globs.webdata.charData);
 						let chr1 = globs.webdata.charData[service1.characteristics[chrName].displayName];
-						response.write('<a href="/chardata?name='+ chr1.displayName+'">' + chr1.objectName + '</a> ('+ chr1.localized.en.displayName+ ') <BR>'); // TODO localisation
+						response.write('<tr><td><a href="/chardata?name=' + chr1.displayName + '">' + chr1.objectName + '</a></td><td>' + chr1.localized.en.displayName + '</td></tr>'); // TODO localisation
 					}
-
 				}
+				response.write('</table>');
 				response.write('<H2>Optional characteristics</H2>');
 				response.write('<H4>Optional characteristics are created if listed in configuration. Any other characteristic might also work, these are thought by Apple to work best with the service</H4>');
+				response.write('<table><tr><th>ObjectName</th><th>Display Name</th></tr>');
 				for (let chrName in service1.optionalCharacteristics) { // service1.characteristics is a numbered array !!!
 					if (service1.optionalCharacteristics.hasOwnProperty(chrName)) {
 						//console.log('Searching for '+service1.optionalCharacteristics[chrName].displayName);
 						//console.dir(globs.webdata.charData);
 						let chr1 = globs.webdata.charData[service1.optionalCharacteristics[chrName].displayName];
-						response.write('<a href="/chardata?name='+ chr1.displayName+'">' + chr1.objectName + '</a> ('+ chr1.localized.en.displayName+ ') <BR>');  // TODO localisation
+						response.write('<tr><td><a href="/chardata?name=' + chr1.displayName + '">' + chr1.objectName + '</a></td><td>' + chr1.localized.en.displayName + '</td></tr>'); // TODO localisation
 					}
-
 				}
+				response.write('</table>');
 			} else {
 				response.write('<H1>Error in URL</H1>');
 			}
 			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
-			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write('<BR><BR>URL<BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
 		} else if (reqparsed[0] === 'chardata') {
@@ -421,33 +439,38 @@ KNXPlatform.prototype.configure = function() {
 			if (params.name && globs.webdata.charData[params.name]) {
 				let disp1 = globs.webdata.charData[params.name];
 				let char1 = globs.webdata.availableCharacteristics[disp1.objectName];
-				response.write('<H1>' + disp1.displayName +'</H1>');
+				response.write('<H1>' + disp1.displayName + '</H1>');
 				response.write('<H2>Properties</H2>');
 				response.write('<H4>Properties define the behaviour of the characteristic</H4>');
-				for (let prop in char1) { // service1.characteristics is a numbered array !!!
+				response.write('<table><tr><th>Property</th><th>Value</th></tr>');
+				for (let prop in char1) { // 
 					if (char1.hasOwnProperty(prop)) {
-						//console.log('Searching for '+service1.characteristics[chrName].displayName);
-						//console.dir(globs.webdata.charData);
-						if (prop!=='props') {
-							response.write(prop + ': '+ char1[prop] +' <BR>'); // TODO localisation
-						} else {
-							for (let pp in char1[prop]) {
-								if (char1[prop].hasOwnProperty(pp)) {
-									response.write(pp + ': '+ char1[prop][pp] +' <BR>'); // TODO localisation
+						if (!that.blacklistedCharProps[prop]) {
+							try {
+								if (typeof char1[prop] !== 'function') {
+									if (prop !== 'props') {
+										response.write('<tr><td>' + prop + '</td><td>' + char1[prop] + '</td></tr>'); // TODO localisation
+									} else {
+										for (let pp in char1[prop]) {
+											if (char1[prop].hasOwnProperty(pp)) {
+												response.write('<tr><td>' + pp + '</td><td>' + char1[prop][pp] + '</td></tr>'); // TODO localisation
+											}
+										}
+									}
 								}
+							} catch (error) {
+								console.dir(error);
 							}
 						}
-
 					}
-
 				}
-
+				response.write('</table>');
 			} else {
 				response.write('<H1>Error in URL</H1>');
 				console.dir(globs.webdata.charData);
 			}
 			response.write('<HR><BR>Available pages are <br><a href="/list">list devices</a> and <br><a href="/availservices">list available services</a><br><a href="/availcharacteristics">list available characteristics</a>');
-			response.write('URL<BR><BR>' + request.url + '<BR>');
+			response.write('<BR>Debug Information: <BR>URL request<BR>' + request.url + '<BR>');
 			response.write(JSON.stringify(params) + '<BR>');
 			response.end('</BODY>');
 		} else {
@@ -465,7 +488,7 @@ KNXPlatform.prototype.configure = function() {
 	globs.debug('BEFORE requestServer.listen');
 	if (this.config.AllowWebserver) {
 		let that = this;
-		this.requestServer.listen(that.config.WebserverPort || 18081, function() {
+		this.requestServer.listen(that.config.WebserverPort || 18081, function () {
 			console.log("Server Listening...localhost:" + that.config.WebserverPort || 18081 + "/list");
 		});
 	}
@@ -502,7 +525,7 @@ function getAccessoryByUUID(accessories, uuid) {
 /**
  * Search the globs object's devices[] array for an knxDevice with name 'name'
  */
-globs.getDeviceByName = function(name) {
+globs.getDeviceByName = function (name) {
 	for (var idevice = 0; idevice < globs.devices.length; idevice++) {
 		var oDevice = globs.devices[idevice];
 		if (oDevice.name === name) {
