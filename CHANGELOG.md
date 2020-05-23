@@ -1,5 +1,8 @@
 # Changelog for Version 0.3.x
 
+## 0.3.27
+- @CyberChris79 found a breaking change in HAP-nodeJS (the HAP protocol implementation which homebridge is build on) which broke the tiny web server that can display HAP Services and such (see https://github.com/snowdd1/homebridge-knx#looking-up-service-types-and-characteristics) *Note to self: the webserver implementation is ugly and has grown too much for kind-of inline code in index.js*
+
 ## 0.3.26
 - @giase82 updated the ThermostatMode handler in #169 to be able to update the Bus value also from HomeKit
 - Found another glitch in the knxaccess.js library where KNXJS was used even if it was not specified (regression from 0.3.24)
