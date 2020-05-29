@@ -33,7 +33,7 @@
  * - OpenTime     - time gate remains open after contact is released (measure!) - defaults to 30 seconds
  * 
  * - AutoClose    - simulate push button contact (true) or open/close switch (false) - default true
- * - ExtendedOpen - open time before starting closing ritual - defaults to 0 seconds
+ * - ExtendedOpen - extra open time before starting closing ritual - defaults to 0 seconds
  *
  * Fadini has single button operation to open/wait/close gate.
  * HomeKit expects two actions, one to open and one close garage door.
@@ -42,8 +42,7 @@
  * will leave the gate open until the switch is switched off in HomeKit
  * 
  * ExtendedOpen can be used to keep the gate open for longer than the measured (30 seconds) period,
- * ExtendedOpen should then be set to the *total* time required and only works when AutoClose is true.
- * ExtendedOpen has to be larger than OpenTime!
+ * ExtendedOpen should then be set to the *extra* time required and only works when AutoClose is true.
  *
  * All information is only based on timing, no feedback/state sensors are available
  */
@@ -83,7 +82,7 @@ class Fadini extends HandlerPattern
 			} else {
 				this.TravelTime = this.TravelTime * 1000; //convert to millisecs
 			}
-		}
+        }
 		if (!this.OpenTime) {
 			this.OpenTime = this.myAPI.getLocalConstant("OpenTime");
 			if (!this.OpenTime) {
@@ -102,10 +101,13 @@ class Fadini extends HandlerPattern
 		}
 		if (!this.AutoClose) {
 			this.AutoClose = this.myAPI.getLocalConstant("AutoClose");
-			if (this.AutoClose != false) 
-				this.AutoClose = true;
+			if (!this.AutoClose) {
+				this.AutoClose = 1; // default to true if not given in config
+			} else {
+				this.AutoClose = 0
+			}
 		}
-		console.log(`INFO: Fadini module initialized with traveltime=${this.TravelTime} OpenTime=${this.OpenTime} AutoClose=${this.AutoClose} ExtendedOpen=${this.ExtendedOpen}`);
+		log(`INFO: fadini module initialized with traveltime=${this.TravelTime} OpenTime=${this.OpenTime} AutoClose=${this.AutoClose} ExtendedOpen=${this.ExtendedOpen}`);
     }
 
 		
