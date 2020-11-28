@@ -3,7 +3,7 @@ homebridge-knx expects the following structure in the `knx_config.json`:
 
 ```
 {
-    "knxdconnection": "knxjs",
+    "knxconnection": "knxjs",
     "knxd_ip": "192.168.1.1",
     "knxd_port": 6720,
     "AllowWebserver": true,
