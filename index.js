@@ -68,7 +68,7 @@ function KNXPlatform(log, config, newAPI) {
 	 * - GroupAddresses object
 	 * - Devices Object
 	 */
-	globs.knxd = this.config.knxd;
+	globs.knxconnection = this.config.knxconnection;
 	globs.knxd_ip = this.config.knxd_ip;
 	globs.knxd_port = this.config.knxd_port || 6720;
 	globs.log = log;
