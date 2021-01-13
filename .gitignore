@@ -27,6 +27,8 @@ build/Release
 node_modules
 config.json
 notes.txt
+# local files
+
 
 # eclipse local files
 .settings
