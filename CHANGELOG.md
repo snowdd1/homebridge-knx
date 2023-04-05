@@ -1,5 +1,7 @@
-# Changelog for Version 0.3.x
-## 0.4.00
+# Changelog
+## 0.4.1
+- bump dependency versions
+## 0.4.0
 - enable child bridge mode by providing a path (absolute) to a configuration file:  
 Example in the config file (e.g. in Homebridge GUI):
 ```json

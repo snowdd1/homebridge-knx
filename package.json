@@ -1,6 +1,6 @@
 {
     "name": "homebridge-knx",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "homebridge shim for KNX home automation.",
     "main": "index.js",
     "scripts": {
@@ -26,7 +26,7 @@
         "Siri"
     ],
     "dependencies": {
-        "debug": "^4.1.1",
+        "debug": "^4.3.4",
         "eibd": "^0.5.1",
         "knx": "^2.5.2"
     },
