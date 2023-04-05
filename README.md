@@ -58,9 +58,7 @@ If you have the webserver enabled (see above), you can get an auto-generated web
 
 
 # Killing homebridge
-**This is for debugging of your knx_config.json only.** If you need homebridge to restart, you can use the setting `"AllowKillHomebridge":true` in your knx_config.json (right on top where the knxd properties are).  
-You'll get a new link at the bottom of the page at `<your-homebridge>:18081/list` that will homebridge-knx to throw an exception ("Committed_Suicide") which then causes homebridge to fail.  
-*You should remove this setting after completing your knx_config.json for security reasons!* 
+Deprecated. Use the homebridge GUI to do that.
 
 
 [npm-url]: https://npmjs.org/package/homebridge-knx
