@@ -1,6 +1,10 @@
 # Changelog
+## 0.4.2
+- fix undefined variable name
+
 ## 0.4.1
 - bump dependency versions
+
 ## 0.4.0
 - enable child bridge mode by providing a path (absolute) to a configuration file:  
 Example in the config file (e.g. in Homebridge GUI):
@@ -28,6 +32,7 @@ Example in the config file (e.g. in Homebridge GUI):
     ]
 ```
 - quite a while back @jendrik found some issues and fixed them. They have been in the master branch ever since but not properly honored or published in a release. 
+
 ## 0.3.27
 - @CyberChris79 found a breaking change in HAP-nodeJS (the HAP protocol implementation which homebridge is build on) which broke the tiny web server that can display HAP Services and such (see https://github.com/snowdd1/homebridge-knx#looking-up-service-types-and-characteristics) *Note to self: the webserver implementation is ugly and has grown too much for kind-of inline code in index.js*
 
