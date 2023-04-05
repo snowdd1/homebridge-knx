@@ -1,81 +1,81 @@
 {
-	"name": "homebridge-knx",
-	"version": "0.3.28",
-	"description": "homebridge shim for KNX home automation.",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "echo \"Error: configure and run homebridge to start\" && exit 1"
-	},
-	"engines": {
-		"node": ">10.0.0",
-		"homebridge": ">=0.4.28"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/snowdd1/homebridge-knx.git"
-	},
-	"keywords": [
-		"homebridge-plugin",
-		"homebridge",
-		"KNX",
-		"knx",
-		"knxd",
-		"eibd",
-		"EIB",
-		"Siri"
-	],
-	"dependencies": {
-		"debug": "^4.1.1",
-		"eibd": "^0.5.0",
-		"knx": "^2.3.7"
-	},
-	"author": {
-		"name": "Raoul",
-		"e-mail": "<snowdd1.theelk@xoxy.net>",
-		"url": "https://github.com/snowdd1"
-	},
-	"contributors": [
-		{
-			"name": "EIBHomeControl",
-			"url": "https://github.com/EIBHomeControl"
-		},
-		{
-			"name": "Michael",
-			"url": "https://github.com/misc2000"
-		},
-		{
-			"name": "bytefactory73",
-			"url": "https://github.com/bytefactory73"
-		},
-		{
-			"name": "Christof",
-			"url": "https://github.com/giase82"
-		},
-		{
-			"name": "Matevz Gacnik",
-			"url": "https://github.com/matevzg"
-		},
-		{
-			"name": "G Kuehn",
-			"url": "https://github.com/gkuehn001"
-		},
-		{
-			"name": "Paul",
-			"url": "https://github.com/c-o-m-m-a-n-d-e-r"
-		},
-		{
-			"name": "Hendrik Luehrsen",
-			"url": "https://github.com/Luehrsen"
-		},
-		{
-			"name": "Martijn Dierck X",
-			"url": "https://github.com/martijndierckx"
-		}
-	],
-	"license": "GPL-2.0",
-	"bugs": {
-		"url": "https://github.com/snowdd1/homebridge-knx/issues"
-	},
-	"homepage": "https://github.com/snowdd1/homebridge-knx"
+    "name": "homebridge-knx",
+    "version": "0.4.0",
+    "description": "homebridge shim for KNX home automation.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "echo \"Error: configure and run homebridge to start\" && exit 1"
+    },
+    "engines": {
+        "node": ">10.0.0",
+        "homebridge": ">=0.4.28"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/snowdd1/homebridge-knx.git"
+    },
+    "keywords": [
+        "homebridge-plugin",
+        "homebridge",
+        "KNX",
+        "knx",
+        "knxd",
+        "eibd",
+        "EIB",
+        "Siri"
+    ],
+    "dependencies": {
+        "debug": "^4.1.1",
+        "eibd": "^0.5.1",
+        "knx": "^2.5.2"
+    },
+    "author": {
+        "name": "Raoul",
+        "e-mail": "<snowdd1.theelk@xoxy.net>",
+        "url": "https://github.com/snowdd1"
+    },
+    "contributors": [
+        {
+            "name": "EIBHomeControl",
+            "url": "https://github.com/EIBHomeControl"
+        },
+        {
+            "name": "Michael",
+            "url": "https://github.com/misc2000"
+        },
+        {
+            "name": "bytefactory73",
+            "url": "https://github.com/bytefactory73"
+        },
+        {
+            "name": "Christof",
+            "url": "https://github.com/giase82"
+        },
+        {
+            "name": "Matevz Gacnik",
+            "url": "https://github.com/matevzg"
+        },
+        {
+            "name": "G Kuehn",
+            "url": "https://github.com/gkuehn001"
+        },
+        {
+            "name": "Paul",
+            "url": "https://github.com/c-o-m-m-a-n-d-e-r"
+        },
+        {
+            "name": "Hendrik Luehrsen",
+            "url": "https://github.com/Luehrsen"
+        },
+        {
+            "name": "Martijn Dierck X",
+            "url": "https://github.com/martijndierckx"
+        }
+    ],
+    "license": "GPL-2.0",
+    "bugs": {
+        "url": "https://github.com/snowdd1/homebridge-knx/issues"
+    },
+    "homepage": "https://github.com/snowdd1/homebridge-knx"
 }
