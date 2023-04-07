@@ -1,4 +1,4 @@
-# homebridge-knx Version 0.3 
+# homebridge-knx Version 0.4 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url][![Dependency status][david-dm-image]][david-dm-url]   
 
 KNX platform shim for homebridge.
@@ -8,19 +8,61 @@ Please also visit [homebridge github homepage](https://github.com/nfarina/homebr
 
 Latest to homebridge-knx changes can be found in the [CHANGELOG.md](CHANGELOG.md)
 
-### This can only be used with homebridge >=0.4.28 and Node >=10.19.0
+### This can only be used with homebridge >=1.0 and Node >=10.19.0
 
 ### Prerequisites
-This node module requires a running (and properly configured) **knx daemon (knxd)**. You can find the latest version [here](https://github.com/knxd/knxd).  
+This node module requires either 
+  - a running (and properly configured) **knx daemon (knxd)**. You can find the latest version [here](https://github.com/knxd/knxd).  
+  - another KNX router which can be reached by KNX multicasts.
+
 I cannot support the knxd. Please address issues directly at the [knxd issue pages](https://github.com/knxd/knxd/issues). It might help to search the existing issues, as your problem might have been solved already.  
 
 ### Installation and running
--  Install homebridge first, [see there](https://github.com/nfarina/homebridge); nfarina recommends a global install as super user. It's a server tool, so we can safely assume that the person that installes it is sufficiently  priviledged to do so. `sudo npm install -g homebridge`
--  then install this package to `<any>` directory you want; If you installed homebridge globally I recommend to do so with homebridge-knx: `sudo npm install -g homebridge-knx`
--  configure homebridge and its plugins. You might start by copying the [`KNX-sample-config.json`](https://github.com/snowdd1/homebridge-knx/blob/master/KNX-sample-config.json) to a new folder `.homebridge` in your user folder (on a default installation raspberry, it's `/home/pi`) and rename it to config.json
-- Then put the configuration file*knx_config.json* into `~/.homebridge`, and adapt them to your needs (knxd address and some test devices in `knx_config.json`). You do not need a `platform` section in `config.json`any more!
+- Install homebridge first, from [https://homebridge.io/](https://homebridge.io/); 
+- Once you have your instance running (without any devices yet), go to the `Plugins` tab and type `knx` in the search box
+- `homebridge-knx` should be within the top five hits (yes, there are alternatives), please check the name before installing
+- Then put the configuration file *knx_config.json* into `~/.homebridge` (or another folder to your liking, but it should be reaadable and writable by user `homebridge` or group `homebridge` which is created by the homebridge installer), and adapt them to your needs (knxd address and some test devices in `knx_config.json`)
 -  Eliminate everything (especially all group addresses) that might harm your KNX installation. Sending bus telegrams to your alarm device might wake the neighbourhood unpleasantly!
--  when done, start homebridge with `homebridge`. If you have chosen a local install, go to the homebridge folder and do a `bin/homebridge --plugin-path <any>/homebridge-knx` with the path to the homebridge-knx installation.
+- If you used the dfeault paths (~/.homebridge/knx_config.json) you can just restart homebridge using the GUI
+- If you didn't, or want to use child bridges for more accessories (than 149) you need to configure homebridge (using the GUI e.g.). The following sample is from my test installation
+
+```json
+{
+    "bridge": {
+        "name": "Homebridge 17AF",
+        "username": "0E:0B:9B:24:17:AD",
+        "port": 51485,
+        "pin": "880-83-869",
+        "advertiser": "avahi"
+    },
+    "accessories": [],
+    "platforms": [
+        {
+            "name": "Config",
+            "port": 8581,
+            "auth": "form",
+            "theme": "auto",
+            "tempUnits": "c",
+            "lang": "en",
+            "platform": "config"
+        },
+        {
+            "name": "KNX",
+            "platform": "KNX",
+            "config_path": "/home/pi/homebridge/dg-knx_config.json"
+        },
+        {
+            "name": "KNX",
+            "platform": "KNX",
+            "config_path": "/home/pi/homebridge/og-knx_config.json",
+            "_bridge": {
+                "username": "0E:0B:9B:24:17:00",
+                "port": 51490
+            }
+        }
+    ]
+}
+```
 
 
 # Assumptions
@@ -35,30 +77,13 @@ Float | DPT9
 
 
 # knx_config.json
-See the [complete Doc!](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/knx_config.json.md).
+See the [complete Doc!](https://github.com/snowdd1/homebridge-knx/blob/master/knx_config.json.md).
 
 
 # Add-ins
-Add-in (aka "handlers") can change the default behavior. [See the article](https://github.com/snowdd1/homebridge-knx/blob/plugin-2.0/handler-add-in.md)
+Add-in (aka "handlers") can change the default behavior. [See the article](https://github.com/snowdd1/homebridge-knx/blob/master/handler-add-in.md)
 
 Happy testing!
-
-# Removing stale accessories from homebridge cache
-The new (well, 1/2016) API of homebridge allows homebridge to cache the accessories for platforms that can add or remove accessories during runtime. As a next step in evolution, homebridge-knx already connects to that API.  
-
-**Allow homebridge-knx to start the webserver by adding `"AllowWebserver":true,` at the beginning of your knx_config.json!**
-
-As a consequence remain devices, that homebridge-knx does not reconnnect to at start-up, stale and unreachable in HomeKit. To remove those shadows from HomeKit, use the little web server at `<your-homebridge>:18081/list`. You might change the web server port with `"WebserverPort":18082` or whatever port suits you. 
-
-![image](https://cloud.githubusercontent.com/assets/11786396/19836160/5d1ddcde-9e98-11e6-8dc2-e621aceb1055.png)  
-Clicking on the `delete from cache` link will **only** remove the devices from the current homebridge instance and their cache, **not** from the *knx_config.json*, that means they will be rediscovered upon next startup as new device in the default room!
-
-# Looking up service types and characteristics  
-If you have the webserver enabled (see above), you can get an auto-generated web-page with all the service types and their characteristics from homebridge. See the links at the bottom of your server's list page.
-
-
-# Killing homebridge
-Deprecated. Use the homebridge GUI to do that.
 
 
 [npm-url]: https://npmjs.org/package/homebridge-knx

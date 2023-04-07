@@ -1,4 +1,12 @@
 # Changelog
+
+## 0.4.3
+- merged PR #198 (Update WindowCoveringTilt.js) by @EyeOfTheStorm 
+- merged PR #204 (Update GarageDoorOpenerAdvanced.js) by @christof-fersch 
+- fix knxd DPT type conversion, was overrun by #194 (Fixes for knxjs integration) in the case that handlers with `KNXObjects` were present.
+- accordingly update GiraJalousieActuator 
+- removed the documentation of the built-in web server, as the most functionality is either gone (restart homebridge) and/or covered by the homebridge GUI now (webserver is still there but will be removed)
+
 ## 0.4.2
 - fix undefined variable name
 
@@ -31,7 +39,7 @@ Example in the config file (e.g. in Homebridge GUI):
         }
     ]
 ```
-- quite a while back @jendrik found some issues and fixed them. They have been in the master branch ever since but not properly honored or published in a release. 
+- quite a while back @jendrik found some issues and fixed them. They have been in the master branch ever since but not properly honored or published in a release. PR #194 also contain sthe fixes for using `knxjs` instead of the `eibd` module to talk to other KNX routers than `knxd`
 
 ## 0.3.27
 - @CyberChris79 found a breaking change in HAP-nodeJS (the HAP protocol implementation which homebridge is build on) which broke the tiny web server that can display HAP Services and such (see https://github.com/snowdd1/homebridge-knx#looking-up-service-types-and-characteristics) *Note to self: the webserver implementation is ugly and has grown too much for kind-of inline code in index.js*

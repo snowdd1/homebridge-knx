@@ -2,8 +2,6 @@
     "knxconnection": "knxd",
     "knxd_ip": "192.168.178.212",
     "knxd_port": 6720,
-    "AllowWebserver": true,
-    "WebserverPort": 18082,
     "Devices": [
         {
             "DeviceName": "Arbeitszimmerlampe",
@@ -68,7 +66,7 @@
                 }
             ]
         },
-                {
+        {
             "DeviceName": "TestDevice",
             "hint": "Sample to show characteristics without KNX addresses",
             "Services": [
@@ -89,5 +87,4 @@
         }
     ],
     "GroupAddresses": []
-
 }
