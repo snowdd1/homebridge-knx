@@ -40,9 +40,7 @@ notes.txt
 *.njsproj
 .vs/homebridge-knx/v15/.suo
 *.sln
-obj/Debug/homebridge-knx.njsproj.CoreCompileInputs.cache
-obj/Debug/homebridge-knx.njsproj.FileListAbsolute.txt
-obj/Debug/homebridge-knx.njsprojAssemblyReference.cache
+obj/*
 .vs/homebridge-knx/v15/.suo
 homebridge-knx.njsproj
 

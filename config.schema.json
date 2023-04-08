@@ -1,0 +1,64 @@
+{
+    "pluginAlias": "KNX",
+    "pluginType": "platform",
+    "singular": true,
+    "headerDisplay": "Configurable KNX interface for homebridge",
+    "footerDisplay": "",
+    "schema": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "title": "Name",
+                "type": "string",
+                "required": true,
+                "default": "KNX"
+            },
+            "config_path": {
+                "title": "KNX configuration file path. Can be a directory containing multiple (JSON or YAML) files.",
+                "type": "string",
+                "required": true,
+                "default": "/home/pi/.homebridge/knx-config.json"
+            },
+            "knx_connection": {
+                "title": "Communication method to KNX bus",
+                "type": "string",
+                "default": "knxd",
+                "oneOf": [
+                    {
+                        "title": "knxd Server",
+                        "enum": [
+                            "knxd"
+                        ]
+                    },
+                    {
+                        "title": "Multicast using knxjs",
+                        "enum": [
+                            "knxjs"
+                        ]
+                    }
+                ],
+                "required": true
+            },
+            "knxd_ip": {
+                "title": "KNXD server IP address (ipv4)",
+                "type": "string",
+                "format": "ipv4",
+                "condition": {
+                    "functionBody": "return model.knx_connection === 'knxd';"
+                }
+            },
+            "knxd_port": {
+                "title": "KNXD server port number",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535,
+                "default": 6720,
+                "condition": {
+                    "functionBody": "return model.knx_connection === 'knxd';"
+                }
+            }
+        }
+    },
+    "form": null,
+    "display": null
+}
