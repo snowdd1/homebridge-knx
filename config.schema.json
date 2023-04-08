@@ -1,7 +1,7 @@
 {
     "pluginAlias": "KNX",
     "pluginType": "platform",
-    "singular": true,
+    "singular": false,
     "headerDisplay": "Configurable KNX interface for homebridge",
     "footerDisplay": "",
     "schema": {

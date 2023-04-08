@@ -28,7 +28,7 @@ node_modules
 config.json
 notes.txt
 # local files
-
+temp/*
 
 # eclipse local files
 .settings
