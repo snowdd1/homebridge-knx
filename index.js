@@ -69,7 +69,7 @@ function KNXPlatform(log, config, newAPI) {
      * - GroupAddresses object
      * - Devices Object
      */
-    globs.knxd = this.platformconfig.knxd; // moved to platform config in homebridge UI
+    globs.knxconnection = this.platformconfig.knxconnection; // moved to platform config in homebridge UI
     globs.knxd_ip = this.platformconfig.knxd_ip;
     globs.knxd_port = this.platformconfig.knxd_port || 6720;
     globs.log = log;

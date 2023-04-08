@@ -19,7 +19,7 @@
                 "required": true,
                 "default": "/home/pi/.homebridge/knx-config.json"
             },
-            "knx_connection": {
+            "knxconnection": {
                 "title": "Communication method to KNX bus",
                 "type": "string",
                 "default": "knxd",
@@ -44,7 +44,7 @@
                 "type": "string",
                 "format": "ipv4",
                 "condition": {
-                    "functionBody": "return model.knx_connection === 'knxd';"
+                    "functionBody": "return model.knxconnection === 'knxd';"
                 }
             },
             "knxd_port": {
@@ -54,7 +54,7 @@
                 "maximum": 65535,
                 "default": 6720,
                 "condition": {
-                    "functionBody": "return model.knx_connection === 'knxd';"
+                    "functionBody": "return model.knxconnection === 'knxd';"
                 }
             }
         }
