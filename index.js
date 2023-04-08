@@ -185,10 +185,10 @@ KNXPlatform.prototype.configure = function () {
 
     /* *************** read the config the first time
      *
-     */
-    if (!this.config.GroupAddresses) {
-        this.config.GroupAddresses = [];
-    }
+    //  */
+    // if (!this.config.GroupAddresses) {
+    //     this.config.GroupAddresses = [];
+    // }
 
     // iterate through all devices the platform my offer
     // for each device, create an accessory

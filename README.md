@@ -1,4 +1,4 @@
-# homebridge-knx Version 0.4 
+# homebridge-knx Version 0.5 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url][![Dependency status][david-dm-image]][david-dm-url]   
 
 KNX platform shim for homebridge.
@@ -21,10 +21,11 @@ I cannot support the knxd. Please address issues directly at the [knxd issue pag
 - Install homebridge first, from [https://homebridge.io/](https://homebridge.io/); 
 - Once you have your instance running (without any devices yet), go to the `Plugins` tab and type `knx` in the search box
 - `homebridge-knx` should be within the top five hits (yes, there are alternatives), please check the name before installing
-- Then put the configuration file *knx_config.json* into `~/.homebridge` (or another folder to your liking, but it should be reaadable and writable by user `homebridge` or group `homebridge` which is created by the homebridge installer), and adapt them to your needs (knxd address and some test devices in `knx_config.json`)
--  Eliminate everything (especially all group addresses) that might harm your KNX installation. Sending bus telegrams to your alarm device might wake the neighbourhood unpleasantly!
-- If you used the dfeault paths (~/.homebridge/knx_config.json) you can just restart homebridge using the GUI
-- If you didn't, or want to use child bridges for more accessories (than 149) you need to configure homebridge (using the GUI e.g.). The following sample is from my test installation
+- Then put the configuration file *knx_config.json* into `~/.homebridge` (or another folder to your liking, but it should be **readable** and **writable** by user `homebridge` or group `homebridge` which is created by the homebridge installer), and adapt them to your needs (knxd address and some test devices in `knx_config.json`)
+- Eliminate everything (especially all group addresses) that might harm your KNX installation. Sending bus telegrams to your alarm device might wake the neighbourhood unpleasantly!
+- Use the homebridge UI to create platform instances. You need to specify a name (your choice), a file name or path to th eknx configuration files, and the means of communication with the KNX bus (knxd or KNX multicast).
+- You can use the UI to move the platform instances you have created into _child bridges_, which is **heavily encouraged**.
+- You can look at (or even modify) the config using the UI. The following sample is from my test installation
 
 ```json
 {
@@ -49,7 +50,11 @@ I cannot support the knxd. Please address issues directly at the [knxd issue pag
         {
             "name": "KNX",
             "platform": "KNX",
-            "config_path": "/home/pi/homebridge/dg-knx_config.json"
+            "config_path": "/home/pi/homebridge/dg-knx_config.json",
+            "_bridge": {
+                "username": "1E:0B:9B:24:17:01",
+                "port": 51490
+            }            
         },
         {
             "name": "KNX",
@@ -57,7 +62,7 @@ I cannot support the knxd. Please address issues directly at the [knxd issue pag
             "config_path": "/home/pi/homebridge/og-knx_config.json",
             "_bridge": {
                 "username": "0E:0B:9B:24:17:00",
-                "port": 51490
+                "port": 51492
             }
         }
     ]

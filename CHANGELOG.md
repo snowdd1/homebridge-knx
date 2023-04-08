@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0
+- **BREAKING CHANGES**
+  The configuration of the KNX gateway (knxd or multicast) has been moved to homebridge's config.json again, to make it configurable using the homebridge UI
+- homebridge UI support for creating child bridges
+- knx configuration files can now be YAML files (extension must be `.yaml`) 
+- knx configuration files can now be splitted into multiple files - only one file per child bridge should contain any other contents than `Devices`
+
 ## 0.4.3
 - merged PR #198 (Update WindowCoveringTilt.js) by @EyeOfTheStorm 
 - merged PR #204 (Update GarageDoorOpenerAdvanced.js) by @christof-fersch 
