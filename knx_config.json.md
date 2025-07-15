@@ -35,7 +35,7 @@ A service **can** have:
 - a `KNXReadRequests` array containing group addresses that should be read upon startup of homebridge, to sync the status of characteristics with the physical devices.   
 
 Service types are regularly amended by Apple, to get new service types into homebridge-knx we need to update homebridge using npm.
-There is a Javascript file containing all valid services and characteristics located here: https://github.com/KhaosT/HAP-NodeJS/blob/master/lib/gen/HomeKitTypes.js
+There is a Javascript file containing all valid services and characteristics located here: https://github.com/KhaosT/HAP-NodeJS/blob/v0.4.53/lib/gen/HomeKitTypes.js
 
  
 ## Characteristics
