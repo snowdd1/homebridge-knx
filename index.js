@@ -72,6 +72,7 @@ function KNXPlatform(log, config, newAPI) {
     globs.knxd = this.config.knxd;
     globs.knxd_ip = this.config.knxd_ip;
     globs.knxd_port = this.config.knxd_port || 6720;
+    globs.knxconnection = this.config.knxconnection;
     globs.log = log;
     globs.knxmonitor = knxmonitor;
     /**
