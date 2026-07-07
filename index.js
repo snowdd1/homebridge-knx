@@ -72,6 +72,7 @@ function KNXPlatform(log, config, newAPI) {
     globs.knxd = this.config.knxd;
     globs.knxd_ip = this.config.knxd_ip;
     globs.knxd_port = this.config.knxd_port || 6720;
+    globs.knxconnection = this.config.knxconnection;
     globs.log = log;
     globs.knxmonitor = knxmonitor;
     /**
@@ -161,7 +162,11 @@ KNXPlatform.prototype.configureAccessory = function (accessory) {
     // set the accessory to reachable if plugin can currently process the accessory
     // otherwise set to false and update the reachability later by invoking
     // accessory.updateReachability()
-    accessory.updateReachability(false);
+    // updateReachability() was removed in Homebridge 2.0, guard for older versions only.
+    // https://github.com/snowdd1/homebridge-knx/issues/218
+    if (typeof accessory.updateReachability === 'function') {
+        accessory.updateReachability(false);
+    }
 
     // collect the accessories
     globs.restoredAccessories.push(accessory);
