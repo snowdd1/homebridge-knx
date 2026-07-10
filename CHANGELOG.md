@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+- **Homebridge 2.0 compatibility** (fixes #218, based on PR #221 by @marco-hoyer):
+  - the custom `KNXThermAtHome` characteristic is now a real ES6 class; the old
+    `Characteristic.call()` + `util.inherits()` pattern threw
+    `TypeError: Class constructor cannot be invoked without 'new'`
+  - `Characteristic.Formats` / `.Perms` / `.Units` are no longer exposed by the
+    HAP library Homebridge 2.x bundles. The wire-format strings now live in
+    `lib/hapConstants.js`
+  - `getServiceByUUIDAndSubType()` was renamed to `getServiceById()`; the new
+    name is preferred, the old one is kept as a fallback
+  - `updateReachability()` was removed; the calls are now guarded
+- Homebridge 1.x keeps working: every changed call site uses feature detection
+  rather than a hard version check. Note that only Homebridge 2.x is covered by
+  the automated tests.
+- `engines` now says `node >=18` / `homebridge >=1.6.0` instead of the stale
+  `node >10.0.0` / `homebridge >=0.4.28`
+- added a smoke test suite (`npm test`) that loads the plugin against the HAP
+  library Homebridge 2.x bundles, and an eslint config (`npm run lint`). There
+  was no automated test at all before this.
+
 ## 0.4.3
 - merged PR #198 (Update WindowCoveringTilt.js) by @EyeOfTheStorm 
 - merged PR #204 (Update GarageDoorOpenerAdvanced.js) by @christof-fersch 
