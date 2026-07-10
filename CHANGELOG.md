@@ -11,6 +11,9 @@
   - `getServiceByUUIDAndSubType()` was renamed to `getServiceById()`; the new
     name is preferred, the old one is kept as a fallback
   - `updateReachability()` was removed; the calls are now guarded
+  - `Accessory.Categories` moved to the top-level `Categories` export; devices
+    with `HKCategory` set in `knx_config.json` crashed on Homebridge 2.x when
+    newly created (i.e. not restored from the accessory cache)
 - Homebridge 1.x keeps working: every changed call site uses feature detection
   rather than a hard version check. Note that only Homebridge 2.x is covered by
   the automated tests.
