@@ -4,7 +4,8 @@
     "description": "homebridge shim for KNX home automation.",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "node --test test/*.test.js",
+        "lint": "eslint .",
         "start": "echo \"Error: configure and run homebridge to start\" && exit 1"
     },
     "engines": {
@@ -77,5 +78,9 @@
     "bugs": {
         "url": "https://github.com/snowdd1/homebridge-knx/issues"
     },
-    "homepage": "https://github.com/snowdd1/homebridge-knx"
+    "homepage": "https://github.com/snowdd1/homebridge-knx",
+    "devDependencies": {
+        "@homebridge/hap-nodejs": "^2.1.7",
+        "eslint": "^9.39.4"
+    }
 }
