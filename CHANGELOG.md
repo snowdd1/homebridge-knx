@@ -1,6 +1,12 @@
 # Changelog
 
 ## Unreleased
+- Updated the README for maintainer @HolyGiraffe, Homebridge 2.0 support,
+  configuration requirements, and the single-file scope of version 0.6.0.
+
+## 0.6.0 - 2026-10-27
+
+### Compatibility
 - **Homebridge 2.0 compatibility** (fixes #218, based on PR #221 by @marco-hoyer):
   - the custom `KNXThermAtHome` characteristic is now a real ES6 class; the old
     `Characteristic.call()` + `util.inherits()` pattern threw
@@ -14,14 +20,34 @@
   - `Accessory.Categories` moved to the top-level `Categories` export; devices
     with `HKCategory` set in `knx_config.json` crashed on Homebridge 2.x when
     newly created (i.e. not restored from the accessory cache)
-- Homebridge 1.x keeps working: every changed call site uses feature detection
-  rather than a hard version check. Note that only Homebridge 2.x is covered by
-  the automated tests.
+- Homebridge 1.x compatibility fallbacks are retained through feature detection
+  rather than a hard version check. Automated tests use the HAP library bundled
+  with Homebridge 2.x; they do not exercise a full Homebridge installation or a
+  live KNX connection.
 - `engines` now says `node >=18` / `homebridge >=1.6.0` instead of the stale
   `node >10.0.0` / `homebridge >=0.4.28`
-- added a smoke test suite (`npm test`) that loads the plugin against the HAP
-  library Homebridge 2.x bundles, and an eslint config (`npm run lint`). There
-  was no automated test at all before this.
+
+### Added
+- `LockSensor` handler by @felixpause (Jan-Felix van Dam), based on `ContactSensor`,
+  to display lock state from a KNX binary input without providing lock control.
+- Automated smoke tests and HAP constant checks (`npm test`), plus an ESLint
+  configuration (`npm run lint`).
+
+### Fixed
+- Aligned local HAP constants with `@homebridge/hap-nodejs` and removed unused
+  constants that no longer exist in that library.
+- Removed the dead `Formats.PERCENTAGE` branch in `getDPT()`; percentage detection
+  continues to use the characteristic's unit.
+- Reduced informational logging during startup.
+- Corrected the package metadata JSON syntax after adding @HolyGiraffe as a
+  contributor.
+
+### Release history
+- These changes follow 0.4.3 on this branch. The Homebridge 2.0 work was initially
+  versioned as `0.5.0-rc.1` on 2026-07-10 before the bump to 0.6.0.
+- The separate 0.5.0 multi-file prerelease line (including `0.5.0-beta.12`) is
+  **not** included in 0.6.0. Configuration remains one KNX configuration file per
+  platform instance; `config_path` and child bridges remain supported.
 
 ## 0.4.3
 - merged PR #198 (Update WindowCoveringTilt.js) by @EyeOfTheStorm 

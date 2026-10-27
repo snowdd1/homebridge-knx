@@ -1,41 +1,68 @@
-# Looking for a maintainer!
-# Maintainer gesucht!
-
-As I have migrated my home away from homebridge plus naked KNX I am not using the software myself anymore.
-
-Also, I didn't do any JS/TS development in recent years, so I am seeing myself as unfit to continue to maintain this homebridge shim.
-
-If you are interested to take over, please message me here in GitHub or create an issue in the repository.
-
-
-
-# homebridge-knx Version 0.4 
+# homebridge-knx
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
 
-KNX platform shim for homebridge.
-**This cannot run stand-alone in node!**
+KNX platform plugin for Homebridge, maintained by [@HolyGiraffe](https://github.com/HolyGiraffe).
+**This cannot run stand-alone in Node.js!**
 
-Please also visit [homebridge github homepage](https://github.com/nfarina/homebridge) first.
+Please also visit the [Homebridge homepage](https://homebridge.io/) first.
 
-Latest to homebridge-knx changes can be found in the [CHANGELOG.md](CHANGELOG.md)
+Release notes can be found in the [CHANGELOG.md](CHANGELOG.md).
 
-### This can only be used with homebridge >=1.0 and Node >=10.19.0
+### Compatibility
+- **Homebridge 2.0 is supported** starting with homebridge-knx 0.6.0.
+- Use a Node.js version supported by your Homebridge installation. The plugin
+  declares a minimum of Node.js 18 and Homebridge 1.6.0, but Homebridge 2.0 has
+  higher Node.js requirements.
+- Compatibility fallbacks for Homebridge 1.x remain in place, but automated tests
+  cover the HAP library used by Homebridge 2.x, not a full Homebridge 1.x installation.
+- Version 0.6.0 uses **one KNX configuration file per platform instance**. It does
+  not include the multi-file configuration features from the separate 0.5.0
+  prerelease branch.
 
 ### Prerequisites
 This node module requires either 
   - a running (and properly configured) **knx daemon (knxd)**. You can find the latest version [here](https://github.com/knxd/knxd).  
-  - another KNX router which can be reached by KNX multicasts.
+  - a KNX/IP router reachable through KNX multicast, using the `knxjs` backend.
 
-I cannot support the knxd. Please address issues directly at the [knxd issue pages](https://github.com/knxd/knxd/issues). It might help to search the existing issues, as your problem might have been solved already.  
+The default backend is `knxd`. To use KNX multicast instead, set
+`"knxconnection": "knxjs"` in your KNX configuration file. See the
+[configuration documentation](knx_config.json.md) for connection settings.
+
+For issues with knxd itself, please use the [knxd issue pages](https://github.com/knxd/knxd/issues). Search existing issues first, as your problem might have been solved already.
 
 ### Installation and running
 - Install homebridge first, from [https://homebridge.io/](https://homebridge.io/); 
 - Once you have your instance running (without any devices yet), go to the `Plugins` tab and type `knx` in the search box
 - `homebridge-knx` should be within the top five hits (yes, there are alternatives), please check the name before installing
-- Then put the configuration file *knx_config.json* into `~/.homebridge` (or another folder to your liking, but it should be reaadable and writable by user `homebridge` or group `homebridge` which is created by the homebridge installer), and adapt them to your needs (knxd address and some test devices in `knx_config.json`)
--  Eliminate everything (especially all group addresses) that might harm your KNX installation. Sending bus telegrams to your alarm device might wake the neighbourhood unpleasantly!
-- If you used the dfeault paths (~/.homebridge/knx_config.json) you can just restart homebridge using the GUI
-- If you didn't, or want to use child bridges for more accessories (than 149) you need to configure homebridge (using the GUI e.g.). The following sample is from my test installation
+- Put [knx_config.json](knx_config.json) into your **Homebridge storage directory**
+  (typically `~/.homebridge`, but this depends on your installation). Adapt it to
+  your KNX connection and devices. The file must be readable and writable by the
+  user running Homebridge because the plugin writes generated device UUIDs and
+  service subtypes back to it.
+- Review all group addresses before starting. Remove sample devices and addresses
+  that do not belong to your installation; sending telegrams to the wrong address
+  can operate real equipment.
+- Add a platform entry with `"name": "KNX"` and `"platform": "KNX"` to the
+  Homebridge configuration, even when using the default KNX configuration path:
+
+```json
+{
+    "platforms": [
+        {
+            "name": "KNX",
+            "platform": "KNX"
+        }
+    ]
+}
+```
+
+- To use a different KNX configuration file, set `config_path` to its absolute
+  path. Use separate platform instances with separate files and child bridges
+  when splitting accessories across bridges. Each bridge supports up to 149
+  bridged accessories.
+- Restart Homebridge after saving both configurations.
+
+The following example shows two platform instances, one using a child bridge:
 
 ```json
 {
@@ -86,19 +113,23 @@ Integer | DPT5
 Percentage | DPT5.001  
 Float | DPT9  
 
+Percentage means a characteristic with a percentage unit, not a separate HomeKit
+format. An explicit `DPT` in the characteristic configuration overrides these defaults.
+
 
 # knx_config.json
-See the [complete Doc!](https://github.com/snowdd1/homebridge-knx/blob/master/knx_config.json.md).
+See the [configuration documentation](knx_config.json.md).
 
 
 # Add-ins
-Add-in (aka "handlers") can change the default behavior. [See the article](https://github.com/snowdd1/homebridge-knx/blob/master/handler-add-in.md)
+Add-ins (also called "handlers") can change the default behavior. See the
+[handler documentation](handler-add-in.md) and [built-in handlers](lib/addins).
+For example, `LockSensor` reports a lock's state from a KNX binary input without
+providing lock control.
 
 Happy testing!
 
 
 [npm-url]: https://npmjs.org/package/homebridge-knx
-[downloads-image]: http://img.shields.io/npm/dm/homebridge-knx.svg
-[npm-image]: http://img.shields.io/npm/v/homebridge-knx.svg
-[david-dm-url]: https://david-dm.org/snowdd1/homebridge-knx
-[david-dm-image]: https://david-dm.org/snowdd1/homebridge-knx.svg
+[downloads-image]: https://img.shields.io/npm/dm/homebridge-knx.svg
+[npm-image]: https://img.shields.io/npm/v/homebridge-knx.svg
