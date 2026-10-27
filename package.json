@@ -1,6 +1,6 @@
 {
     "name": "homebridge-knx",
-    "version": "0.5.0-rc.1",
+    "version": "0.6.0",
     "description": "homebridge shim for KNX home automation.",
     "main": "index.js",
     "scripts": {
@@ -37,6 +37,10 @@
         "url": "https://github.com/snowdd1"
     },
     "contributors": [
+        {
+            "name": "HolyGiraffe",
+            "url": "https://github.com/HolyGiraffe"
+        }
         {
             "name": "EIBHomeControl",
             "url": "https://github.com/EIBHomeControl"
